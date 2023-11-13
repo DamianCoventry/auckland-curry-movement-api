@@ -1,0 +1,134 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Auckland Curry Movement'
+  description: Manage all tasks related to the Auckland Curry Movement (ACM)
+
+paths:
+  /DinnerReservation/:
+    post:
+      summary: Create a dinner reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dinnerReservation"
+      responses:
+        '201':
+          description: Created a new dinner reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dinnerReservationId'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /DinnerReservation/{dinnerReservationId}:
+    parameters:
+      - name: dinnerReservationId
+        description: The unique identifier of the dinnerReservation
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/dinnerReservationId'
+    get:
+      summary: Read a dinner reservation
+      responses:
+        '200':
+          description: Retrieved he dinner reservation corresponding to the provided `dinnerReservationId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dinnerReservation'
+        404:
+          description: No dinner reservation found for the provided `dinnerReservationId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a dinner reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dinnerReservation"
+      responses:
+        '202':
+          description: Updated the dinner reservation corresponding to the provided `dinnerReservationId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dinnerReservation'
+        404:
+          description: No dinner reservation found for the provided `dinnerReservationId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a dinner reservation
+      responses:
+        '204':
+          description: Deleted the dinner reservation corresponding to the provided `dinnerReservationId`
+        404:
+          description: No dinner reservation found for the provided `dinnerReservationId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    dinnerReservationId:
+      description: The unique identifier of a dinner reservation
+      type: integer
+    dinnerReservation:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          $ref: '#/components/schemas/dinnerReservationId'
+        name:
+          type: integer
+        description:
+          type: string
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: An unexpected error has occurred
+          type: string
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+security:
+  - ApiKey: []

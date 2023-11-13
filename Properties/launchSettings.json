@@ -4,17 +4,17 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:48985",
-      "sslPort": 44359
+      "applicationUrl": "http://localhost:45228",
+      "sslPort": 44309
     }
   },
   "profiles": {
-    "auckland_curry_movement": {
+    "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7028;http://localhost:5215",
+      "applicationUrl": "https://localhost:7024;http://localhost:5136",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

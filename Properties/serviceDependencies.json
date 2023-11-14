@@ -4,6 +4,15 @@
       "type": "identityapp",
       "connectionId": "AzureAD:ClientSecret",
       "dynamicId": null
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "auckland-curry-movement"
+    },
+    "appInsights1": {
+      "type": "appInsights",
+      "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+      "dynamicId": null
     }
   }
 }

@@ -6,11 +6,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-auckland_curry_movement_api-4c0d029c-a749-44a4-9838-864d699a03c6</UserSecretsId>
     <RootNamespace>auckland_curry_movement_api</RootNamespace>
+    <ApplicationInsightsResourceId>/subscriptions/ce52e57a-7373-4412-85d8-ec54e364bdc9/resourceGroups/auckland-curry-movement/providers/microsoft.insights/components/auckland-curry-movement</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" Version="2.15.3" />
     <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="2.15.3" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.15.3" />

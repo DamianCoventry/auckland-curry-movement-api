@@ -15,8 +15,8 @@ namespace auckland_curry_movement_api
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<AcmDatabaseContext>(
-                options => options.UseSqlServer(builder.Configuration["auckland-curry-movement"]));
+            //builder.Services.AddDbContext<AcmDatabaseContext>(
+            //    options => options.UseSqlServer(builder.Configuration["auckland-curry-movement"]));
 
             var app = builder.Build();
 

@@ -1,0 +1,3 @@
+INSERT INTO dbo.Dinner
+VALUES
+(1,NULL,NULL)

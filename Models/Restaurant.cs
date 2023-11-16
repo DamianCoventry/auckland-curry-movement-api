@@ -12,6 +12,6 @@ namespace auckland_curry_movement_api.Models
         [Column("Phone Number")]
         public string? PhoneNumber { get; set; }
         public bool IsArchived { get; set; }
-        public string ArchiveReason { get; set; } = string.Empty;
+        public string? ArchiveReason { get; set; }
     }
 }

@@ -1,0 +1,21 @@
+ID,Date,ShortDescription,LongDescription,Attendee,Club,Dinner,Exemption,KotC,Level,Member,Reservation,Restaurant,RotY,Violation
+1,2010-06-01,New Curry Club established,Welcome to the new club – where Founding Fathers rendezvous on the last Thursday monthly to relish an Indian curry dinner. Join this exclusive club by attending one of our randomly selected Auckland area restaurants. Experience the blend of culinary mastery and camaraderie. Unite with fellow gentlemen over a shared love for exceptional cuisine.,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+2,2010-06-01,Founding Father instated,A Founding Father brings a wealth of passion for Indian cuisine and a shared enthusiasm for the camaraderie that defines our movement.,NULL,1,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL
+3,2010-06-01,Founding Father instated,A Founding Father brings a wealth of passion for Indian cuisine and a shared enthusiasm for the camaraderie that defines our movement.,NULL,1,NULL,NULL,NULL,NULL,4,NULL,NULL,NULL,NULL
+4,2010-06-01,Founding Father instated,A Founding Father brings a wealth of passion for Indian cuisine and a shared enthusiasm for the camaraderie that defines our movement.,NULL,1,NULL,NULL,NULL,NULL,9,NULL,NULL,NULL,NULL
+5,2010-06-01,Founding Father instated,A Founding Father brings a wealth of passion for Indian cuisine and a shared enthusiasm for the camaraderie that defines our movement.,NULL,1,NULL,NULL,NULL,NULL,10,NULL,NULL,NULL,NULL
+6,2010-06-01,Founding Father instated,A Founding Father brings a wealth of passion for Indian cuisine and a shared enthusiasm for the camaraderie that defines our movement.,NULL,1,NULL,NULL,NULL,NULL,12,NULL,NULL,NULL,NULL
+7,2010-06-01,New member joined club,We're thrilled to welcome a number to our club! Let the curry adventures begin!,NULL,1,NULL,NULL,NULL,1,1,NULL,NULL,NULL,NULL
+8,2010-06-01,New member joined club,We're thrilled to welcome a number to our club! Let the curry adventures begin!,NULL,1,NULL,NULL,NULL,1,4,NULL,NULL,NULL,NULL
+9,2010-06-01,New member joined club,We're thrilled to welcome a number to our club! Let the curry adventures begin!,NULL,1,NULL,NULL,NULL,1,9,NULL,NULL,NULL,NULL
+10,2010-06-01,New member joined club,We're thrilled to welcome a number to our club! Let the curry adventures begin!,NULL,1,NULL,NULL,NULL,1,10,NULL,NULL,NULL,NULL
+11,2010-06-01,New member joined club,We're thrilled to welcome a number to our club! Let the curry adventures begin!,NULL,1,NULL,NULL,NULL,1,12,NULL,NULL,NULL,NULL
+12,2010-06-16,New dinner reservation,"We've just secured a delectable spot for our next curry dinner. Your taste buds are in for a treat, and we look forward to sharing this culinary adventure with all of you.",NULL,1,NULL,NULL,NULL,NULL,NULL,1,2,NULL,NULL
+13,2010-06-25,Dinner commenced,"The feast has begun! Grab your seats, savor the flavors, and enjoy the camaraderie. Here's to another delightful evening together!",NULL,1,1,NULL,NULL,NULL,NULL,1,2,NULL,NULL
+14,2010-06-25,Member is attending dinner,Thrilled to announce that a member has joined us for dinner! Get ready for a fantastic evening of flavors and fun!,1,1,1,NULL,NULL,NULL,1,1,2,NULL,NULL
+15,2010-06-25,Member is attending dinner,Thrilled to announce that a member has joined us for dinner! Get ready for a fantastic evening of flavors and fun!,2,1,1,NULL,NULL,NULL,4,1,2,NULL,NULL
+16,2010-06-25,Member is attending dinner,Thrilled to announce that a member has joined us for dinner! Get ready for a fantastic evening of flavors and fun!,3,1,1,NULL,NULL,NULL,9,1,2,NULL,NULL
+17,2010-06-25,Member is attending dinner,Thrilled to announce that a member has joined us for dinner! Get ready for a fantastic evening of flavors and fun!,4,1,1,NULL,NULL,NULL,10,1,2,NULL,NULL
+18,2010-06-25,Member is attending dinner,Thrilled to announce that a member has joined us for dinner! Get ready for a fantastic evening of flavors and fun!,5,1,1,NULL,NULL,NULL,12,1,2,NULL,NULL
+19,2010-06-25,Dinner concluded,Another flavorful chapter has concluded. Thanks for the delightful company and shared moments. Until our next culinary adventure!,NULL,NULL,1,NULL,NULL,NULL,NULL,1,2,NULL,NULL
+20,2010-06-25,Dinner concluded,Another flavorful chapter has concluded. Thanks for the delightful company and shared moments. Until our next culinary adventure!,NULL,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL

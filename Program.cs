@@ -22,12 +22,12 @@ namespace auckland_curry_movement_api
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen();
 
-                string connectionString = string.Empty;
-                if (builder.Environment.IsDevelopment())
-                    connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_SERVER");
-                else
-                    connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_SERVER") ?? string.Empty;
-                builder.Services.AddDbContext<AcmDatabaseContext>(options => options.UseSqlServer(connectionString));
+                //string connectionString = string.Empty;
+                //if (builder.Environment.IsDevelopment())
+                //    connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_SERVER");
+                //else
+                //    connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_SERVER") ?? string.Empty;
+                //builder.Services.AddDbContext<AcmDatabaseContext>(options => options.UseSqlServer(connectionString));
 
                 var app = builder.Build();
 

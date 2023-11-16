@@ -26,8 +26,8 @@ namespace auckland_curry_movement_api
                 string connectionString = string.Empty;
                 if (builder.Environment.IsDevelopment())
                     connectionString = builder.Configuration.GetConnectionString("SQLAZURECONNSTR_ACM_DB");
-                else
-                    connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_ACM_DB") ?? string.Empty;
+                //else
+                //    connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_ACM_DB") ?? string.Empty;
                 builder.Services.AddDbContext<AcmDatabaseContext>(options => options.UseSqlServer(connectionString));
 
                 var app = builder.Build();

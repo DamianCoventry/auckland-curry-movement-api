@@ -12,6 +12,9 @@ namespace auckland_curry_movement_api
             try
             {
                 var builder = WebApplication.CreateBuilder(args);
+                builder.Logging.AddConsole();
+                builder.Logging.AddDebug();
+                builder.Logging.AddApplicationInsights();
                 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
                 builder.Services.AddControllers();
@@ -38,7 +41,7 @@ namespace auckland_curry_movement_api
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Caught an exception, the process will end.\n" + ex.ToString());
+                System.Diagnostics.Trace.WriteLine("Caught an exception, the process will end.\n" + ex.ToString());
             }
         }
     }

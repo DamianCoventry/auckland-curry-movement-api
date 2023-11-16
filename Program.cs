@@ -15,13 +15,19 @@ namespace auckland_curry_movement_api
                 builder.Logging.AddConsole();
                 builder.Logging.AddDebug();
                 builder.Logging.AddApplicationInsights();
+
                 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
                 builder.Services.AddControllers();
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen();
-                builder.Services.AddDbContext<AcmDatabaseContext>(
-                    options => options.UseSqlServer(builder.Configuration["auckland-curry-movement"]));
+
+                string connectionString = string.Empty;
+                if (builder.Environment.IsDevelopment())
+                    connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_SERVER");
+                else
+                    connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_SERVER") ?? string.Empty;
+                builder.Services.AddDbContext<AcmDatabaseContext>(options => options.UseSqlServer(connectionString));
 
                 var app = builder.Build();
 

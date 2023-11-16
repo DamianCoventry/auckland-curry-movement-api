@@ -12,6 +12,7 @@ namespace auckland_curry_movement_api
             try
             {
                 var builder = WebApplication.CreateBuilder(args);
+                builder.Services.AddLogging();
                 builder.Logging.AddConsole();
                 builder.Logging.AddDebug();
                 builder.Logging.AddApplicationInsights();

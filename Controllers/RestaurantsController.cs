@@ -20,22 +20,22 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Restaurant>>> GetRestaurants()
         {
-            if (_context.Restaurants == null)
+            if (_context.Restaurant == null)
             {
                 return NotFound();
             }
-            return await _context.Restaurants.ToListAsync();
+            return await _context.Restaurant.ToListAsync();
         }
 
         // GET: api/Restaurants/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Restaurant>> GetRestaurant(int? id)
         {
-            if (_context.Restaurants == null)
+            if (_context.Restaurant == null)
             {
                 return NotFound();
             }
-            var restaurant = await _context.Restaurants.FindAsync(id);
+            var restaurant = await _context.Restaurant.FindAsync(id);
 
             if (restaurant == null)
             {
@@ -81,11 +81,11 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Restaurant>> PostRestaurant(Restaurant restaurant)
         {
-            if (_context.Restaurants == null)
+            if (_context.Restaurant == null)
             {
                 return Problem("Entity set 'AcmDatabaseContext.Restaurants'  is null.");
             }
-            _context.Restaurants.Add(restaurant);
+            _context.Restaurant.Add(restaurant);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetRestaurant", new { id = restaurant.ID }, restaurant);
@@ -95,17 +95,17 @@ namespace auckland_curry_movement_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRestaurant(int? id)
         {
-            if (_context.Restaurants == null)
+            if (_context.Restaurant == null)
             {
                 return NotFound();
             }
-            var restaurant = await _context.Restaurants.FindAsync(id);
+            var restaurant = await _context.Restaurant.FindAsync(id);
             if (restaurant == null)
             {
                 return NotFound();
             }
 
-            _context.Restaurants.Remove(restaurant);
+            _context.Restaurant.Remove(restaurant);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -113,7 +113,7 @@ namespace auckland_curry_movement_api.Controllers
 
         private bool RestaurantExists(int? id)
         {
-            return (_context.Restaurants?.Any(e => e.ID == id)).GetValueOrDefault();
+            return (_context.Restaurant?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }

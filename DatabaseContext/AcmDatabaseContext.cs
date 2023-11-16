@@ -10,6 +10,6 @@ namespace auckland_curry_movement_api.DatabaseContext
         {
         }
 
-        public DbSet<Restaurant> Restaurants { get; set; } = null!;
+        public DbSet<Restaurant> Restaurant { get; set; } = null!;
     }
 }

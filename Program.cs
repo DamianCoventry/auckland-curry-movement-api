@@ -26,9 +26,14 @@ namespace auckland_curry_movement_api
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen();
 
-                builder.Services.AddDbContext<AcmDatabaseContext>(
-                    options => options.EnableDetailedErrors().UseSqlServer(
-                        builder.Configuration.GetConnectionString("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING")));
+                string connectionString = builder.Configuration.GetConnectionString("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING");
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING") ?? string.Empty;
+                    if (string.IsNullOrEmpty(connectionString))
+                        throw new Exception("Unable to locate valid database connection string");
+                }
+                builder.Services.AddDbContext<AcmDatabaseContext>(options => options.EnableDetailedErrors().UseSqlServer(connectionString));
 
                 var app = builder.Build();
 

@@ -12,10 +12,11 @@ namespace auckland_curry_movement_api
             try
             {
                 var builder = WebApplication.CreateBuilder(args);
-                builder.Services.AddLogging();
-                builder.Logging.AddConsole();
-                builder.Logging.AddDebug();
-                builder.Logging.AddApplicationInsights();
+                builder.Logging.ClearProviders();
+                builder.Logging
+                    .SetMinimumLevel(LogLevel.Debug)
+                    .AddApplicationInsights(tc => { tc.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]; }, lo => { })
+                    .AddDebug().AddConsole();
 
                 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
@@ -24,7 +25,7 @@ namespace auckland_curry_movement_api
                 builder.Services.AddSwaggerGen();
 
                 builder.Services.AddDbContext<AcmDatabaseContext>(
-                    options => options.UseSqlServer(
+                    options => options.EnableDetailedErrors().UseSqlServer(
                         builder.Configuration.GetConnectionString("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING")));
 
                 var app = builder.Build();

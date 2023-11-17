@@ -25,7 +25,10 @@ namespace auckland_curry_movement_api.Controllers
             //    return NotFound();
             //}
             //return await _context.Restaurant.ToListAsync();
-            return NoContent();
+
+            //return NoContent();
+
+            return new Restaurant[] { new Restaurant() { StreetAddress = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING") } };
         }
 
         // GET: api/Restaurants/5

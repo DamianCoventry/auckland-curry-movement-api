@@ -14,8 +14,9 @@ namespace auckland_curry_movement_api
                 var builder = WebApplication.CreateBuilder(args);
                 builder.Logging.ClearProviders();
                 builder.Logging
-                    .SetMinimumLevel(LogLevel.Debug)
+                    .SetMinimumLevel(LogLevel.Trace)
                     .AddApplicationInsights(tc => { tc.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]; }, lo => { })
+                    .AddAzureWebAppDiagnostics()
                     .AddDebug().AddConsole();
 
                 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,7 +47,7 @@ namespace auckland_curry_movement_api
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine("Caught an exception, the process will end.\n" + ex.ToString());
+                System.Diagnostics.Trace.TraceError("Caught an exception, the process will end.\n" + ex.ToString());
             }
         }
     }

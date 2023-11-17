@@ -17,7 +17,8 @@ namespace auckland_curry_movement_api
                     .SetMinimumLevel(LogLevel.Trace)
                     .AddApplicationInsights(tc => { tc.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]; }, lo => { })
                     .AddAzureWebAppDiagnostics()
-                    .AddDebug().AddConsole();
+                    .AddDebug()
+                    .AddConsole();
 
                 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));

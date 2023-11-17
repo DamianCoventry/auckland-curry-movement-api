@@ -13,6 +13,7 @@ namespace auckland_curry_movement_api.Controllers
 
         public RestaurantsController(AcmDatabaseContext context)
         {
+            System.Diagnostics.Trace.TraceError("RestaurantsController ctor");
             _context = context;
         }
 
@@ -20,6 +21,7 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Restaurant>>> GetRestaurants()
         {
+            System.Diagnostics.Trace.TraceError("In GetRestaurants()");
             //if (_context.Restaurant == null)
             //{
             //    return NotFound();

@@ -9,12 +9,12 @@ namespace auckland_curry_movement_api.Controllers
     [ApiController]
     public class RestaurantsController : ControllerBase
     {
-        //private readonly AcmDatabaseContext _context;
+        private readonly AcmDatabaseContext _context;
 
-        //public RestaurantsController(AcmDatabaseContext context)
-        //{
-        //    _context = context;
-        //}
+        public RestaurantsController(AcmDatabaseContext context)
+        {
+            _context = context;
+        }
 
         // GET: api/Restaurants
         [HttpGet]

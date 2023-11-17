@@ -13,7 +13,6 @@ namespace auckland_curry_movement_api.Controllers
 
         public RestaurantsController(AcmDatabaseContext context)
         {
-            System.Diagnostics.Trace.TraceError("RestaurantsController ctor");
             _context = context;
         }
 
@@ -21,35 +20,29 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Restaurant>>> GetRestaurants()
         {
-            System.Diagnostics.Trace.TraceError("In GetRestaurants()");
-            //if (_context.Restaurant == null)
-            //{
-            //    return NotFound();
-            //}
-            //return await _context.Restaurant.ToListAsync();
-
-            //return NoContent();
-
-            return new Restaurant[] { new Restaurant() { StreetAddress = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING") } };
+            if (_context.Restaurant == null)
+            {
+                return NotFound();
+            }
+            return await _context.Restaurant.ToListAsync();
         }
 
         // GET: api/Restaurants/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Restaurant>> GetRestaurant(int? id)
         {
-            //if (_context.Restaurant == null)
-            //{
-            //    return NotFound();
-            //}
-            //var restaurant = await _context.Restaurant.FindAsync(id);
+            if (_context.Restaurant == null)
+            {
+                return NotFound();
+            }
+            var restaurant = await _context.Restaurant.FindAsync(id);
 
-            //if (restaurant == null)
-            //{
-            //    return NotFound();
-            //}
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
 
-            //return restaurant;
-            return NoContent();
+            return restaurant;
         }
 
         // PUT: api/Restaurants/5
@@ -57,30 +50,29 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRestaurant(int? id, Restaurant restaurant)
         {
-            //if (id != restaurant.ID)
-            //{
-            //    return BadRequest();
-            //}
+            if (id != restaurant.ID)
+            {
+                return BadRequest();
+            }
 
-            //_context.Entry(restaurant).State = EntityState.Modified;
+            _context.Entry(restaurant).State = EntityState.Modified;
 
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!RestaurantExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RestaurantExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-            //return NoContent();
             return NoContent();
         }
 
@@ -89,41 +81,39 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Restaurant>> PostRestaurant(Restaurant restaurant)
         {
-            //if (_context.Restaurant == null)
-            //{
-            //    return Problem("Entity set 'AcmDatabaseContext.Restaurants'  is null.");
-            //}
-            //_context.Restaurant.Add(restaurant);
-            //await _context.SaveChangesAsync();
+            if (_context.Restaurant == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.Restaurants'  is null.");
+            }
+            _context.Restaurant.Add(restaurant);
+            await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetRestaurant", new { id = restaurant.ID }, restaurant);
-            return NoContent();
+            return CreatedAtAction("GetRestaurant", new { id = restaurant.ID }, restaurant);
         }
 
         // DELETE: api/Restaurants/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRestaurant(int? id)
         {
-            //if (_context.Restaurant == null)
-            //{
-            //    return NotFound();
-            //}
-            //var restaurant = await _context.Restaurant.FindAsync(id);
-            //if (restaurant == null)
-            //{
-            //    return NotFound();
-            //}
+            if (_context.Restaurant == null)
+            {
+                return NotFound();
+            }
+            var restaurant = await _context.Restaurant.FindAsync(id);
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
 
-            //_context.Restaurant.Remove(restaurant);
-            //await _context.SaveChangesAsync();
+            _context.Restaurant.Remove(restaurant);
+            await _context.SaveChangesAsync();
 
-            //return NoContent();
             return NoContent();
         }
 
-        //private bool RestaurantExists(int? id)
-        //{
-        //    return (_context.Restaurant?.Any(e => e.ID == id)).GetValueOrDefault();
-        //}
+        private bool RestaurantExists(int? id)
+        {
+            return (_context.Restaurant?.Any(e => e.ID == id)).GetValueOrDefault();
+        }
     }
 }

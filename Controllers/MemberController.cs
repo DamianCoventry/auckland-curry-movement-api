@@ -29,7 +29,7 @@ namespace auckland_curry_movement_api.Controllers
             {
                 return NotFound();
             }
-            return await _context.Member.Include(x => x.Clubs).ToListAsync();
+            return await _context.Member.ToListAsync();
         }
 
         // GET: api/Member/5
@@ -41,7 +41,21 @@ namespace auckland_curry_movement_api.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Member.Include(x => x.Clubs).Where(x => x.ID == id).FirstOrDefaultAsync();
+            var member = await _context.Member
+                .Include(x => x.Clubs)
+                .Include(x => x.Dinners)
+                .Include(x => x.Attendees)
+                .Include(x => x.CurrentLevel)
+                .Include(x => x.ExemptionsGiven)
+                .Include(x => x.ExemptionsReceived)
+                .Include(x => x.KotCs)
+                .Include(x => x.Reservations)
+                .Include(x => x.RotYs)
+                .Include(x => x.ViolationsGiven)
+                .Include(x => x.ViolationsReceived)
+                .Include(x => x.Notifications)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (member == null)
             {
                 return NotFound();

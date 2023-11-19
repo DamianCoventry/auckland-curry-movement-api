@@ -25,10 +25,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Violation>>> GetViolation()
         {
-          if (_context.Violation == null)
-          {
-              return NotFound();
-          }
+            if (_context.Violation == null)
+            {
+                return NotFound();
+            }
             return await _context.Violation.ToListAsync();
         }
 
@@ -36,12 +36,18 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Violation>> GetViolation(int? id)
         {
-          if (_context.Violation == null)
-          {
-              return NotFound();
-          }
-            var violation = await _context.Violation.FindAsync(id);
+            if (_context.Violation == null)
+            {
+                return NotFound();
+            }
 
+            var violation = await _context.Violation
+                .Include(x => x.Dinner)
+                .Include(x => x.FoundingFather)
+                .Include(x => x.Member)
+                .Include(x => x.Notifications)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (violation == null)
             {
                 return NotFound();
@@ -86,10 +92,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Violation>> PostViolation(Violation violation)
         {
-          if (_context.Violation == null)
-          {
-              return Problem("Entity set 'AcmDatabaseContext.Violation'  is null.");
-          }
+            if (_context.Violation == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.Violation'  is null.");
+            }
             _context.Violation.Add(violation);
             await _context.SaveChangesAsync();
 

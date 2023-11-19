@@ -25,10 +25,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Level>>> GetLevel()
         {
-          if (_context.Level == null)
-          {
-              return NotFound();
-          }
+            if (_context.Level == null)
+            {
+                return NotFound();
+            }
             return await _context.Level.ToListAsync();
         }
 
@@ -36,12 +36,17 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Level>> GetLevel(int? id)
         {
-          if (_context.Level == null)
-          {
-              return NotFound();
-          }
-            var level = await _context.Level.FindAsync(id);
+            if (_context.Level == null)
+            {
+                return NotFound();
+            }
 
+            var level = await _context.Level
+                .Include(x => x.Attendees)
+                .Include(x => x.Members)
+                .Include(x => x.Notifications)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (level == null)
             {
                 return NotFound();
@@ -86,10 +91,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Level>> PostLevel(Level level)
         {
-          if (_context.Level == null)
-          {
-              return Problem("Entity set 'AcmDatabaseContext.Level'  is null.");
-          }
+            if (_context.Level == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.Level'  is null.");
+            }
             _context.Level.Add(level);
             await _context.SaveChangesAsync();
 

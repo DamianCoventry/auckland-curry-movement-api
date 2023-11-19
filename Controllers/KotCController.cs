@@ -25,10 +25,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<KotC>>> GetKotC()
         {
-          if (_context.KotC == null)
-          {
-              return NotFound();
-          }
+            if (_context.KotC == null)
+            {
+                return NotFound();
+            }
             return await _context.KotC.ToListAsync();
         }
 
@@ -36,12 +36,17 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<KotC>> GetKotC(int? id)
         {
-          if (_context.KotC == null)
-          {
-              return NotFound();
-          }
-            var kotC = await _context.KotC.FindAsync(id);
+            if (_context.KotC == null)
+            {
+                return NotFound();
+            }
 
+            var kotC = await _context.KotC
+                .Include(x => x.Member)
+                .Include(x => x.Dinner)
+                .Include(x => x.Notifications)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (kotC == null)
             {
                 return NotFound();
@@ -86,10 +91,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<KotC>> PostKotC(KotC kotC)
         {
-          if (_context.KotC == null)
-          {
-              return Problem("Entity set 'AcmDatabaseContext.KotC'  is null.");
-          }
+            if (_context.KotC == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.KotC'  is null.");
+            }
             _context.KotC.Add(kotC);
             await _context.SaveChangesAsync();
 

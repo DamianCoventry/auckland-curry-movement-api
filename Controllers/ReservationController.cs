@@ -25,10 +25,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservation()
         {
-          if (_context.Reservation == null)
-          {
-              return NotFound();
-          }
+            if (_context.Reservation == null)
+            {
+                return NotFound();
+            }
             return await _context.Reservation.ToListAsync();
         }
 
@@ -36,12 +36,18 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> GetReservation(int? id)
         {
-          if (_context.Reservation == null)
-          {
-              return NotFound();
-          }
-            var reservation = await _context.Reservation.FindAsync(id);
+            if (_context.Reservation == null)
+            {
+                return NotFound();
+            }
 
+            var reservation = await _context.Reservation
+                .Include(x => x.Organiser)
+                .Include(x => x.Restaurant)
+                .Include(x => x.Dinner)
+                .Include(x => x.Notifications)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (reservation == null)
             {
                 return NotFound();
@@ -86,10 +92,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
-          if (_context.Reservation == null)
-          {
-              return Problem("Entity set 'AcmDatabaseContext.Reservation'  is null.");
-          }
+            if (_context.Reservation == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.Reservation'  is null.");
+            }
             _context.Reservation.Add(reservation);
             await _context.SaveChangesAsync();
 

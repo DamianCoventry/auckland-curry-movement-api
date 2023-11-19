@@ -25,10 +25,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Attendee>>> GetAttendee()
         {
-          if (_context.Attendee == null)
-          {
-              return NotFound();
-          }
+            if (_context.Attendee == null)
+            {
+                return NotFound();
+            }
             return await _context.Attendee.ToListAsync();
         }
 
@@ -36,12 +36,18 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Attendee>> GetAttendee(int? id)
         {
-          if (_context.Attendee == null)
-          {
-              return NotFound();
-          }
-            var attendee = await _context.Attendee.FindAsync(id);
+            if (_context.Attendee == null)
+            {
+                return NotFound();
+            }
 
+            var attendee = await _context.Attendee
+                .Include(x => x.Dinner)
+                .Include(x => x.Member)
+                .Include(x => x.Level)
+                .Include(x => x.Notifications)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (attendee == null)
             {
                 return NotFound();
@@ -86,10 +92,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Attendee>> PostAttendee(Attendee attendee)
         {
-          if (_context.Attendee == null)
-          {
-              return Problem("Entity set 'AcmDatabaseContext.Attendee'  is null.");
-          }
+            if (_context.Attendee == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.Attendee'  is null.");
+            }
             _context.Attendee.Add(attendee);
             await _context.SaveChangesAsync();
 

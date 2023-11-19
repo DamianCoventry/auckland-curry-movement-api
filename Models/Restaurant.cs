@@ -13,5 +13,9 @@ namespace auckland_curry_movement_api.Models
         public string? PhoneNumber { get; set; }
         public bool IsArchived { get; set; }
         public string? ArchiveReason { get; set; }
+
+        public virtual ICollection<Reservation>? Reservations { get; set; }
+        public virtual ICollection<RotY>? RotYs { get; set; }
+        public virtual ICollection<Notification>? Notifications { get; set; }
     }
 }

@@ -41,7 +41,11 @@ namespace auckland_curry_movement_api.Controllers
                 return NotFound();
             }
 
-            var club = await _context.Club.Include(x => x.Members).Where(x => x.ID == id).FirstOrDefaultAsync();
+            var club = await _context.Club
+                .Include(x => x.Members)
+                .Include(x => x.Notifications)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (club == null)
             {
                 return NotFound();

@@ -25,10 +25,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Exemption>>> GetExemption()
         {
-          if (_context.Exemption == null)
-          {
-              return NotFound();
-          }
+            if (_context.Exemption == null)
+            {
+                return NotFound();
+            }
             return await _context.Exemption.ToListAsync();
         }
 
@@ -36,12 +36,17 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Exemption>> GetExemption(int? id)
         {
-          if (_context.Exemption == null)
-          {
-              return NotFound();
-          }
-            var exemption = await _context.Exemption.FindAsync(id);
+            if (_context.Exemption == null)
+            {
+                return NotFound();
+            }
 
+            var exemption = await _context.Exemption
+                .Include(x => x.FoundingFather)
+                .Include(x => x.Member)
+                .Include(x => x.Notifications)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (exemption == null)
             {
                 return NotFound();
@@ -86,10 +91,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Exemption>> PostExemption(Exemption exemption)
         {
-          if (_context.Exemption == null)
-          {
-              return Problem("Entity set 'AcmDatabaseContext.Exemption'  is null.");
-          }
+            if (_context.Exemption == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.Exemption'  is null.");
+            }
             _context.Exemption.Add(exemption);
             await _context.SaveChangesAsync();
 

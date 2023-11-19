@@ -54,6 +54,37 @@ namespace auckland_curry_movement_api
                 .WithMany(x => x.Members)
                 .HasForeignKey(x => x.CurrentLevelID)
                 .IsRequired();
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(x => x.Organiser)
+                .WithMany(x => x.Reservations)
+                .HasForeignKey(x => x.OrganiserID)
+                .IsRequired();
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(x => x.RotY)
+                .WithMany(x => x.Notifications)
+                .HasForeignKey(x => x.RotYYear);
+
+            modelBuilder.Entity<Exemption>()
+                .HasOne(x => x.FoundingFather)
+                .WithMany(x => x.ExemptionsGiven)
+                .HasForeignKey(x => x.FoundingFatherID);
+
+            modelBuilder.Entity<Exemption>()
+                .HasOne(x => x.Member)
+                .WithMany(x => x.ExemptionsReceived)
+                .HasForeignKey(x => x.MemberID);
+
+            modelBuilder.Entity<Violation>()
+                .HasOne(x => x.FoundingFather)
+                .WithMany(x => x.ViolationsGiven)
+                .HasForeignKey(x => x.FoundingFatherID);
+
+            modelBuilder.Entity<Violation>()
+                .HasOne(x => x.Member)
+                .WithMany(x => x.ViolationsReceived)
+                .HasForeignKey(x => x.MemberID);
         }
     }
 }

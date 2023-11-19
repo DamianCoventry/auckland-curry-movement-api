@@ -25,10 +25,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RotY>>> GetRotY()
         {
-          if (_context.RotY == null)
-          {
-              return NotFound();
-          }
+            if (_context.RotY == null)
+            {
+                return NotFound();
+            }
             return await _context.RotY.ToListAsync();
         }
 
@@ -36,12 +36,17 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RotY>> GetRotY(int? id)
         {
-          if (_context.RotY == null)
-          {
-              return NotFound();
-          }
-            var rotY = await _context.RotY.FindAsync(id);
+            if (_context.RotY == null)
+            {
+                return NotFound();
+            }
 
+            var rotY = await _context.RotY
+                .Include(x => x.Restaurant)
+                .Include(x => x.Presenter)
+                .Include(x => x.Notifications)
+                .Where(x => x.Year == id)
+                .FirstOrDefaultAsync();
             if (rotY == null)
             {
                 return NotFound();
@@ -86,10 +91,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<RotY>> PostRotY(RotY rotY)
         {
-          if (_context.RotY == null)
-          {
-              return Problem("Entity set 'AcmDatabaseContext.RotY'  is null.");
-          }
+            if (_context.RotY == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.RotY'  is null.");
+            }
             _context.RotY.Add(rotY);
             await _context.SaveChangesAsync();
 

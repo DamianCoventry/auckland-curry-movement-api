@@ -25,10 +25,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Notification>>> GetNotification()
         {
-          if (_context.Notification == null)
-          {
-              return NotFound();
-          }
+            if (_context.Notification == null)
+            {
+                return NotFound();
+            }
             return await _context.Notification.ToListAsync();
         }
 
@@ -36,12 +36,25 @@ namespace auckland_curry_movement_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Notification>> GetNotification(int? id)
         {
-          if (_context.Notification == null)
-          {
-              return NotFound();
-          }
-            var notification = await _context.Notification.FindAsync(id);
+            if (_context.Notification == null)
+            {
+                return NotFound();
+            }
 
+            var notification = await _context.Notification
+                .Include(x => x.Attendee)
+                .Include(x => x.Club)
+                .Include(x => x.Dinner)
+                .Include(x => x.Exemption)
+                .Include(x => x.KotC)
+                .Include(x => x.Level)
+                .Include(x => x.Member)
+                .Include(x => x.Reservation)
+                .Include(x => x.Restaurant)
+                .Include(x => x.RotY)
+                .Include(x => x.Violation)
+                .Where(x => x.ID == id)
+                .FirstOrDefaultAsync();
             if (notification == null)
             {
                 return NotFound();
@@ -86,10 +99,10 @@ namespace auckland_curry_movement_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Notification>> PostNotification(Notification notification)
         {
-          if (_context.Notification == null)
-          {
-              return Problem("Entity set 'AcmDatabaseContext.Notification'  is null.");
-          }
+            if (_context.Notification == null)
+            {
+                return Problem("Entity set 'AcmDatabaseContext.Notification'  is null.");
+            }
             _context.Notification.Add(notification);
             await _context.SaveChangesAsync();
 

@@ -1,3 +1,2 @@
-Turn off trace logging
 An 'update attendance count' routine needs to be created for the member table
 An 'update year and month' routine needs to be created for the reservation table

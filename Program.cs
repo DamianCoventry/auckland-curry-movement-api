@@ -14,7 +14,7 @@ namespace auckland_curry_movement_api
                 var builder = WebApplication.CreateBuilder(args);
                 builder.Logging.ClearProviders();
                 builder.Logging
-                    .SetMinimumLevel(LogLevel.Trace)
+                    .SetMinimumLevel(LogLevel.Warning)
                     .AddApplicationInsights(tc => { tc.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]; }, lo => { })
                     .AddAzureWebAppDiagnostics()
                     .AddDebug()

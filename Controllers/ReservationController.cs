@@ -23,13 +23,15 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Reservation
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservation()
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservation([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.Reservation == null)
             {
                 return NotFound();
             }
-            return await _context.Reservation.ToListAsync();
+            return await _context.Reservation
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/Reservation/5

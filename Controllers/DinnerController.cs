@@ -23,13 +23,15 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Dinner
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Dinner>>> GetDinner()
+        public async Task<ActionResult<IEnumerable<Dinner>>> GetDinner([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.Dinner == null)
             {
                 return NotFound();
             }
-            return await _context.Dinner.ToListAsync();
+            return await _context.Dinner
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/Dinner/5

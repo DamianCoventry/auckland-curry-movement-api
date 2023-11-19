@@ -23,13 +23,15 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Notification
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Notification>>> GetNotification()
+        public async Task<ActionResult<IEnumerable<Notification>>> GetNotification([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.Notification == null)
             {
                 return NotFound();
             }
-            return await _context.Notification.ToListAsync();
+            return await _context.Notification
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/Notification/5

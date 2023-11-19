@@ -23,13 +23,15 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/RotY
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RotY>>> GetRotY()
+        public async Task<ActionResult<IEnumerable<RotY>>> GetRotY([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.RotY == null)
             {
                 return NotFound();
             }
-            return await _context.RotY.ToListAsync();
+            return await _context.RotY
+                .OrderBy(x => x.Year).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/RotY/5

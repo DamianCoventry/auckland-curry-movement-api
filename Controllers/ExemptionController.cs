@@ -23,13 +23,15 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Exemption
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Exemption>>> GetExemption()
+        public async Task<ActionResult<IEnumerable<Exemption>>> GetExemption([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.Exemption == null)
             {
                 return NotFound();
             }
-            return await _context.Exemption.ToListAsync();
+            return await _context.Exemption
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/Exemption/5

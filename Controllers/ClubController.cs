@@ -23,13 +23,16 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Club
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Club>>> GetClub()
+        public async Task<ActionResult<IEnumerable<Club>>> GetClub([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.Club == null)
             {
                 return NotFound();
             }
-            return await _context.Club.Include(x => x.Members).ToListAsync();
+            return await _context.Club
+                .Include(x => x.Members)
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/Club/5

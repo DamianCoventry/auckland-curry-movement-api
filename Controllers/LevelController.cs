@@ -23,13 +23,15 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Level
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Level>>> GetLevel()
+        public async Task<ActionResult<IEnumerable<Level>>> GetLevel([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.Level == null)
             {
                 return NotFound();
             }
-            return await _context.Level.ToListAsync();
+            return await _context.Level
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/Level/5

@@ -23,13 +23,15 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/KotC
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<KotC>>> GetKotC()
+        public async Task<ActionResult<IEnumerable<KotC>>> GetKotC([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.KotC == null)
             {
                 return NotFound();
             }
-            return await _context.KotC.ToListAsync();
+            return await _context.KotC
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/KotC/5

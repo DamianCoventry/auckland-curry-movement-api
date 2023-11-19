@@ -23,13 +23,15 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Violation
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Violation>>> GetViolation()
+        public async Task<ActionResult<IEnumerable<Violation>>> GetViolation([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
         {
             if (_context.Violation == null)
             {
                 return NotFound();
             }
-            return await _context.Violation.ToListAsync();
+            return await _context.Violation
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // GET: api/Violation/5

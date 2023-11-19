@@ -1,0 +1,4 @@
+don't recurse down more than one level for Include<>()
+Pagination https://learn.microsoft.com/en-us/ef/core/querying/pagination
+Avoid the back and forth with a key and an instance
+Turn off trace logging

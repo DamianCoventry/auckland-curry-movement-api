@@ -1,40 +1,45 @@
-﻿using auckland_curry_movement_api.DatabaseContext;
-using auckland_curry_movement_api.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using auckland_curry_movement_api;
+using auckland_curry_movement_api.Models;
 
 namespace auckland_curry_movement_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RestaurantsController : ControllerBase
+    public class RestaurantController : ControllerBase
     {
         private readonly AcmDatabaseContext _context;
 
-        public RestaurantsController(AcmDatabaseContext context)
+        public RestaurantController(AcmDatabaseContext context)
         {
             _context = context;
         }
 
-        // GET: api/Restaurants
+        // GET: api/Restaurant
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Restaurant>>> GetRestaurants()
+        public async Task<ActionResult<IEnumerable<Restaurant>>> GetRestaurant()
         {
-            if (_context.Restaurant == null)
-            {
-                return NotFound();
-            }
+          if (_context.Restaurant == null)
+          {
+              return NotFound();
+          }
             return await _context.Restaurant.ToListAsync();
         }
 
-        // GET: api/Restaurants/5
+        // GET: api/Restaurant/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Restaurant>> GetRestaurant(int? id)
         {
-            if (_context.Restaurant == null)
-            {
-                return NotFound();
-            }
+          if (_context.Restaurant == null)
+          {
+              return NotFound();
+          }
             var restaurant = await _context.Restaurant.FindAsync(id);
 
             if (restaurant == null)
@@ -45,7 +50,7 @@ namespace auckland_curry_movement_api.Controllers
             return restaurant;
         }
 
-        // PUT: api/Restaurants/5
+        // PUT: api/Restaurant/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRestaurant(int? id, Restaurant restaurant)
@@ -76,22 +81,22 @@ namespace auckland_curry_movement_api.Controllers
             return NoContent();
         }
 
-        // POST: api/Restaurants
+        // POST: api/Restaurant
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Restaurant>> PostRestaurant(Restaurant restaurant)
         {
-            if (_context.Restaurant == null)
-            {
-                return Problem("Entity set 'AcmDatabaseContext.Restaurants'  is null.");
-            }
+          if (_context.Restaurant == null)
+          {
+              return Problem("Entity set 'AcmDatabaseContext.Restaurant'  is null.");
+          }
             _context.Restaurant.Add(restaurant);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetRestaurant", new { id = restaurant.ID }, restaurant);
         }
 
-        // DELETE: api/Restaurants/5
+        // DELETE: api/Restaurant/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRestaurant(int? id)
         {

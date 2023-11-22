@@ -1,0 +1,11 @@
+Download the latest Azure SQL Server docker image:
+    docker pull mcr.microsoft.com/azure-sql-edge
+    
+Start an Azure SQL Edge instance using the latest release:
+    docker run --cap-add SYS_PTRACE -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mrekVaVGSB4N6yEJfTuW -p 1433:1433 --name acm-docker-container -d mcr.microsoft.com/azure-sql-edge
+
+Start an Azure SQL Edge instance running as the Premium edition:
+    docker run --cap-add SYS_PTRACE -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=mrekVaVGSB4N6yEJfTuW' -e 'MSSQL_PID=Premium' -p 1433:1433 --name acm-docker-container -d mcr.microsoft.com/azure-sql-edge
+
+Connect to Microsoft Azure SQL Edge:
+    docker exec -it <container_id|container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <your_password>

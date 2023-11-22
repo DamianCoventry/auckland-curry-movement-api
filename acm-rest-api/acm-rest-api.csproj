@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-auckland_curry_movement_api-4c0d029c-a749-44a4-9838-864d699a03c6</UserSecretsId>
-    <RootNamespace>auckland_curry_movement_api</RootNamespace>
+    <RootNamespace>acm_rest_api</RootNamespace>
     <ApplicationInsightsResourceId>/subscriptions/ce52e57a-7373-4412-85d8-ec54e364bdc9/resourceGroups/auckland-curry-movement/providers/microsoft.insights/components/auckland-curry-movement</ApplicationInsightsResourceId>
   </PropertyGroup>
 

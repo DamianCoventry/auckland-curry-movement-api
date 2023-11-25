@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="using:acm_mobile_app"
+             xmlns:views="clr-namespace:acm_mobile_app.Views"
+             x:Class="acm_mobile_app.Views.ManageMembers"
+             Title="Members">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
+    </ContentPage.ToolbarItems>
+    <Grid Margin="20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <HorizontalStackLayout FlowDirection="RightToLeft">
+
+            <ImageButton Source="delete.png" Margin="10, 0"
+                         Clicked="OnClickDelete"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Delete"/>
+
+            <ImageButton Source="modify.png" Margin="10, 0"
+                         Clicked="OnClickModify"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Edit"/>
+
+            <ImageButton Source="add.png" Margin="10, 0"
+                         Clicked="OnClickAdd"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Add"/>
+
+        </HorizontalStackLayout>
+
+        <ScrollView VerticalOptions="FillAndExpand" Grid.Row="1" Margin="0,15">
+            <VerticalStackLayout>
+                <ListView x:Name="MembersView" ItemsSource="{Binding Members}" RowHeight="64">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Label Text="{Binding Name}" TextColor="CornflowerBlue" FontAttributes="Bold" Margin="0,0,0,8"/>
+                                        <HorizontalStackLayout Grid.Row="1">
+                                            <Image WidthRequest="24" IsVisible="{Binding IsFoundingFather}" Source="founding_father.png"
+                                                   ToolTipProperties.Text="Founding Father" Margin="4,0"/>
+                                            <Image WidthRequest="24" Source="maharaja.png"
+                                                   ToolTipProperties.Text="Maharaja" Margin="4,0"/>
+                                            <Image WidthRequest="24" Source="guru.png"
+                                                   ToolTipProperties.Text="Guru" Margin="4,0"/>
+                                            <Image WidthRequest="24" Source="chilli.png"
+                                                   ToolTipProperties.Text="Current King of the Chillis" Margin="4,0"/>
+                                            <Image WidthRequest="24" Source="violation.png"
+                                                   ToolTipProperties.Text="2 current violations" Margin="4,0"/>
+                                            <Image WidthRequest="24" Source="exemption.png"
+                                                   ToolTipProperties.Text="1 current exemption" Margin="4,0"/>
+                                        </HorizontalStackLayout>
+                                    </Grid>
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Label Text="Attendances"/>
+                                        <Label Text="{Binding AttendanceCount}"
+                                               FontSize="Large" Grid.Row="1"
+                                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                    </Grid>
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

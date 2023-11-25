@@ -11,6 +11,6 @@
 
         public virtual ICollection<Attendee>? Attendees { get; set; }
         public virtual ICollection<Member>? Members { get; set; }
-        public virtual ICollection<Notification>? Notifications { get; set; }
+        public ICollection<Notification>? Notifications { get; set; }
     }
 }

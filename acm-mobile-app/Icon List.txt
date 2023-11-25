@@ -1,0 +1,40 @@
+yes     attendee
+yes     club
+yes     dinner
+yes     exemption
+yes     kotc
+yes     level
+yes     member
+yes     notification
+yes     reservation
+yes     restaurant
+yes     roty
+yes     violation
+yes     guru
+yes     maharaja
+yes     inductee
+yes     view
+yes     add
+yes     modify
+yes     delete
+yes     search
+yes     auditor only feature
+yes     home
+yes     time
+yes     date
+yes     chart
+yes     comment
+yes     cost
+yes     location
+yes     phone number
+yes     email address
+yes     favourite
+yes     download
+yes     picture
+yes     refresh
+yes     help
+yes     settings
+yes     yes
+yes     no
+yes     beer
+yes     toilet paper

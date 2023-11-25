@@ -20,7 +20,7 @@
         public virtual ICollection<RotY>? RotYs { get; set; }
         public virtual ICollection<Violation>? ViolationsGiven { get; set; }
         public virtual ICollection<Violation>? ViolationsReceived { get; set; }
-        public virtual ICollection<Notification>? Notifications { get; set; }
+        public ICollection<Notification>? Notifications { get; set; }
 
         public bool IsArchived { get; set; }
         public string? ArchiveReason { get; set; }

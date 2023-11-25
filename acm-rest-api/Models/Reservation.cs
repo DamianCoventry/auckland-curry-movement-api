@@ -14,6 +14,6 @@
         public double? NegotiatedBeerDiscount { get; set; }
 
         public Dinner? Dinner { get; set; }
-        public virtual ICollection<Notification>? Notifications { get; set; }
+        public ICollection<Notification>? Notifications { get; set; }
     }
 }

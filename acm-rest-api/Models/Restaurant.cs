@@ -16,6 +16,6 @@ namespace auckland_curry_movement_api.Models
 
         public virtual ICollection<Reservation>? Reservations { get; set; }
         public virtual ICollection<RotY>? RotYs { get; set; }
-        public virtual ICollection<Notification>? Notifications { get; set; }
+        public ICollection<Notification>? Notifications { get; set; }
     }
 }

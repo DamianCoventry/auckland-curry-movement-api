@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="using:acm_mobile_app"
+             xmlns:views="clr-namespace:acm_mobile_app.Views"
+             x:Class="acm_mobile_app.Views.ManageLevels"
+             Title="Levels">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
+    </ContentPage.ToolbarItems>
+    <Grid Margin="20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <HorizontalStackLayout FlowDirection="RightToLeft">
+
+            <ImageButton Source="delete.png" Margin="10, 0"
+                         Clicked="OnClickDelete"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Delete"/>
+
+            <ImageButton Source="modify.png" Margin="10, 0"
+                         Clicked="OnClickModify"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Edit"/>
+
+            <ImageButton Source="add.png" Margin="10, 0"
+                         Clicked="OnClickAdd"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Add"/>
+
+        </HorizontalStackLayout>
+
+        <ScrollView VerticalOptions="FillAndExpand" Grid.Row="1" Margin="0,15">
+            <VerticalStackLayout>
+                <ListView x:Name="LevelsView" ItemsSource="{Binding Levels}" RowHeight="64">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Label Text="{Binding Name}"
+                                               TextColor="CornflowerBlue" FontAttributes="Bold"/>
+                                        <Label Grid.Row="1"  Text="{Binding Description}"
+                                               LineBreakMode="WordWrap"/>
+                                    </Grid>
+
+                                    <Label Grid.Column="1" Text="{Binding RequiredAttendances}"
+                                        FontSize="Large" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

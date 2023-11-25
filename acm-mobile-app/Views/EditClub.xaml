@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="using:acm_mobile_app"
+             xmlns:views="clr-namespace:acm_mobile_app.Views"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="acm_mobile_app.Views.EditClub"
+             Title="Club">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
+    </ContentPage.ToolbarItems>
+    <Grid Margin="20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Name" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Entry x:Name="ClubName"
+                   MaxLength="100"
+                   Placeholder="Enter club name"
+                   VerticalOptions="Fill"
+                   Grid.Column="1"/>
+        </Grid>
+
+        <Label Text="Founding Fathers" Margin="0,15,0,0" Grid.Row="1"/>
+        
+        <FlexLayout Direction="Row" Grid.Row="2">
+            <Grid>
+                <Ellipse Fill="Red" WidthRequest="48" HeightRequest="48"
+                         ToolTipProperties.Text="Greg Long"
+                         HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text="GL" TextColor="White" FontAttributes="Bold" FontSize="Large"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+            </Grid>
+            <Grid>
+                <Ellipse Fill="Yellow" WidthRequest="48" HeightRequest="48"
+                         ToolTipProperties.Text="Kareem Kader"
+                         HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text="KK" TextColor="Black" FontAttributes="Bold" FontSize="Large"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+            </Grid>
+            <Grid>
+                <Ellipse Fill="Green" WidthRequest="48" HeightRequest="48"
+                         ToolTipProperties.Text="Elvin Maharaj"
+                         HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text="EM" TextColor="White" FontAttributes="Bold" FontSize="Large"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+            </Grid>
+            <Grid>
+                <Ellipse Fill="Blue" WidthRequest="48" HeightRequest="48"
+                         ToolTipProperties.Text="Matt Wilson-Vogler"
+                         HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text="MW" TextColor="White" FontAttributes="Bold" FontSize="Large"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+            </Grid>
+            <Grid>
+                <Ellipse Fill="Orange" WidthRequest="48" HeightRequest="48"
+                         ToolTipProperties.Text="Jason Mann"
+                         HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text="JM" TextColor="Black" FontAttributes="Bold" FontSize="Large"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+            </Grid>
+            <ImageButton Source="ellipsis.png" WidthRequest="48" HeightRequest="48"
+                         ToolTipProperties.Text="Show more"
+                         HorizontalOptions="Center" VerticalOptions="Center"
+                         Clicked="OnClickShowMore"/>
+        </FlexLayout>
+
+        <Label Text="Available Members" Margin="0,15,0,0" Grid.Row="3"/>
+
+        <ScrollView VerticalOptions="FillAndExpand" Grid.Row="4" Margin="0,15">
+            <ListView ItemsSource="{Binding MemberList}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox IsChecked="{Binding IsFoundingFather}" VerticalOptions="Center" CheckedChanged="OnClickAssignFoundingFather"/>
+                                <Label Grid.Column="1" Text="{Binding Name}" VerticalTextAlignment="Center"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+
+        <HorizontalStackLayout FlowDirection="RightToLeft" Margin="0,15" Grid.Row="5">
+
+            <ImageButton Source="yes.png" Margin="10, 0"
+                         Clicked="OnClickOK"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Save"/>
+
+        </HorizontalStackLayout>
+
+    </Grid>
+</ContentPage>

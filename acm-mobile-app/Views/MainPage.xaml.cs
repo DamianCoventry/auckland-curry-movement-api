@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.Identity.Client;
+using System.Diagnostics;
 
 namespace acm_mobile_app
 {
@@ -108,27 +109,27 @@ namespace acm_mobile_app
             ObjectGrid.IsVisible = !ObjectGrid.IsVisible;
         }
 
-        async public void OnAddReservation(object sender, EventArgs e)
+        public async void OnAddReservation(object sender, EventArgs e)
         {
-            await DisplayAlert("Add Reservation", "TODO", "OK");
+            await Shell.Current.GoToAsync("edit_reservation");
         }
 
-        async public void OnAddRestaurant(object sender, EventArgs e)
+        public async void OnAddRestaurant(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("edit_restaurant");
         }
 
-        async public void OnAddMember(object sender, EventArgs e)
+        public async void OnAddMember(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("edit_member");
         }
 
-        async public void NavigateToEditLevel(object sender, EventArgs e)
+        public async void NavigateToEditLevel(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("edit_level");
         }
 
-        async public void NavigateToEditClub(object sender, EventArgs e)
+        public async void NavigateToEditClub(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("edit_club");
         }

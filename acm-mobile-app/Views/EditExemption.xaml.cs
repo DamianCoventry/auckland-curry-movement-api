@@ -8,7 +8,7 @@ public partial class EditExemption : ContentPage
         BindingContext = this;
     }
 
-    async public void OnClickOK(object sender, EventArgs e)
+    public async void OnClickOK(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(ShortReason.Text))
         {
@@ -19,7 +19,7 @@ public partial class EditExemption : ContentPage
         await Shell.Current.GoToAsync("//manage_exemptions");
     }
 
-    async public void OnClickCancel(object sender, EventArgs e)
+    public async void OnClickCancel(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//home");
     }

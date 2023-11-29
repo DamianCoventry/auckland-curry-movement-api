@@ -46,7 +46,7 @@ public partial class EditClub : ContentPage
         new Models.Member() { ID = 30, Name = "Peter Wakely", IsFoundingFather = false },
     ];
 
-    async public void OnClickOK(object sender, EventArgs e)
+    public async void OnClickOK(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(ClubName.Text))
         {
@@ -62,12 +62,12 @@ public partial class EditClub : ContentPage
         await Shell.Current.GoToAsync("//manage_clubs");
     }
 
-    async public void OnClickCancel(object sender, EventArgs e)
+    public async void OnClickCancel(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//home");
     }
 
-    async public void OnClickShowMore(object sender, EventArgs e)
+    public async void OnClickShowMore(object sender, EventArgs e)
     {
         await DisplayActionSheet("Founding Fathers", "Close", null, "Greg Long", "Kareem Kader", "Elvin Maharaj", "Matt Wilson-Vogler", "Jason Mann");
     }

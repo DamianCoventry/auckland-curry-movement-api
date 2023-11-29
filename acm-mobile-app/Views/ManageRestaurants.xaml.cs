@@ -16,12 +16,12 @@ public partial class ManageRestaurants : ContentPage
                 new Models.Restaurant() { ID = 4, Name = "Kabana Indian Cuisine", StreetAddress = "598 New North Road" },
             ];
 
-    async public void OnClickAdd(object sender, EventArgs e)
+    public async void OnClickAdd(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("edit_restaurant");
     }
 
-    async public void OnClickModify(object sender, EventArgs e)
+    public async void OnClickModify(object sender, EventArgs e)
     {
         if (RestaurantsView.SelectedItem == null)
         {
@@ -31,7 +31,7 @@ public partial class ManageRestaurants : ContentPage
         await Shell.Current.GoToAsync("edit_restaurant");
     }
 
-    async public void OnClickDelete(object sender, EventArgs e)
+    public async void OnClickDelete(object sender, EventArgs e)
     {
         if (RestaurantsView.SelectedItem == null)
         {

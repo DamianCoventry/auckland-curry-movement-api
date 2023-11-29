@@ -1,8 +1,8 @@
 namespace acm_mobile_app.Views;
 
-public partial class EditMember : ContentPage
+public partial class EditReservation : ContentPage
 {
-	public EditMember()
+	public EditReservation()
 	{
 		InitializeComponent();
         BindingContext = this;
@@ -10,18 +10,18 @@ public partial class EditMember : ContentPage
 
     public async void OnClickOK(object sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(MemberName.Text))
+        if (string.IsNullOrWhiteSpace(Organiser.Text))
         {
             // TODO: display a 'name is required' method
             return;
         }
-        if (string.IsNullOrWhiteSpace(Sponsor.Text))
+        if (string.IsNullOrWhiteSpace(Restaurant.Text))
         {
-            // TODO: display a 'description is required' method
+            // TODO: display a 'suburb is required' method
             return;
         }
         // TODO: actually add it
-        await Shell.Current.GoToAsync("//manage_members");
+        await Shell.Current.GoToAsync("//home");
     }
 
     public async void OnClickCancel(object sender, EventArgs e)

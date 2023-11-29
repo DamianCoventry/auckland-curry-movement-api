@@ -15,12 +15,12 @@ public partial class ManageLevels : ContentPage
         new Models.Level() { ID = 3, RequiredAttendances = 100, Name = "Maharaja", Description = "Wear the Golden Jacket during the 100th curry dinner." },
     ];
 
-    async public void OnClickAdd(object sender, EventArgs e)
+    public async void OnClickAdd(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("edit_level");
     }
 
-    async public void OnClickModify(object sender, EventArgs e)
+    public async void OnClickModify(object sender, EventArgs e)
     {
         if (LevelsView.SelectedItem == null)
         {
@@ -30,7 +30,7 @@ public partial class ManageLevels : ContentPage
         await Shell.Current.GoToAsync("edit_level");
     }
 
-    async public void OnClickDelete(object sender, EventArgs e)
+    public async void OnClickDelete(object sender, EventArgs e)
     {
         if (LevelsView.SelectedItem == null)
         {

@@ -18,12 +18,12 @@ public partial class ManageClubs : ContentPage
         "Pilau Talkers",
     ];
 
-    async public void OnClickAdd(object sender, EventArgs e)
+    public async void OnClickAdd(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("edit_club");
     }
 
-    async public void OnClickModify(object sender, EventArgs e)
+    public async void OnClickModify(object sender, EventArgs e)
     {
         if (ClubListView.SelectedItem == null)
         {
@@ -33,7 +33,7 @@ public partial class ManageClubs : ContentPage
         await Shell.Current.GoToAsync("edit_club");
     }
 
-    async public void OnClickDelete(object sender, EventArgs e)
+    public async void OnClickDelete(object sender, EventArgs e)
     {
         if (ClubListView.SelectedItem == null)
         {

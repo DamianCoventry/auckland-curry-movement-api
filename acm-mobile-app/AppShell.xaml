@@ -14,6 +14,12 @@
         <views:FlyoutHeader />
     </Shell.FlyoutHeader>
 
+    <FlyoutItem Title="Sign In" Icon="sign_in.png">
+        <Tab>
+            <ShellContent Route="signin" ContentTemplate="{DataTemplate views:SignInPage}"/>
+        </Tab>
+    </FlyoutItem>
+
     <FlyoutItem Title="Home" Icon="home.png">
         <Tab>
             <ShellContent Route="home" ContentTemplate="{DataTemplate local:MainPage}"/>
@@ -50,7 +56,7 @@
         </Tab>
     </FlyoutItem>
 
-    <MenuItem Text="About" IconImageSource="help.png"/>
+    <MenuItem Text="About" IconImageSource="help.png" Clicked="NavigateToAbout"/>
 
     <Shell.FlyoutFooter>
         <views:FlyoutFooter />

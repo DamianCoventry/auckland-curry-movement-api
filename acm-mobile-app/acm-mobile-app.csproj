@@ -72,75 +72,81 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4"/>
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128"/>
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
-		<MauiImage Include="Resources\Images\*"/>
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185"/>
-		<MauiImage Update="Resources\Images\home.png" Resize="False" BaseSize="64,64"/>
-		<MauiImage Update="Resources\Images\member.png" Resize="False" BaseSize="64,64"/>
-		<MauiImage Update="Resources\Images\email.png" Resize="False" BaseSize="64,64"/>
-		<MauiImage Update="Resources\Images\phone_number.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\help.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\violation.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\flyout_header.png" Resize="True" BaseSize="512,341"/>
-        <MauiImage Update="Resources\Images\trophy.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\settings.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\attendee.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\modify.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\favourite.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\delete.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\add.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\search.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\auditor_only.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\comment.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\notification.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\date.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\chart.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\time.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\download.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\view.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\inductee.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\location.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\no.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\picture.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\cost.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\refresh.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\reservation.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\yes.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\restaurant.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\kotc.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\restaurant.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\level.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\dinner.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\beer.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\chilli.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\club.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\toilet_paper.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\exemption.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\guru.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\maharaja.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\ellipsis.png" Resize="False" BaseSize="64,64"/>
-        <MauiImage Update="Resources\Images\founding_father.png" Resize="False" BaseSize="64,64"/>
+		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\home.png" Resize="False" BaseSize="64,64" />
+		<MauiImage Update="Resources\Images\member.png" Resize="False" BaseSize="64,64" />
+		<MauiImage Update="Resources\Images\email.png" Resize="False" BaseSize="64,64" />
+		<MauiImage Update="Resources\Images\phone_number.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\help.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\violation.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\flyout_header.png" Resize="True" BaseSize="512,341" />
+        <MauiImage Update="Resources\Images\trophy.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\settings.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\attendee.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\modify.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\favourite.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\delete.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\add.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\search.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\auditor_only.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\comment.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\notification.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\date.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\chart.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\time.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\download.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\view.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\inductee.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\location.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\no.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\picture.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\cost.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\refresh.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\reservation.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\yes.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\restaurant.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\kotc.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\restaurant.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\level.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\dinner.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\beer.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\chilli.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\club.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\toilet_paper.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\exemption.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\guru.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\maharaja.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\ellipsis.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\founding_father.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\sign_in.png" Resize="False" BaseSize="64,64" />
+        <MauiImage Update="Resources\Images\sign_out.png" Resize="False" BaseSize="64,64" />
 
         <!-- Custom Fonts -->
-		<MauiFont Include="Resources\Fonts\*"/>
+		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)"/>
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.0"/>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)"/>
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0"/>
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.57.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\EditReservation.xaml.cs">
+	    <DependentUpon>EditReservation.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\ManageClubs.xaml.cs">
 	    <DependentUpon>ManageClubs.xaml</DependentUpon>
 	  </Compile>
@@ -150,6 +156,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\About.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\EditClub.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -160,6 +169,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditMember.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EditReservation.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditRestaurant.xaml">
@@ -184,6 +196,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ManageClubs.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SignInPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

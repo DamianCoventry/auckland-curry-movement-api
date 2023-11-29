@@ -1,0 +1,21 @@
+﻿GUIs
+                L E A D
+club            ✓ ✓ ✓ ✓
+level           ✓ ✓ ✓ ✓
+member          ✓ ✓ ✓ ✓
+restaurant      ✓ ✓ ✓ ✓
+exemption       ✓ ✓ ✓ ✓
+attendee
+dinner          ✓
+kotc
+notification
+reservation         ✓
+roty
+violation
+
+custom picker
+
+login
+login GUI
+check for internet connectivity before logging in
+

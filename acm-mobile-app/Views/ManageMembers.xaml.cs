@@ -42,12 +42,12 @@ public partial class ManageMembers : ContentPage
         new Models.Member() { ID = 30, Name = "Peter Wakely", IsFoundingFather = false },
     ];
 
-    async public void OnClickAdd(object sender, EventArgs e)
+    public async void OnClickAdd(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("edit_member");
     }
 
-    async public void OnClickModify(object sender, EventArgs e)
+    public async void OnClickModify(object sender, EventArgs e)
     {
         if (MembersView.SelectedItem == null)
         {
@@ -57,7 +57,7 @@ public partial class ManageMembers : ContentPage
         await Shell.Current.GoToAsync("edit_member");
     }
 
-    async public void OnClickDelete(object sender, EventArgs e)
+    public async void OnClickDelete(object sender, EventArgs e)
     {
         if (MembersView.SelectedItem == null)
         {

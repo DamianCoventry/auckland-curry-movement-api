@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="acm_mobile_app.Views.SignInPage"
+             xmlns:views="clr-namespace:acm_mobile_app.Views"
+             xmlns:models="clr-namespace:acm_mobile_app.Models"
+             x:DataType="views:SignInPage"
+             Title="SignInPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
+    </ContentPage.ToolbarItems>
+    <Grid Margin="20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Button x:Name="SignInPanel" Text="Sign In" Clicked="OnClickSignIn" Margin="20,5"/>
+            <Button x:Name="ApiPanel" Text="Send GET request" Clicked="OnClickSendGetRequest" Margin="20,5"/>
+            <ActivityIndicator x:Name="Spinner" IsRunning="False"/>
+        </Grid>
+
+        <ScrollView VerticalOptions="FillAndExpand" Margin="0,15" Grid.Row="1">
+            <ListView x:Name="MemberListView" ItemsSource="{Binding Members}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Member">
+                        <ViewCell>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label TextColor="CornflowerBlue" Text="{Binding Name}" FontAttributes="Bold"/>
+                                <Label Grid.Row="1" Text="{Binding IsFoundingFather}"/>
+                                <Label Grid.Column="1" HorizontalTextAlignment="End" FontAttributes="Bold" Text="{Binding CurrentLevelID}"/>
+
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

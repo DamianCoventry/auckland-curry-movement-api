@@ -1,3 +1,5 @@
 ﻿<a href="https://www.flaticon.com/free-icons/turban" title="turban icons">Turban icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/turban" title="turban icons">Turban icons created by Those Icons - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/beard" title="beard icons">Beard icons created by PIXARTIST - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/log-in" title="log in icons">Log in icons created by sonnycandra - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/logout" title="logout icons">Logout icons created by Freepik - Flaticon</a>

@@ -15,12 +15,12 @@ public partial class ManageExemptions : ContentPage
         new Models.Exemption() { ID = 3, ShortReason = "Moved to Australia", LongReason = "Chris moved to Australia permanently." },
     ];
 
-    async public void OnClickAdd(object sender, EventArgs e)
+    public async void OnClickAdd(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("edit_exemption");
     }
 
-    async public void OnClickModify(object sender, EventArgs e)
+    public async void OnClickModify(object sender, EventArgs e)
     {
         if (ExemptionsView.SelectedItem == null)
         {
@@ -30,7 +30,7 @@ public partial class ManageExemptions : ContentPage
         await Shell.Current.GoToAsync("edit_exemption");
     }
 
-    async public void OnClickDelete(object sender, EventArgs e)
+    public async void OnClickDelete(object sender, EventArgs e)
     {
         if (ExemptionsView.SelectedItem == null)
         {

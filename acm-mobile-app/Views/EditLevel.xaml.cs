@@ -8,7 +8,7 @@ public partial class EditLevel : ContentPage
         BindingContext = this;
     }
 
-    async public void OnClickOK(object sender, EventArgs e)
+    public async void OnClickOK(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(LevelName.Text))
         {
@@ -29,7 +29,7 @@ public partial class EditLevel : ContentPage
         await Shell.Current.GoToAsync("//manage_level");
     }
 
-    async public void OnClickCancel(object sender, EventArgs e)
+    public async void OnClickCancel(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//home");
     }

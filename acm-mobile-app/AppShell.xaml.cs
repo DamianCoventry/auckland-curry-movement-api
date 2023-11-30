@@ -22,7 +22,7 @@ namespace acm_mobile_app
             _acmService = new AcmService();
         }
 
-        internal IAcmService AcmService { get { return _acmService; } }
+        public IAcmService AcmService { get { return _acmService; } }
 
         public async void NavigateToAbout(object sender, EventArgs e)
         {

@@ -1,6 +1,6 @@
 ﻿namespace acm_mobile_app.Services
 {
-    internal interface IAcmService
+    public interface IAcmService
     {
         bool IsSignedIn { get; }
         Task<bool> SignIn();

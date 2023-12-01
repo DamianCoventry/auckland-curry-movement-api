@@ -1,4 +1,5 @@
-﻿using auckland_curry_movement_api.Models;
+﻿using acm_rest_api.Models;
+using auckland_curry_movement_api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace auckland_curry_movement_api
@@ -17,6 +18,8 @@ namespace auckland_curry_movement_api
         public DbSet<Club>? Club { get; set; }
 
         public DbSet<Dinner>? Dinner { get; set; }
+
+        public DbSet<PastDinner>? PastDinner { get; set; }
 
         public DbSet<Exemption>? Exemption { get; set; }
 

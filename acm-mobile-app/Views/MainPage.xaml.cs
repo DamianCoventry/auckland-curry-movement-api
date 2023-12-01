@@ -1,5 +1,6 @@
 ﻿using acm_mobile_app.Services;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace acm_mobile_app
 {
@@ -18,7 +19,12 @@ namespace acm_mobile_app
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            RefreshDinnerData(this, new EventArgs());
+            Task.Run(RefreshDinnerData);
+        }
+
+        public void RefreshData(object sender, EventArgs e)
+        {
+            Task.Run(RefreshDinnerData);
         }
 
         public void OnAddObject(object sender, EventArgs e)
@@ -58,20 +64,44 @@ namespace acm_mobile_app
 
         public int CurrentPage { get { return _page + 1; } }
 
-        public ObservableCollection<Models.Dinner> Dinners { get; set; } = [];
+        public class CollatedDinnerInfo
+        {
+            public string Organiser { get; set; } = string.Empty;
+            public string Restaurant { get; set; } = string.Empty;
+            public DateTime ExactDateTime { get; set; }
+            public float NegotiatedBeerPrice { get; set; }
+            public float NegotiatedBeerDiscount { get; set; }
+            public float CostPerPerson { get; set; }
+            public int NumBeersConsumed { get; set; }
+        }
 
-        public async void RefreshDinnerData(object o, EventArgs e)
+        public ObservableCollection<CollatedDinnerInfo> CollatedDinnerInfos { get; set; } = [];
+
+        private async Task RefreshDinnerData()
         {
             try
             {
-                ClubDinners.BeginRefresh();
+                var dinners = await AcmService.ListDinnersAsync(_page * PAGE_SIZE, PAGE_SIZE);
+                _numDinnersReturnedLastTime = dinners.Count;
 
-                var members = await AcmService.ListDinnersAsync(_page * PAGE_SIZE, PAGE_SIZE);
-                _numDinnersReturnedLastTime = members.Count;
+                CollatedDinnerInfos.Clear();
+                foreach (var dinner in dinners)
+                {
+                    var reservation = await AcmService.GetReservationAsync(dinner.ReservationID);
+                    var member = await AcmService.GetMemberAsync(reservation.OrganiserID);
+                    var restaurant = await AcmService.GetRestaurantAsync(reservation.RestaurantID);
 
-                Dinners.Clear();
-                foreach (var member in members)
-                    Dinners.Add(member);
+                    CollatedDinnerInfos.Add(new CollatedDinnerInfo()
+                    {
+                        Organiser = member.Name,
+                        Restaurant = restaurant.Name,
+                        ExactDateTime = reservation.ExactDateTime,
+                        NegotiatedBeerPrice = (float)(reservation.NegotiatedBeerPrice == null ? 0.0 : reservation.NegotiatedBeerPrice),
+                        NegotiatedBeerDiscount = (float)(reservation.NegotiatedBeerDiscount == null ? 0.0 : reservation.NegotiatedBeerDiscount),
+                        CostPerPerson = (float)(dinner.CostPerPerson == null ? 0.0 : dinner.CostPerPerson),
+                        NumBeersConsumed = (int)(dinner.NumBeersConsumed == null ? 0 : dinner.NumBeersConsumed)
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -88,7 +118,7 @@ namespace acm_mobile_app
             if (_page > 0)
             {
                 --_page;
-                RefreshDinnerData(o, e);
+                Task.Run(RefreshDinnerData);
                 CurrentPageNumber.Text = (1 + _page).ToString();
             }
         }
@@ -98,7 +128,7 @@ namespace acm_mobile_app
             if (_numDinnersReturnedLastTime >= PAGE_SIZE)
             {
                 ++_page;
-                RefreshDinnerData(o, e);
+                Task.Run(RefreshDinnerData);
                 CurrentPageNumber.Text = (1 + _page).ToString();
             }
         }

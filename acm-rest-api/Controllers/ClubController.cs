@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
+using acm_rest_api.Models;
+using auckland_curry_movement_api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using auckland_curry_movement_api;
-using auckland_curry_movement_api.Models;
 
 namespace auckland_curry_movement_api.Controllers
 {
@@ -55,6 +51,41 @@ namespace auckland_curry_movement_api.Controllers
             }
 
             return club;
+        }
+
+        // GET: api/Club/5/PastDinners
+        [HttpGet("{id}/PastDinners")]
+        public async Task<ActionResult<IEnumerable<PastDinner>>> GetClubPastDinners(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
+        {
+            if (_context.Club == null || _context.Dinner == null)
+            {
+                return NotFound();
+            }
+
+            var club = await _context.Club.Where(x => x.ID == id).FirstOrDefaultAsync();
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            return await _context
+                .Set<PastDinner>()
+                .FromSqlRaw(
+                    "SELECT d.ID, m.ID AS OrganiserID, m.Name AS OrganiserName, " +
+                    "       rs.ID AS RestaurantID, rs.Name AS RestaurantName, " +
+                    "       rv.ExactDateTime, rv.NegotiatedBeerPrice, rv.NegotiatedBeerDiscount, " +
+                    "       d.CostPerPerson, d.NumBeersConsumed, " +
+                    "       (SELECT IIF(COUNT(*) > 0, 1, 0) FROM KotC k WHERE k.DinnerID = d.ID) AS IsNewKotC, " +
+                    "       (SELECT IIF(COUNT(*) > 0, 1, 0) FROM RotY r1 WHERE r1.RestaurantID = rs.ID AND r1.Year < YEAR(GETDATE())) AS IsFormerRotY, " +
+                    "       (SELECT IIF(COUNT(*) > 0, 1, 0) FROM RotY r2 WHERE r2.RestaurantID = rs.ID AND r2.Year = YEAR(GETDATE())) AS IsCurrentRotY, " +
+                    "       (SELECT IIF(COUNT(*) > 0, 1, 0) FROM Violation v WHERE v.DinnerID = d.ID) AS IsRulesViolation " +
+                    "FROM Dinner d " +
+                    "INNER JOIN Reservation rv ON rv.ID = d.ReservationID " +
+                    "INNER JOIN Restaurant rs ON rs.ID = rv.RestaurantID " +
+                    "INNER JOIN Member m ON m.ID = rv.OrganiserID " +
+                    $"INNER JOIN MemberClub mc ON mc.MemberID = m.ID AND mc.ClubID = {id}")
+                .OrderBy(x => x.ID).Skip(first).Take(count)
+                .ToListAsync();
         }
 
         // PUT: api/Club/5

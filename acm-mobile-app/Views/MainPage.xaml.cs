@@ -1,6 +1,5 @@
 ﻿using acm_mobile_app.Services;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace acm_mobile_app
 {
@@ -16,18 +15,16 @@ namespace acm_mobile_app
             BindingContext = this;
         }
 
-        protected override void OnAppearing()
+        public int CurrentPage { get { return _page + 1; } }
+
+        public ObservableCollection<Models.PastDinner> PastDinners { get; set; } = [];
+
+        public void OnClickRefreshData(object sender, EventArgs e)
         {
-            base.OnAppearing();
-            Task.Run(RefreshDinnerData);
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
         }
 
-        public void RefreshData(object sender, EventArgs e)
-        {
-            Task.Run(RefreshDinnerData);
-        }
-
-        public void OnAddObject(object sender, EventArgs e)
+        public void OnClickAdd(object sender, EventArgs e)
         {
             ObjectGrid.IsVisible = !ObjectGrid.IsVisible;
         }
@@ -57,68 +54,12 @@ namespace acm_mobile_app
             await Shell.Current.GoToAsync("edit_club");
         }
 
-        private static IAcmService AcmService
-        {
-            get { return ((AppShell)Shell.Current).AcmService; }
-        }
-
-        public int CurrentPage { get { return _page + 1; } }
-
-        public class CollatedDinnerInfo
-        {
-            public string Organiser { get; set; } = string.Empty;
-            public string Restaurant { get; set; } = string.Empty;
-            public DateTime ExactDateTime { get; set; }
-            public float NegotiatedBeerPrice { get; set; }
-            public float NegotiatedBeerDiscount { get; set; }
-            public float CostPerPerson { get; set; }
-            public int NumBeersConsumed { get; set; }
-        }
-
-        public ObservableCollection<CollatedDinnerInfo> CollatedDinnerInfos { get; set; } = [];
-
-        private async Task RefreshDinnerData()
-        {
-            try
-            {
-                var dinners = await AcmService.ListDinnersAsync(_page * PAGE_SIZE, PAGE_SIZE);
-                _numDinnersReturnedLastTime = dinners.Count;
-
-                CollatedDinnerInfos.Clear();
-                foreach (var dinner in dinners)
-                {
-                    var reservation = await AcmService.GetReservationAsync(dinner.ReservationID);
-                    var member = await AcmService.GetMemberAsync(reservation.OrganiserID);
-                    var restaurant = await AcmService.GetRestaurantAsync(reservation.RestaurantID);
-
-                    CollatedDinnerInfos.Add(new CollatedDinnerInfo()
-                    {
-                        Organiser = member.Name,
-                        Restaurant = restaurant.Name,
-                        ExactDateTime = reservation.ExactDateTime,
-                        NegotiatedBeerPrice = (float)(reservation.NegotiatedBeerPrice == null ? 0.0 : reservation.NegotiatedBeerPrice),
-                        NegotiatedBeerDiscount = (float)(reservation.NegotiatedBeerDiscount == null ? 0.0 : reservation.NegotiatedBeerDiscount),
-                        CostPerPerson = (float)(dinner.CostPerPerson == null ? 0.0 : dinner.CostPerPerson),
-                        NumBeersConsumed = (int)(dinner.NumBeersConsumed == null ? 0 : dinner.NumBeersConsumed)
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "Close");
-            }
-            finally
-            {
-                ClubDinners.EndRefresh();
-            }
-        }
-
         public void OnPreviousPage(object o, EventArgs e)
         {
             if (_page > 0)
             {
                 --_page;
-                Task.Run(RefreshDinnerData);
+                MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
                 CurrentPageNumber.Text = (1 + _page).ToString();
             }
         }
@@ -128,8 +69,49 @@ namespace acm_mobile_app
             if (_numDinnersReturnedLastTime >= PAGE_SIZE)
             {
                 ++_page;
-                Task.Run(RefreshDinnerData);
+                MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
                 CurrentPageNumber.Text = (1 + _page).ToString();
+            }
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+        }
+
+        private static IAcmService AcmService
+        {
+            get { return ((AppShell)Shell.Current).AcmService; }
+        }
+
+        private async Task RefreshListData()
+        {
+            try
+            {
+                if (IsRefreshingListData.IsRunning)
+                    return;
+
+                IsRefreshingListData.IsRunning = true;
+                await Task.Delay(250);
+
+                // TODO: Get the club ID from somewhere
+                var dinners = await AcmService.ListClubPastDinnersAsync(1, _page * PAGE_SIZE, PAGE_SIZE);
+                _numDinnersReturnedLastTime = dinners.Count;
+
+                await Task.Delay(250);
+
+                PastDinners.Clear();
+                foreach (var dinner in dinners)
+                    PastDinners.Add(dinner);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "Close");
+            }
+            finally
+            {
+                IsRefreshingListData.IsRunning = false;
             }
         }
     }

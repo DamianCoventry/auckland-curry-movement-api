@@ -19,17 +19,17 @@
 
         <HorizontalStackLayout FlowDirection="RightToLeft">
 
-            <ImageButton Source="delete.png" Margin="10, 0"
+            <ImageButton Source="delete.png" Margin="10,0"
                          Clicked="OnClickDelete"
                          WidthRequest="32" HeightRequest="32"
                          ToolTipProperties.Text="Delete"/>
 
-            <ImageButton Source="modify.png" Margin="10, 0"
+            <ImageButton Source="modify.png" Margin="10,0"
                          Clicked="OnClickModify"
                          WidthRequest="32" HeightRequest="32"
                          ToolTipProperties.Text="Edit"/>
 
-            <ImageButton Source="add.png" Margin="10, 0"
+            <ImageButton Source="add.png" Margin="10,0"
                          Clicked="OnClickAdd"
                          WidthRequest="32" HeightRequest="32"
                          ToolTipProperties.Text="Add"/>

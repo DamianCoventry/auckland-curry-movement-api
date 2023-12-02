@@ -22,82 +22,76 @@
         </Grid.ColumnDefinitions>
 
         <ImageButton Source="add.png"
-                     Clicked="OnAddObject"
+                     Clicked="OnClickAdd"
                      WidthRequest="32" HeightRequest="32"
                      ToolTipProperties.Text="Add a new object"
                      HorizontalOptions="End"
                      VerticalOptions="Center"/>
 
-        <Grid x:Name="ObjectGrid" IsVisible="false" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <ImageButton Source="reservation.png"
+        <HorizontalStackLayout x:Name="ObjectGrid" FlowDirection="RightToLeft" IsVisible="false" Grid.Row="1">
+            <ImageButton Source="reservation.png" Margin="10,0,0,0"
                          Clicked="OnAddReservation"
                          WidthRequest="32" HeightRequest="32"
-                         ToolTipProperties.Text="New reservation"
-                         HorizontalOptions="Center"
-                         VerticalOptions="Center"/>
+                         ToolTipProperties.Text="New reservation"/>
 
-            <ImageButton Source="restaurant.png"
+            <ImageButton Source="restaurant.png" Margin="10,0,0,0"
                          Clicked="OnAddRestaurant"
                          WidthRequest="32" HeightRequest="32"
-                         ToolTipProperties.Text="New restaurant"
-                         HorizontalOptions="Center"
-                         VerticalOptions="Center" Grid.Column="1"/>
+                         ToolTipProperties.Text="New restaurant"/>
 
-            <ImageButton Source="member.png"
+            <ImageButton Source="member.png" Margin="10,0,0,0"
                          Clicked="OnAddDinner"
                          WidthRequest="32" HeightRequest="32"
-                         ToolTipProperties.Text="New member"
-                         HorizontalOptions="Center"
-                         VerticalOptions="Center" Grid.Column="2"/>
+                         ToolTipProperties.Text="New member"/>
 
-            <ImageButton Source="level.png"
+            <ImageButton Source="level.png" Margin="10,0,0,0"
                          Clicked="NavigateToEditLevel"
                          WidthRequest="32" HeightRequest="32"
-                         ToolTipProperties.Text="New level"
-                     HorizontalOptions="Center"
-                     VerticalOptions="Center" Grid.Column="3"/>
+                         ToolTipProperties.Text="New level"/>
 
-            <ImageButton Source="club.png"
+            <ImageButton Source="club.png" Margin="10,0,0,0"
                          Clicked="NavigateToEditClub"
                          WidthRequest="32" HeightRequest="32"
-                         ToolTipProperties.Text="New club"
-                     HorizontalOptions="Center"
-                     VerticalOptions="Center" Grid.Column="4"/>
-        </Grid>
+                         ToolTipProperties.Text="New club"/>
 
-        <Grid>
-            <ImageButton Source="refresh.png" WidthRequest="32" Clicked="RefreshData"/>
-        </Grid>
-        
-        <ListView x:Name="ClubDinners" ItemsSource="{Binding CollatedDinnerInfos}" Grid.Row="3">
+            <ImageButton Source="refresh.png" Margin="10,0,0,0"
+                         Clicked="OnClickRefreshData"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Refresh"/>
+        </HorizontalStackLayout>
+
+        <ActivityIndicator x:Name="IsRefreshingListData" Grid.Row="2"/>
+
+        <ListView x:Name="DinnerListView" ItemsSource="{Binding PastDinners}" Grid.Row="3" RowHeight="96">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Restaurant}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
-                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding Organiser}" FontAttributes="Bold"/>
+                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding RestaurantName}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
+                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding OrganiserName}" FontAttributes="Bold"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="{Binding ExactDateTime}" HorizontalTextAlignment="End"/>
                             <Label Grid.Row="1" Grid.Column="1" Text="{Binding CostPerPerson}" HorizontalTextAlignment="End" />
+
+                            <HorizontalStackLayout Grid.Row="2">
+                                <ImageButton Source="chilli.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                             ToolTipProperties.Text="A new KotC was crowned" IsVisible="{Binding NewKotC}"/>
+                                <ImageButton Source="time.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                             ToolTipProperties.Text="This restaurant is a former RotY" IsVisible="{Binding FormerRotY}"/>
+                                <ImageButton Source="roty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                             ToolTipProperties.Text="This restaurant is the current RotY" IsVisible="{Binding CurrentRotY}"/>
+                                <ImageButton Source="violation.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                             ToolTipProperties.Text="A rules violation occurred" IsVisible="{Binding RulesViolation}"/>
+                            </HorizontalStackLayout>
 
                         </Grid>
                     </ViewCell>

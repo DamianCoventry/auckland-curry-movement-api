@@ -13,55 +13,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Button Text="Sign In" Clicked="SignIn" Margin="20,5"/>
-            <Button Text="Refresh" Clicked="RefreshMemberData" Margin="20,5" Grid.Row="1"/>
-            <ActivityIndicator x:Name="Spinner" IsRunning="False" Margin="20,5" Grid.Row="2"/>
-        </Grid>
-
-        <ListView x:Name="ClubMembers" ItemsSource="{Binding Members}" Grid.Row="1">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:Member">
-                    <ViewCell>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
-                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding CurrentLevelID}" FontAttributes="Bold" HorizontalTextAlignment="End"/>
-                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding IsFoundingFather}"/>
-
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-        <Grid Grid.Row="2" HeightRequest="50">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Text="Previous Page" Grid.Column="1" Clicked="OnPreviousPage" Margin="5"/>
-            <Button Text="Next Page" Grid.Column="2" Clicked="OnNextPage" Margin="5"/>
-            <Label x:Name="CurrentPageNumber" Text="{Binding CurrentPage}" Grid.Column="3" HorizontalTextAlignment="End"/>
-        </Grid>
-
+        <Button Text="Sign In" Clicked="OnClickSignIn" Margin="20,5"/>
+        <ActivityIndicator x:Name="SigningInIndicator" IsRunning="False" Grid.Row="1"/>
+        <Label x:Name="SignInResult" Text="" Grid.Row="2" Margin="0,10" FontAttributes="Bold" FontSize="Large"/>
+        <Label Text="Access Token:" Grid.Row="3"/>
+        <Editor x:Name="Token" HeightRequest="200" Grid.Row="4"/>
     </Grid>
 </ContentPage>

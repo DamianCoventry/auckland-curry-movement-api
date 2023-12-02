@@ -5,6 +5,7 @@
         bool IsSignedIn { get; }
         Task<bool> SignIn();
         void SignOut();
+        string AccessToken { get; }
 
         Task<List<Models.Attendee>> ListAttendeesAsync(int first, int count);
         Task<Models.Attendee> GetAttendeeAsync(int ID);
@@ -13,6 +14,7 @@
         Task DeleteAttendeeAsync(int ID);
 
         Task<List<Models.Club>> ListClubsAsync(int first, int count);
+        Task<List<Models.PastDinner>> ListClubPastDinnersAsync(int ID, int first, int count);
         Task<Models.Club> GetClubAsync(int ID);
         Task<Models.Club> AddClubAsync(Models.Club x);
         Task UpdateClubAsync(Models.Club x);

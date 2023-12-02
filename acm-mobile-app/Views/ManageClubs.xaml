@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="using:acm_mobile_app"
              xmlns:views="clr-namespace:acm_mobile_app.Views"
+             xmlns:models="clr-namespace:acm_mobile_app.Models"
              x:Class="acm_mobile_app.Views.ManageClubs"
              x:DataType="views:ManageClubs"
              Title="Clubs">
@@ -12,36 +13,73 @@
     <Grid Margin="20,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <HorizontalStackLayout FlowDirection="RightToLeft">
-            
-            <ImageButton Source="delete.png" Margin="10, 0"
+        <HorizontalStackLayout Grid.Row="0" FlowDirection="RightToLeft">
+            <ImageButton Source="delete.png" Margin="10,0,0,0"
                          Clicked="OnClickDelete"
                          WidthRequest="32" HeightRequest="32"
                          ToolTipProperties.Text="Delete"/>
-            
-            <ImageButton Source="modify.png" Margin="10, 0"
+
+            <ImageButton Source="modify.png" Margin="10,0,0,0"
                          Clicked="OnClickModify"
                          WidthRequest="32" HeightRequest="32"
                          ToolTipProperties.Text="Edit"/>
-            
-            <ImageButton Source="add.png" Margin="10, 0"
+
+            <ImageButton Source="add.png" Margin="10,0,0,0"
                          Clicked="OnClickAdd"
                          WidthRequest="32" HeightRequest="32"
                          ToolTipProperties.Text="Add"/>
-            
+
+            <ImageButton Source="refresh.png" Margin="10,0,0,0"
+                         Clicked="OnClickRefreshData"
+                         WidthRequest="32" HeightRequest="32"
+                         ToolTipProperties.Text="Refresh"/>
         </HorizontalStackLayout>
 
-        <ScrollView VerticalOptions="FillAndExpand" Grid.Row="1" Margin="0,15">
-            <VerticalStackLayout>
-                <ListView x:Name="ClubListView" ItemsSource="{Binding Clubs}"/>
-            </VerticalStackLayout>
-        </ScrollView>
+        <ActivityIndicator Grid.Row="1" x:Name="IsRefreshingListData"/>
+
+        <ListView Grid.Row="2" x:Name="ClubListView" ItemsSource="{Binding Clubs}" Margin="0,15">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Club">
+                    <ViewCell>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding NumMembers}"/>
+                                <Label Text=" members" Grid.Column="1"/>
+                            </Grid>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid Grid.Row="3" HeightRequest="50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Text="Previous Page" Grid.Column="1" Clicked="OnPreviousPage" Margin="5"/>
+            <Button Text="Next Page" Grid.Column="2" Clicked="OnNextPage" Margin="5"/>
+            <Label x:Name="CurrentPageNumber" Text="{Binding CurrentPage}" Grid.Column="3" HorizontalTextAlignment="End"/>
+        </Grid>
 
     </Grid>
 </ContentPage>

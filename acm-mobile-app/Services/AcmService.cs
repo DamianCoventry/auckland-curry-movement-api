@@ -66,6 +66,8 @@ namespace acm_mobile_app.Services
             _accessToken = string.Empty;
         }
 
+        public string AccessToken { get { return _accessToken; } }
+
         private struct MultipleItemsResult<T>
         {
             public List<T>? _items;
@@ -531,6 +533,30 @@ namespace acm_mobile_app.Services
         public Task<List<Club>> ListClubsAsync(int first, int count)
         {
             return ListItems<Club>("Club", first, count);
+        }
+
+        public async Task<List<PastDinner>> ListClubPastDinnersAsync(int ID, int first, int count)
+        {
+            await AcquireTokenIfRequired();
+
+            var statusCode = await ListItemsInternal<PastDinner>($"Club/{ID}/PastDinners", first, count);
+            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._items != null)
+                return statusCode._items;
+
+            if (statusCode._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception("Unable to retrieve a list of items");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            statusCode = await ListItemsInternal<PastDinner>($"Club/{ID}/PastDinners", first, count);
+            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._items != null)
+                return statusCode._items;
+
+            if (statusCode._statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception("Unable to retrieve a list of items");
         }
 
         public Task<List<Dinner>> ListDinnersAsync(int first, int count)

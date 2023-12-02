@@ -104,7 +104,7 @@
         </Grid>
 
         <HorizontalStackLayout FlowDirection="RightToLeft" Margin="0,15" Grid.Row="6">
-            <ImageButton Source="yes.png" Margin="10, 0" Clicked="OnClickOK"
+            <ImageButton Source="yes.png" Margin="10,0" Clicked="OnClickOK"
                          WidthRequest="32" HeightRequest="32" ToolTipProperties.Text="Save"/>
         </HorizontalStackLayout>
     </Grid>

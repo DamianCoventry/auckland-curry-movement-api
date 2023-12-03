@@ -1,3 +1,6 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+
 namespace acm_mobile_app.Views;
 
 public partial class EditClub : ContentPage
@@ -50,12 +53,14 @@ public partial class EditClub : ContentPage
     {
         if (string.IsNullOrWhiteSpace(ClubName.Text))
         {
-            // TODO: display a 'name is required' method
+            var toast = Toast.Make("A name for the club is required", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         if (FoundingFathers.Count == 0)
         {
-            // TODO: display a 'at fewest one founding father must be added' method
+            var toast = Toast.Make("At least one founding father for the club is required", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         // TODO: actually add it

@@ -7,7 +7,7 @@ namespace acm_mobile_app
     {
         private const int PAGE_SIZE = 10;
         private int _page = 0;
-        private int _numDinnersReturnedLastTime = 0;
+        private int _numItemsReturnedLastTime = 0;
 
         public MainPage()
         {
@@ -66,7 +66,7 @@ namespace acm_mobile_app
 
         public void OnNextPage(object o, EventArgs e)
         {
-            if (_numDinnersReturnedLastTime >= PAGE_SIZE)
+            if (_numItemsReturnedLastTime >= PAGE_SIZE)
             {
                 ++_page;
                 MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
@@ -97,10 +97,11 @@ namespace acm_mobile_app
 
                 // TODO: Get the club ID from somewhere
                 var dinners = await AcmService.ListClubPastDinnersAsync(1, _page * PAGE_SIZE, PAGE_SIZE);
-                _numDinnersReturnedLastTime = dinners.Count;
+                _numItemsReturnedLastTime = dinners.Count;
 
                 await Task.Delay(250);
 
+                DinnerListView.SelectedItem = null;
                 PastDinners.Clear();
                 foreach (var dinner in dinners)
                     PastDinners.Add(dinner);

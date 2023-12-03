@@ -1,3 +1,6 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+
 namespace acm_mobile_app.Views;
 
 public partial class EditExemption : ContentPage
@@ -12,7 +15,8 @@ public partial class EditExemption : ContentPage
     {
         if (string.IsNullOrWhiteSpace(ShortReason.Text))
         {
-            // TODO: display a 'short reason is required' method
+            var toast = Toast.Make("A short reason for the exemption is required", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         // TODO: actually add it

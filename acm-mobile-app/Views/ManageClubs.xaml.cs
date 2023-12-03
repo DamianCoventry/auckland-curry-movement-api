@@ -1,5 +1,9 @@
 using acm_mobile_app.Services;
+using Microsoft.Maui;
 using System.Collections.ObjectModel;
+using static System.Net.Mime.MediaTypeNames;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 
 namespace acm_mobile_app.Views
 {
@@ -7,7 +11,7 @@ namespace acm_mobile_app.Views
     {
         private const int PAGE_SIZE = 10;
         private int _page = 0;
-        private int _numDinnersReturnedLastTime = 0;
+        private int _numItemsReturnedLastTime = 0;
 
         public ManageClubs()
         {
@@ -33,7 +37,8 @@ namespace acm_mobile_app.Views
         {
             if (ClubListView.SelectedItem == null)
             {
-                // TODO: display a 'select a club' message
+                var toast = Toast.Make("Select a club first", ToastDuration.Short, 14);
+                await toast.Show();
                 return;
             }
             await Shell.Current.GoToAsync("edit_club");
@@ -43,7 +48,8 @@ namespace acm_mobile_app.Views
         {
             if (ClubListView.SelectedItem == null)
             {
-                // TODO: display a 'select a club' message
+                var toast = Toast.Make("Select a club first", ToastDuration.Short, 14);
+                await toast.Show();
                 return;
             }
             if (await DisplayAlert("Delete Club", "Are you sure you want to delete the selected club?", "Yes", "No"))
@@ -64,7 +70,7 @@ namespace acm_mobile_app.Views
 
         public void OnNextPage(object o, EventArgs e)
         {
-            if (_numDinnersReturnedLastTime >= PAGE_SIZE)
+            if (_numItemsReturnedLastTime >= PAGE_SIZE)
             {
                 ++_page;
                 MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
@@ -94,10 +100,11 @@ namespace acm_mobile_app.Views
                 await Task.Delay(250);
 
                 var clubs = await AcmService.ListClubsAsync(_page * PAGE_SIZE, PAGE_SIZE);
-                _numDinnersReturnedLastTime = clubs.Count;
+                _numItemsReturnedLastTime = clubs.Count;
 
                 await Task.Delay(250);
 
+                ClubListView.SelectedItem = null;
                 Clubs.Clear();
                 foreach (var club in clubs)
                     Clubs.Add(club);

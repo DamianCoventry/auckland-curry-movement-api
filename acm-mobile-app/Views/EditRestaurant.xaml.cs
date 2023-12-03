@@ -1,3 +1,6 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+
 namespace acm_mobile_app.Views;
 
 public partial class EditRestaurant : ContentPage
@@ -12,12 +15,14 @@ public partial class EditRestaurant : ContentPage
     {
         if (string.IsNullOrWhiteSpace(RestaurantName.Text))
         {
-            // TODO: display a 'name is required' method
+            var toast = Toast.Make("A name for the restaurant is required", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         if (string.IsNullOrWhiteSpace(Suburb.Text))
         {
-            // TODO: display a 'suburb is required' method
+            var toast = Toast.Make("A suburb for the restaurant is required", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         // TODO: actually add it

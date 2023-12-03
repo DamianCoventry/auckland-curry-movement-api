@@ -1,3 +1,6 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+
 namespace acm_mobile_app.Views;
 
 public partial class EditReservation : ContentPage
@@ -12,12 +15,14 @@ public partial class EditReservation : ContentPage
     {
         if (string.IsNullOrWhiteSpace(Organiser.Text))
         {
-            // TODO: display a 'name is required' method
+            var toast = Toast.Make("An organiser for the reservation is required", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         if (string.IsNullOrWhiteSpace(Restaurant.Text))
         {
-            // TODO: display a 'suburb is required' method
+            var toast = Toast.Make("A restaurant for the reservation is required", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         // TODO: actually add it

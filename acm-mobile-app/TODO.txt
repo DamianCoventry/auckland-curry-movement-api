@@ -1,21 +1,25 @@
-﻿GUIs
-                L E A D
-club            ✓ ✓ ✓ ✓
-level           ✓ ✓ ✓ ✓
-member          ✓ ✓ ✓ ✓
-restaurant      ✓ ✓ ✓ ✓
-exemption       ✓ ✓ ✓ ✓
-attendee
-dinner          ✓
-kotc
-notification
-reservation         ✓
-roty
-violation
+﻿                L E A D
+club            ✓      
+level           ✓      
+member          ✓      
+restaurant      ✓      
+exemption       ✓      
+attendee               
+dinner          ✓      
+kotc                   
+notification           
+reservation            
+roty                   
+violation              
 
 custom picker
+better pagination GUI
+add a search ability
+toast popups
+snackbars
 
-login
-login GUI
-check for internet connectivity before logging in
-
+signin          ✓
+signin GUI      ✓
+signout
+signout GUI
+check for internet connectivity before signing in

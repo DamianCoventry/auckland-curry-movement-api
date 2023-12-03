@@ -4,6 +4,6 @@
              x:Class="acm_mobile_app.Views.FlyoutHeader"
              HeightRequest="200">
     <Grid>
-        <Image Aspect="AspectFill" Source="flyout_header.png"/>
+        <Image Aspect="AspectFill" Source="acm_member_hi_res.png"/>
     </Grid>
 </ContentView>

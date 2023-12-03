@@ -5,22 +5,25 @@
              xmlns:views="clr-namespace:acm_mobile_app.Views"
              xmlns:models="clr-namespace:acm_mobile_app.Models"
              x:DataType="views:SignInPage"
-             Title="SignInPage">
+             Title="SignInPage"
+             BackgroundColor="#f2fbf8">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
     </ContentPage.ToolbarItems>
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Button Text="Sign In" Clicked="OnClickSignIn" Margin="20,5"/>
-        <ActivityIndicator x:Name="SigningInIndicator" IsRunning="False" Grid.Row="1"/>
-        <Label x:Name="SignInResult" Text="" Grid.Row="2" Margin="0,10" FontAttributes="Bold" FontSize="Large"/>
-        <Label Text="Access Token:" Grid.Row="3"/>
-        <Editor x:Name="Token" HeightRequest="200" Grid.Row="4"/>
+        <Image Source="acm_logo_hi_res.png"/>
+        <Button Grid.Row="1" Text="Sign In" Clicked="OnClickSignIn" Margin="20,5"/>
+        <ActivityIndicator Grid.Row="2" x:Name="SigningInIndicator" IsRunning="False"/>
+        <Label Grid.Row="3" x:Name="SignInResult" Text="" Margin="0,10" FontAttributes="Bold" FontSize="Large"/>
+        <Label Grid.Row="4" Text="Access Token:"/>
+        <Editor Grid.Row="5" x:Name="Token" HeightRequest="200" IsReadOnly="True"/>
     </Grid>
 </ContentPage>

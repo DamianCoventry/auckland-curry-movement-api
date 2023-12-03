@@ -1,46 +1,30 @@
+using acm_mobile_app.Services;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using System.Collections.ObjectModel;
+
 namespace acm_mobile_app.Views;
 
 public partial class ManageMembers : ContentPage
 {
-	public ManageMembers()
-	{
-		InitializeComponent();
+    private const int PAGE_SIZE = 10;
+    private int _page = 0;
+    private int _numItemsReturnedLastTime = 0;
+
+    public ManageMembers()
+    {
+        InitializeComponent();
         BindingContext = this;
     }
 
-    // TODO: fill this is dynamically
-    public List<Models.Member> Members { get; set; } = [
-        new Models.Member() { ID = 1, Name = "Adrian Dick", IsFoundingFather = true },
-        new Models.Member() { ID = 2, Name = "Brent Verry", IsFoundingFather = false },
-        new Models.Member() { ID = 3, Name = "Brent Gladding", IsFoundingFather = false },
-        new Models.Member() { ID = 4, Name = "Matt Moore", IsFoundingFather = true },
-        new Models.Member() { ID = 5, Name = "Jason Mann", IsFoundingFather = false },
-        new Models.Member() { ID = 6, Name = "Damian Coventry", IsFoundingFather = false },
-        new Models.Member() { ID = 7, Name = "Martin Dick", IsFoundingFather = false },
-        new Models.Member() { ID = 8, Name = "Justin MacLennan", IsFoundingFather = false },
-        new Models.Member() { ID = 9, Name = "Dave Fowlie", IsFoundingFather = true },
-        new Models.Member() { ID = 10, Name = "Francis Lings", IsFoundingFather = true },
-        new Models.Member() { ID = 11, Name = "Chris Whitehead", IsFoundingFather = false },
-        new Models.Member() { ID = 12, Name = "Rob MacLennan", IsFoundingFather = true },
-        new Models.Member() { ID = 13, Name = "Kurt Kelsall", IsFoundingFather = false },
-        new Models.Member() { ID = 14, Name = "Matt Wilson-Vogler", IsFoundingFather = false },
-        new Models.Member() { ID = 15, Name = "Stu Macferson", IsFoundingFather = false },
-        new Models.Member() { ID = 16, Name = "Philip Hunt", IsFoundingFather = false },
-        new Models.Member() { ID = 17, Name = "Ken Nicod", IsFoundingFather = false },
-        new Models.Member() { ID = 18, Name = "Scott Robinson", IsFoundingFather = false },
-        new Models.Member() { ID = 19, Name = "Kenny Stuart", IsFoundingFather = false },
-        new Models.Member() { ID = 20, Name = "Jason Armstrong", IsFoundingFather = false },
-        new Models.Member() { ID = 21, Name = "Greg Long", IsFoundingFather = false },
-        new Models.Member() { ID = 22, Name = "Chris Stephens", IsFoundingFather = false },
-        new Models.Member() { ID = 23, Name = "Gary Spalding", IsFoundingFather = false },
-        new Models.Member() { ID = 24, Name = "Kareem Kader", IsFoundingFather = false },
-        new Models.Member() { ID = 25, Name = "Hamish Graham", IsFoundingFather = false },
-        new Models.Member() { ID = 26, Name = "Elvin Maharaj", IsFoundingFather = false },
-        new Models.Member() { ID = 27, Name = "Daryl Blake", IsFoundingFather = false },
-        new Models.Member() { ID = 28, Name = "Paul James", IsFoundingFather = false },
-        new Models.Member() { ID = 29, Name = "Davey Goode", IsFoundingFather = false },
-        new Models.Member() { ID = 30, Name = "Peter Wakely", IsFoundingFather = false },
-    ];
+    public int CurrentPage { get { return _page + 1; } }
+
+    public ObservableCollection<Models.Member> Members { get; set; } = [];
+
+    public void OnClickRefreshData(object sender, EventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+    }
 
     public async void OnClickAdd(object sender, EventArgs e)
     {
@@ -49,9 +33,10 @@ public partial class ManageMembers : ContentPage
 
     public async void OnClickModify(object sender, EventArgs e)
     {
-        if (MembersView.SelectedItem == null)
+        if (MemberListView.SelectedItem == null)
         {
-            // TODO: display a 'select a member' message
+            var toast = Toast.Make("Select a member first", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         await Shell.Current.GoToAsync("edit_member");
@@ -59,14 +44,76 @@ public partial class ManageMembers : ContentPage
 
     public async void OnClickDelete(object sender, EventArgs e)
     {
-        if (MembersView.SelectedItem == null)
+        if (MemberListView.SelectedItem == null)
         {
-            // TODO: display a 'select a member' message
+            var toast = Toast.Make("Select a member first", ToastDuration.Short, 14);
+            await toast.Show();
             return;
         }
         if (await DisplayAlert("Delete Member", "Are you sure you want to delete the selected member?", "Yes", "No"))
         {
             // TODO: actually delete the member
+        }
+    }
+
+    public void OnPreviousPage(object o, EventArgs e)
+    {
+        if (_page > 0)
+        {
+            --_page;
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+            CurrentPageNumber.Text = (1 + _page).ToString();
+        }
+    }
+
+    public void OnNextPage(object o, EventArgs e)
+    {
+        if (_numItemsReturnedLastTime >= PAGE_SIZE)
+        {
+            ++_page;
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+            CurrentPageNumber.Text = (1 + _page).ToString();
+        }
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+    }
+
+    private static IAcmService AcmService
+    {
+        get { return ((AppShell)Shell.Current).AcmService; }
+    }
+
+    private async Task RefreshListData()
+    {
+        try
+        {
+            if (IsRefreshingListData.IsRunning)
+                return;
+
+            IsRefreshingListData.IsRunning = true;
+            await Task.Delay(250);
+
+            var members = await AcmService.ListMembersAsync(_page * PAGE_SIZE, PAGE_SIZE);
+            _numItemsReturnedLastTime = members.Count;
+
+            await Task.Delay(250);
+
+            MemberListView.SelectedItem = null;
+            Members.Clear();
+            foreach (var member in members)
+                Members.Add(member);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "Close");
+        }
+        finally
+        {
+            IsRefreshingListData.IsRunning = false;
         }
     }
 }

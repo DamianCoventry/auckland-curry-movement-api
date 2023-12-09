@@ -34,10 +34,10 @@ namespace acm_rest_api.Controllers
                 CurrentPage = first,
                 TotalPages = totalPages,
                 PageItems = await _context.Club
-                                            .Include(x => x.Members)
-                                            .OrderBy(x => x.ID)
-                                            .Skip(first).Take(pageSize)
-                                            .ToListAsync()
+                    .Include(x => x.Members)
+                    .OrderBy(x => x.ID)
+                    .Skip(first).Take(pageSize)
+                    .ToListAsync()
             };
         }
 
@@ -216,16 +216,11 @@ namespace acm_rest_api.Controllers
 
             if (_context.Membership != null && foundingFathers != null && id != null)
             {
-                var memberClubs = await _context.Membership.Where(x => x.ClubID == id).ToListAsync();
-                foreach (var mc in memberClubs)
-                    _context.Membership.Remove(mc);
-
-                await _context.SaveChangesAsync();
-
-                foreach (var ff in foundingFathers)
+                var memberships = await _context.Membership.Where(x => x.ClubID == id).ToListAsync();
+                foreach (var membership in memberships)
                 {
-                    if (ff.ID != null)
-                        _context.Membership.Add(new Membership() { ClubID = (int)id, MemberID = (int)ff.ID, IsFoundingFather = true });
+                    membership.IsFoundingFather = foundingFathers.Where(x => x.ID == membership.MemberID).Any();
+                    _context.Entry(membership).State = EntityState.Modified;
                 }
 
                 await _context.SaveChangesAsync();

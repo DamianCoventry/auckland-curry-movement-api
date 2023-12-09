@@ -2,6 +2,8 @@ using acm_mobile_app.Services;
 using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using Microsoft.VisualBasic;
+using System.Collections;
 using System.Collections.ObjectModel;
 
 namespace acm_mobile_app.Views;
@@ -27,18 +29,20 @@ public partial class EditClub : ContentPage
 
     public List<SelectedMember> SelectedMembers
     {
-        get => _selectedMembers;
+        get
+        {
+            _selectedMembers = [];
+            foreach (var foundingFather in FoundingFathers)
+                _selectedMembers.Add(new SelectedMember() { IsSelected = true, Member = foundingFather });
+            return _selectedMembers;
+        }
         set
         {
             if (value == null)
                 return;
             _selectedMembers = value;
             FoundingFathers.Clear();
-            foreach (var member in _selectedMembers)
-            {
-                if (member.IsSelected)
-                    FoundingFathers.Add(member.Member);
-            }
+            SynchroniseFoundingFatherContainer();
         }
     }
 
@@ -69,12 +73,14 @@ public partial class EditClub : ContentPage
 
     public async void OnClickSelectMembers(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("select_members", true);
+        Dictionary<string, object> parameters = new() { { "ClubID", ClubID }, { "SelectedMembers", SelectedMembers } };
+        await Shell.Current.GoToAsync("select_members", true, parameters);
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        ClubNameEntry.Text = ClubName;
         MainThread.BeginInvokeOnMainThread(async () => { await RefreshFoundingFathers(); });
     }
 
@@ -145,6 +151,8 @@ public partial class EditClub : ContentPage
                         FoundingFathers.Add(x);
                 }
             }
+
+            SynchroniseFoundingFatherContainer();
         }
         catch (Exception ex)
         {
@@ -153,6 +161,18 @@ public partial class EditClub : ContentPage
         finally
         {
             LoadingIndicator.IsRunning = false;
+        }
+    }
+
+    private void SynchroniseFoundingFatherContainer()
+    {
+        foreach (var member in _selectedMembers)
+        {
+            var existingFoundingFather = FoundingFathers.FirstOrDefault(x => x.ID == member.Member.ID);
+            if (member.IsSelected && existingFoundingFather == null)
+                FoundingFathers.Add(member.Member);
+            else if (!member.IsSelected && existingFoundingFather != null)
+                FoundingFathers.Remove(existingFoundingFather);
         }
     }
 }

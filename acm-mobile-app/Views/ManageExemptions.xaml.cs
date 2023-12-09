@@ -36,7 +36,7 @@ public partial class ManageExemptions : ContentPage
     {
         if (ExemptionListView.SelectedItem == null)
         {
-            var toast = Toast.Make("Select an exemmption first", ToastDuration.Short, 14);
+            var toast = Toast.Make("Select an exemption first", ToastDuration.Short, 14);
             await toast.Show();
             return;
         }
@@ -47,7 +47,7 @@ public partial class ManageExemptions : ContentPage
     {
         if (ExemptionListView.SelectedItem == null)
         {
-            var toast = Toast.Make("Select an exemmption first", ToastDuration.Short, 14);
+            var toast = Toast.Make("Select an exemption first", ToastDuration.Short, 14);
             await toast.Show();
             return;
         }

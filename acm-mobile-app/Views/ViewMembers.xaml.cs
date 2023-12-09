@@ -6,13 +6,13 @@ namespace acm_mobile_app.Views;
 
 [QueryProperty(nameof(ClubID), "ClubID")]
 [QueryProperty(nameof(ClubName), "ClubName")]
-public partial class ViewFoundingFathers : ContentPage
+public partial class ViewMembers : ContentPage
 {
     private const int PAGE_SIZE = 10;
     private int _page = 0;
     private int _totalPages = 0;
 
-    public ViewFoundingFathers()
+    public ViewMembers()
 	{
 		InitializeComponent();
         BindingContext = this;
@@ -87,7 +87,7 @@ public partial class ViewFoundingFathers : ContentPage
             IsRefreshingListData.IsRunning = true;
             await Task.Delay(150);
 
-            var members = await AcmService.ListClubFoundingFathersAsync(ClubID, _page * PAGE_SIZE, PAGE_SIZE);
+            var members = await AcmService.ListClubMembersAsync(ClubID, _page * PAGE_SIZE, PAGE_SIZE);
             _totalPages = members.PageItems == null ? 0 : members.TotalPages;
 
             await Task.Delay(150);

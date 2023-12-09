@@ -1,6 +1,7 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -17,15 +18,27 @@ namespace acm_rest_api.Controllers
 
         // GET: api/Member
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Member>>> GetMember([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
+        public async Task<ActionResult<PageOfData<Member>>> GetMember([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
-            if (_context.Member == null)
+            if (_context.Member == null || pageSize <= 0)
             {
                 return NotFound();
             }
-            return await _context.Member
-                .OrderBy(x => x.ID).Skip(first).Take(count)
-                .ToListAsync();
+
+            int rowCount = await _context.Member.CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<Member>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context.Member
+                .OrderBy(x => x.ID)
+                    .Skip(first).Take(pageSize)
+                    .ToListAsync()
+            };
         }
 
         // GET: api/Member/5

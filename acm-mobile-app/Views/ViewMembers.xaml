@@ -4,9 +4,9 @@
              xmlns:local="using:acm_mobile_app"
              xmlns:views="clr-namespace:acm_mobile_app.Views"
              xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
-             x:Class="acm_mobile_app.Views.ViewFoundingFathers"
-             x:DataType="views:ViewFoundingFathers"
-             Title="ViewFoundingFathers">
+             x:Class="acm_mobile_app.Views.ViewMembers"
+             x:DataType="views:ViewMembers"
+             Title="ViewMembers">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
     </ContentPage.ToolbarItems>

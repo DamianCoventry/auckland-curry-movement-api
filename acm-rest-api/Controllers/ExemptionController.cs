@@ -1,6 +1,7 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -17,15 +18,27 @@ namespace acm_rest_api.Controllers
 
         // GET: api/Exemption
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Exemption>>> GetExemption([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
+        public async Task<ActionResult<PageOfData<Exemption>>> GetExemption([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
-            if (_context.Exemption == null)
+            if (_context.Exemption == null || pageSize <= 0)
             {
                 return NotFound();
             }
-            return await _context.Exemption
-                .OrderBy(x => x.ID).Skip(first).Take(count)
-                .ToListAsync();
+
+            int rowCount = await _context.Exemption.CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<Exemption>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context.Exemption
+                .OrderBy(x => x.ID)
+                    .Skip(first).Take(pageSize)
+                    .ToListAsync()
+            };
         }
 
         // GET: api/Exemption/5

@@ -1,6 +1,7 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -17,15 +18,27 @@ namespace acm_rest_api.Controllers
 
         // GET: api/Notification
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Notification>>> GetNotification([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
+        public async Task<ActionResult<PageOfData<Notification>>> GetNotification([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
-            if (_context.Notification == null)
+            if (_context.Notification == null || pageSize <= 0)
             {
                 return NotFound();
             }
-            return await _context.Notification
-                .OrderBy(x => x.ID).Skip(first).Take(count)
-                .ToListAsync();
+
+            int rowCount = await _context.Notification.CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<Notification>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context.Notification
+                .OrderBy(x => x.ID)
+                    .Skip(first).Take(pageSize)
+                    .ToListAsync()
+            };
         }
 
         // GET: api/Notification/5

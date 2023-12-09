@@ -1,6 +1,7 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -17,15 +18,27 @@ namespace acm_rest_api.Controllers
 
         // GET: api/Dinner
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Dinner>>> GetDinner([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
+        public async Task<ActionResult<PageOfData<Dinner>>> GetDinner([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
-            if (_context.Dinner == null)
+            if (_context.Dinner == null || pageSize <= 0)
             {
                 return NotFound();
             }
-            return await _context.Dinner
-                .OrderBy(x => x.ID).Skip(first).Take(count)
-                .ToListAsync();
+
+            int rowCount = await _context.Dinner.CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<Dinner>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context.Dinner
+                    .OrderBy(x => x.ID)
+                    .Skip(first).Take(pageSize)
+                    .ToListAsync()
+            };
         }
 
         // GET: api/Dinner/5

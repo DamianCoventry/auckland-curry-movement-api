@@ -23,3 +23,6 @@ signin GUI      ✓
 signout
 signout GUI
 check for internet connectivity before signing in
+
+Updating the FFs removes all non-FFs from the club.
+How to add FFs for a new club? There's no members yet.

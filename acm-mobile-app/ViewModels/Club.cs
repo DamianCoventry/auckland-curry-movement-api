@@ -7,13 +7,27 @@ namespace acm_mobile_app.ViewModels
         static public Club? FromModel(acm_models.Club? model)
         {
             if (model == null) return null;
-            return new Club()
+
+            var club = new Club
             {
                 _id = model.ID,
                 _name = model.Name,
                 _isArchived = model.IsArchived,
                 _archiveReason = model.ArchiveReason,
+                Members = []
             };
+
+            if (model.Members != null)
+            {
+                foreach (var m in model.Members)
+                {
+                    var x = Member.FromModel(m);
+                    if (x != null)
+                        club.Members.Add(x);
+                }
+            }
+
+            return club;
         }
 
         private int? _id;

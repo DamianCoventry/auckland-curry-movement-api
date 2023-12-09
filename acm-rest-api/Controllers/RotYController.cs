@@ -1,6 +1,7 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -17,15 +18,27 @@ namespace acm_rest_api.Controllers
 
         // GET: api/RotY
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RotY>>> GetRotY([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
+        public async Task<ActionResult<PageOfData<RotY>>> GetRotY([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
-            if (_context.RotY == null)
+            if (_context.RotY == null || pageSize <= 0)
             {
                 return NotFound();
             }
-            return await _context.RotY
-                .OrderBy(x => x.Year).Skip(first).Take(count)
-                .ToListAsync();
+
+            int rowCount = await _context.RotY.CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<RotY>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context.RotY
+                .OrderBy(x => x.Year)
+                    .Skip(first).Take(pageSize)
+                    .ToListAsync()
+            };
         }
 
         // GET: api/RotY/5

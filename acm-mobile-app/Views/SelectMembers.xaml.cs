@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 
 namespace acm_mobile_app.Views;
 
+[QueryProperty(nameof(ClubID), "ClubID")]
+[QueryProperty(nameof(MasterListOfMembers), "SelectedMembers")]
 public partial class SelectMembers : ContentPage
 {
     private const int PAGE_SIZE = 10;
@@ -18,6 +20,7 @@ public partial class SelectMembers : ContentPage
 
     public int CurrentPage { get { return _page + 1; } }
 
+    public int ClubID { get; set; }
     public List<SelectedMember> MasterListOfMembers { get; set; } = [];
     public ObservableCollection<SelectedMember> CurrentPageOfMembers { get; set; } = [];
 
@@ -93,9 +96,7 @@ public partial class SelectMembers : ContentPage
             IsRefreshing.IsRunning = true;
             await Task.Delay(150);
 
-            // TODO: Get the club ID from somewhere
-
-            var members = await AcmService.ListClubMembersAsync(1, _page * PAGE_SIZE, PAGE_SIZE);
+            var members = await AcmService.ListClubMembersAsync(ClubID, _page * PAGE_SIZE, PAGE_SIZE);
             _totalPages = members.PageItems == null ? 0 : members.TotalPages;
 
             MergeReceivedPageIntoMasterList(members.PageItems);

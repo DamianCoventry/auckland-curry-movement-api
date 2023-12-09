@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="using:acm_mobile_app"
              xmlns:views="clr-namespace:acm_mobile_app.Views"
-             xmlns:models="clr-namespace:acm_mobile_app.Models"
+             xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
              x:Class="acm_mobile_app.Views.ManageLevels"
              x:DataType="views:ManageLevels"
              Title="Levels">
@@ -47,7 +47,7 @@
 
         <ListView x:Name="LevelListView" ItemsSource="{Binding Levels}" Grid.Row="2" Margin="0,15" RowHeight="64">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:Level">
+                <DataTemplate x:DataType="viewmodels:Level">
                     <ViewCell>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -69,16 +69,26 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Grid Grid.Row="3" HeightRequest="50">
+        <Grid Grid.Row="3" Margin="0,8,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Text="Previous Page" Grid.Column="1" Clicked="OnPreviousPage" Margin="5"/>
-            <Button Text="Next Page" Grid.Column="2" Clicked="OnNextPage" Margin="5"/>
-            <Label x:Name="CurrentPageNumber" Text="{Binding CurrentPage}" Grid.Column="3" HorizontalTextAlignment="End"/>
+            <ImageButton Grid.Column="1" WidthRequest="32" HeightRequest="32" Margin="16,0" Source="angle_double_left.png" Clicked="OnClickFirst"/>
+            <ImageButton Grid.Column="2" WidthRequest="32" HeightRequest="32" Margin="16,0" Source="angle_left.png" Clicked="OnClickPrevious"/>
+            <Label Grid.Column="3"
+                   x:Name="CurrentPageNumber"
+                   Text="{Binding CurrentPage}"
+                   WidthRequest="32" HeightRequest="32"
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                   FontSize="Large"/>
+            <ImageButton Grid.Column="4" WidthRequest="32" HeightRequest="32" Margin="16,0" Source="angle_right.png" Clicked="OnClickNext"/>
+            <ImageButton Grid.Column="5" WidthRequest="32" HeightRequest="32" Margin="16,0" Source="angle_double_right.png" Clicked="OnClickLast"/>
         </Grid>
 
     </Grid>

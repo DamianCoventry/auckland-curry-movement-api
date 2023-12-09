@@ -28,9 +28,4 @@ public partial class EditRestaurant : ContentPage
         // TODO: actually add it
         await Shell.Current.GoToAsync("//manage_restaurants");
     }
-
-    public async void OnClickCancel(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//home");
-    }
 }

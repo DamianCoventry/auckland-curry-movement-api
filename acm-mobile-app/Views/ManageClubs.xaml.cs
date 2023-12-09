@@ -1,9 +1,7 @@
 using acm_mobile_app.Services;
-using Microsoft.Maui;
-using System.Collections.ObjectModel;
-using static System.Net.Mime.MediaTypeNames;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using System.Collections.ObjectModel;
 
 namespace acm_mobile_app.Views
 {
@@ -11,7 +9,8 @@ namespace acm_mobile_app.Views
     {
         private const int PAGE_SIZE = 10;
         private int _page = 0;
-        private int _numItemsReturnedLastTime = 0;
+        private int _totalPages = 0;
+        private bool _isDeleting = false;
 
         public ManageClubs()
         {
@@ -21,7 +20,7 @@ namespace acm_mobile_app.Views
 
         public int CurrentPage { get { return _page + 1; } }
 
-        public ObservableCollection<Models.Club> Clubs { get; set; } = [];
+        public ObservableCollection<Club> Clubs { get; set; } = [];
 
         public void OnClickRefreshData(object sender, EventArgs e)
         {
@@ -30,7 +29,7 @@ namespace acm_mobile_app.Views
 
         public async void OnClickAdd(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("edit_club");
+            await Shell.Current.GoToAsync("add_club", true);
         }
 
         public async void OnClickModify(object sender, EventArgs e)
@@ -41,7 +40,12 @@ namespace acm_mobile_app.Views
                 await toast.Show();
                 return;
             }
-            await Shell.Current.GoToAsync("edit_club");
+
+            if (ClubListView.SelectedItem is Viewviewmodels:Club club)
+            {
+                Dictionary<string, object> parameters = new() { { "ClubID", club.ID ?? 0 }, { "ClubName", club.Name } };
+                await Shell.Current.GoToAsync("edit_club", true, parameters);
+            }
         }
 
         public async void OnClickDelete(object sender, EventArgs e)
@@ -54,11 +58,21 @@ namespace acm_mobile_app.Views
             }
             if (await DisplayAlert("Delete Club", "Are you sure you want to delete the selected club?", "Yes", "No"))
             {
-                // TODO: actually delete the club
+                MainThread.BeginInvokeOnMainThread(async () => { await DeleteSelectedItem(); });
             }
         }
 
-        public void OnPreviousPage(object o, EventArgs e)
+        public void OnClickFirst(object sender, EventArgs e)
+        {
+            if (_page > 0)
+            {
+                _page = 0;
+                MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+                CurrentPageNumber.Text = (1 + _page).ToString();
+            }
+        }
+
+        public void OnClickPrevious(object sender, EventArgs e)
         {
             if (_page > 0)
             {
@@ -68,11 +82,21 @@ namespace acm_mobile_app.Views
             }
         }
 
-        public void OnNextPage(object o, EventArgs e)
+        public void OnClickNext(object sender, EventArgs e)
         {
-            if (_numItemsReturnedLastTime >= PAGE_SIZE)
+            if (_page < _totalPages - 1)
             {
                 ++_page;
+                MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+                CurrentPageNumber.Text = (1 + _page).ToString();
+            }
+        }
+
+        public void OnClickLast(object sender, EventArgs e)
+        {
+            if (_page < _totalPages - 1)
+            {
+                _page = _totalPages - 1;
                 MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
                 CurrentPageNumber.Text = (1 + _page).ToString();
             }
@@ -97,17 +121,21 @@ namespace acm_mobile_app.Views
                     return;
 
                 IsRefreshingListData.IsRunning = true;
-                await Task.Delay(250);
+                await Task.Delay(150);
 
                 var clubs = await AcmService.ListClubsAsync(_page * PAGE_SIZE, PAGE_SIZE);
-                _numItemsReturnedLastTime = clubs.Count;
+                _totalPages = clubs.PageItems == null ? 0 : clubs.TotalPages;
 
-                await Task.Delay(250);
+                await Task.Delay(150);
 
                 ClubListView.SelectedItem = null;
                 Clubs.Clear();
-                foreach (var club in clubs)
-                    Clubs.Add(club);
+
+                if (clubs.PageItems != null)
+                {
+                    foreach (var club in clubs.PageItems)
+                        Clubs.Add(club);
+                }
             }
             catch (Exception ex)
             {
@@ -116,6 +144,34 @@ namespace acm_mobile_app.Views
             finally
             {
                 IsRefreshingListData.IsRunning = false;
+            }
+        }
+
+        private async Task DeleteSelectedItem()
+        {
+            try
+            {
+                if (_isDeleting || ClubListView.SelectedItem == null)
+                    return;
+
+                if (ClubListView.SelectedItem is not Viewviewmodels:Club selectedClub || selectedClub.ID == null)
+                    return;
+
+                _isDeleting = true;
+                await Task.Delay(150);
+
+                // TODO: don't actually delete the club, archive it.
+                await AcmService.DeleteClubAsync((int)selectedClub.ID);
+
+                await RefreshListData();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "Close");
+            }
+            finally
+            {
+                _isDeleting = false;
             }
         }
     }

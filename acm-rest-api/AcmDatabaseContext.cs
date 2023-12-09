@@ -1,8 +1,7 @@
-﻿using acm_rest_api.Models;
-using auckland_curry_movement_api.Models;
+﻿using acm_models;
 using Microsoft.EntityFrameworkCore;
 
-namespace auckland_curry_movement_api
+namespace acm_rest_api
 {
     public class AcmDatabaseContext : DbContext
     {
@@ -37,6 +36,8 @@ namespace auckland_curry_movement_api
 
         public DbSet<RotY>? RotY { get; set; }
 
+        public DbSet<Membership>? Membership { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RotY>()
@@ -45,7 +46,7 @@ namespace auckland_curry_movement_api
             modelBuilder.Entity<Club>()
                 .HasMany(x => x.Members)
                 .WithMany(x => x.Clubs)
-                .UsingEntity<MemberClub>();
+                .UsingEntity<Membership>();
 
             modelBuilder.Entity<Member>()
                 .HasMany(x => x.Dinners)

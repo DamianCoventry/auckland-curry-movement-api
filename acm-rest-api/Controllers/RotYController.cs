@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using auckland_curry_movement_api;
-using auckland_curry_movement_api.Models;
 
-namespace auckland_curry_movement_api.Controllers
+namespace acm_rest_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -95,7 +89,7 @@ namespace auckland_curry_movement_api.Controllers
         {
             if (_context.RotY == null)
             {
-                return Problem("Entity set 'AcmDatabaseContext.RotY'  is null.");
+                return Problem("Entity set 'AcmDatabaseContext.RotY' is null.");
             }
             _context.RotY.Add(rotY);
             await _context.SaveChangesAsync();

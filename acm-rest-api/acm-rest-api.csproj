@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-auckland_curry_movement_api-4c0d029c-a749-44a4-9838-864d699a03c6</UserSecretsId>
+    <UserSecretsId>aspnet-acm_rest_api-4c0d029c-a749-44a4-9838-864d699a03c6</UserSecretsId>
     <RootNamespace>acm_rest_api</RootNamespace>
     <ApplicationInsightsResourceId>/subscriptions/ce52e57a-7373-4412-85d8-ec54e364bdc9/resourceGroups/auckland-curry-movement/providers/microsoft.insights/components/auckland-curry-movement</ApplicationInsightsResourceId>
   </PropertyGroup>
@@ -27,6 +27,10 @@
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.15.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\acm-models\acm-models.csproj" />
   </ItemGroup>
 
 </Project>

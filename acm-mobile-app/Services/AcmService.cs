@@ -1,4 +1,4 @@
-﻿using acm_mobile_app.Models;
+﻿using acm_models;
 using Microsoft.Identity.Client;
 using System.Net;
 using System.Text;
@@ -70,7 +70,7 @@ namespace acm_mobile_app.Services
 
         private struct MultipleItemsResult<T>
         {
-            public List<T>? _items;
+            public PageOfData<T>? _pageOfData;
             public HttpStatusCode _statusCode;
         }
 
@@ -136,28 +136,28 @@ namespace acm_mobile_app.Services
             return ((int)statusCode >= 200) && ((int)statusCode <= 299);
         }
 
-        private async Task<List<T>> ListItems<T>(string path, int first, int count)
+        private async Task<PageOfData<T>> ListItems<T>(string path, int first, int count)
         {
             await AcquireTokenIfRequired();
 
-            var statusCode = await ListItemsInternal<T>(path, first, count);
-            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._items != null)
-                return statusCode._items;
+            var itemList = await ListItemsInternal<T>(path, first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
 
-            if (statusCode._statusCode != HttpStatusCode.Unauthorized)
-                throw new Exception("Unable to retrieve a list of items");
+            if (itemList._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
 
             // Get a new one.
             _accessToken = string.Empty;
             await AcquireTokenInteractively();
 
-            statusCode = await ListItemsInternal<T>(path, first, count);
-            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._items != null)
-                return statusCode._items;
+            itemList = await ListItemsInternal<T>(path, first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
 
-            if (statusCode._statusCode == HttpStatusCode.Unauthorized)
+            if (itemList._statusCode == HttpStatusCode.Unauthorized)
                 throw new UnauthorizedAccessException();
-            throw new Exception("Unable to retrieve a list of items");
+            throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
         }
 
         private async Task<MultipleItemsResult<T>> ListItemsInternal<T>(string path, int first, int count)
@@ -174,7 +174,7 @@ namespace acm_mobile_app.Services
                 string content = await response.Content.ReadAsStringAsync()
                     ?? throw new Exception("Unable to read returned data");
 
-                statusCode._items = JsonSerializer.Deserialize<List<T>>(content, _serializerOptions)
+                statusCode._pageOfData = JsonSerializer.Deserialize<PageOfData<T>>(content, _serializerOptions)
                     ?? throw new Exception("Unable to parse returned data as JSON");
             }
 
@@ -185,24 +185,24 @@ namespace acm_mobile_app.Services
         {
             await AcquireTokenIfRequired();
 
-            var statusCode = await GetItemInternal<T>(path, ID);
-            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._item != null)
-                return statusCode._item;
+            var item = await GetItemInternal<T>(path, ID);
+            if (IsSuccessfulStatusCode(item._statusCode) && item._item != null)
+                return item._item;
 
-            if (statusCode._statusCode != HttpStatusCode.Unauthorized)
-                throw new Exception("Unable to retrieve an item");
+            if (item._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve an item ({item._statusCode})");
 
             // Get a new one.
             _accessToken = string.Empty;
             await AcquireTokenInteractively();
 
-            statusCode = await GetItemInternal<T>(path, ID);
-            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._item != null)
-                return statusCode._item;
+            item = await GetItemInternal<T>(path, ID);
+            if (IsSuccessfulStatusCode(item._statusCode) && item._item != null)
+                return item._item;
 
-            if (statusCode._statusCode == HttpStatusCode.Unauthorized)
+            if (item._statusCode == HttpStatusCode.Unauthorized)
                 throw new UnauthorizedAccessException();
-            throw new Exception("Unable to retrieve an item");
+            throw new Exception($"Unable to retrieve an item ({item._statusCode})");
         }
 
         private async Task<SingleItemResult<T>> GetItemInternal<T>(string path, int ID)
@@ -230,24 +230,24 @@ namespace acm_mobile_app.Services
         {
             await AcquireTokenIfRequired();
 
-            var statusCode = await AddItemInternal<T>(path, item);
-            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._item != null)
-                return statusCode._item;
+            var itemResult = await AddItemInternal<T>(path, item);
+            if (IsSuccessfulStatusCode(itemResult._statusCode) && itemResult._item != null)
+                return itemResult._item;
 
-            if (statusCode._statusCode != HttpStatusCode.Unauthorized)
-                throw new Exception("Unable to add an item");
+            if (itemResult._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to add an item ({itemResult._statusCode})");
 
             // Get a new one.
             _accessToken = string.Empty;
             await AcquireTokenInteractively();
 
-            statusCode = await AddItemInternal(path, item);
-            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._item != null)
-                return statusCode._item;
+            itemResult = await AddItemInternal(path, item);
+            if (IsSuccessfulStatusCode(itemResult._statusCode) && itemResult._item != null)
+                return itemResult._item;
 
-            if (statusCode._statusCode == HttpStatusCode.Unauthorized)
+            if (itemResult._statusCode == HttpStatusCode.Unauthorized)
                 throw new UnauthorizedAccessException();
-            throw new Exception("Unable to add an item");
+            throw new Exception($"Unable to add an item ({itemResult._statusCode})");
         }
 
         private async Task<SingleItemResult<T>> AddItemInternal<T>(string path, T item)
@@ -274,36 +274,36 @@ namespace acm_mobile_app.Services
             return statusCode;
         }
 
-        private async Task<bool> UpdateItem<T>(string path, T item)
+        private async Task<bool> UpdateItem<T>(string path, int ID, T item)
         {
             await AcquireTokenIfRequired();
 
-            var statusCode = await UpdateItemInternal<T>(path, item);
+            var statusCode = await UpdateItemInternal(path, ID, item);
             if (IsSuccessfulStatusCode(statusCode))
                 return true;
 
             if (statusCode != HttpStatusCode.Unauthorized)
-                throw new Exception("Unable to update an item");
+                throw new Exception($"Unable to update an item ({statusCode})");
 
             // Get a new one.
             _accessToken = string.Empty;
             await AcquireTokenInteractively();
 
-            statusCode = await UpdateItemInternal(path, item);
+            statusCode = await UpdateItemInternal(path, ID, item);
             if (IsSuccessfulStatusCode(statusCode))
                 return true;
 
             if (statusCode == HttpStatusCode.Unauthorized)
                 throw new UnauthorizedAccessException();
-            throw new Exception("Unable to update an item");
+            throw new Exception($"Unable to update an item ({statusCode})");
         }
 
-        private async Task<HttpStatusCode> UpdateItemInternal<T>(string path, T item)
+        private async Task<HttpStatusCode> UpdateItemInternal<T>(string path, int ID, T item)
         {
             string json = JsonSerializer.Serialize<T>(item, _serializerOptions);
             StringContent content = new(json, Encoding.UTF8, "application/json");
 
-            Uri uri = new($"{UriBase}{path}");
+            Uri uri = new($"{UriBase}{path}/{ID}");
 
             HttpResponseMessage response = await _client.PutAsync(uri, content)
                 ?? throw new Exception("Unable to update an item");
@@ -320,7 +320,7 @@ namespace acm_mobile_app.Services
                 return true;
 
             if (statusCode != HttpStatusCode.Unauthorized)
-                throw new Exception("Unable to delete an item");
+                throw new Exception($"Unable to delete an item ({statusCode})");
 
             // Get a new one.
             _accessToken = string.Empty;
@@ -332,7 +332,7 @@ namespace acm_mobile_app.Services
 
             if (statusCode == HttpStatusCode.Unauthorized)
                 throw new UnauthorizedAccessException();
-            throw new Exception("Unable to delete an item");
+            throw new Exception($"Unable to delete an item ({statusCode})");
         }
 
         private async Task<HttpStatusCode> DeleteItemInternal(string path, int ID)
@@ -405,62 +405,62 @@ namespace acm_mobile_app.Services
             return AddItem("Violation", x);
         }
 
-        public Task DeleteAttendeeAsync(int ID)
+        public Task<bool> DeleteAttendeeAsync(int ID)
         {
             return DeleteItem("Attendee", ID);
         }
 
-        public Task DeleteClubAsync(int ID)
+        public Task<bool> DeleteClubAsync(int ID)
         {
             return DeleteItem("Club", ID);
         }
 
-        public Task DeleteDinnerAsync(int ID)
+        public Task<bool> DeleteDinnerAsync(int ID)
         {
             return DeleteItem("Dinner", ID);
         }
 
-        public Task DeleteExemptionAsync(int ID)
+        public Task<bool> DeleteExemptionAsync(int ID)
         {
             return DeleteItem("Exemption", ID);
         }
 
-        public Task DeleteKotCAsync(int ID)
+        public Task<bool> DeleteKotCAsync(int ID)
         {
             return DeleteItem("KotC", ID);
         }
 
-        public Task DeleteLevelAsync(int ID)
+        public Task<bool> DeleteLevelAsync(int ID)
         {
             return DeleteItem("Level", ID);
         }
 
-        public Task DeleteMemberAsync(int ID)
+        public Task<bool> DeleteMemberAsync(int ID)
         {
             return DeleteItem("Member", ID);
         }
 
-        public Task DeleteNotificationAsync(int ID)
+        public Task<bool> DeleteNotificationAsync(int ID)
         {
             return DeleteItem("Notification", ID);
         }
 
-        public Task DeleteReservationAsync(int ID)
+        public Task<bool> DeleteReservationAsync(int ID)
         {
             return DeleteItem("Reservation", ID);
         }
 
-        public Task DeleteRestaurantAsync(int ID)
+        public Task<bool> DeleteRestaurantAsync(int ID)
         {
             return DeleteItem("Restaurant", ID);
         }
 
-        public Task DeleteRotYAsync(int ID)
+        public Task<bool> DeleteRotYAsync(int ID)
         {
             return DeleteItem("RotY", ID);
         }
 
-        public Task DeleteViolationAsync(int ID)
+        public Task<bool> DeleteViolationAsync(int ID)
         {
             return DeleteItem("Violation", ID);
         }
@@ -525,148 +525,196 @@ namespace acm_mobile_app.Services
             return GetItem<Violation>("Violation", ID);
         }
 
-        public Task<List<Attendee>> ListAttendeesAsync(int first, int count)
+        public Task<PageOfData<Attendee>> ListAttendeesAsync(int first, int count)
         {
             return ListItems<Attendee>("Attendee", first, count);
         }
 
-        public Task<List<Club>> ListClubsAsync(int first, int count)
+        public Task<PageOfData<Club>> ListClubsAsync(int first, int count)
         {
             return ListItems<Club>("Club", first, count);
         }
 
-        public async Task<List<PastDinner>> ListClubPastDinnersAsync(int ID, int first, int count)
+        public async Task<PageOfData<PastDinner>> ListClubPastDinnersAsync(int ID, int first, int count)
         {
             await AcquireTokenIfRequired();
 
-            var statusCode = await ListItemsInternal<PastDinner>($"Club/{ID}/PastDinners", first, count);
-            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._items != null)
-                return statusCode._items;
+            var itemList = await ListItemsInternal<PastDinner>($"Club/{ID}/PastDinners", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
 
-            if (statusCode._statusCode != HttpStatusCode.Unauthorized)
-                throw new Exception("Unable to retrieve a list of items");
+            if (itemList._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
 
             // Get a new one.
             _accessToken = string.Empty;
             await AcquireTokenInteractively();
 
-            statusCode = await ListItemsInternal<PastDinner>($"Club/{ID}/PastDinners", first, count);
-            if (IsSuccessfulStatusCode(statusCode._statusCode) && statusCode._items != null)
-                return statusCode._items;
+            itemList = await ListItemsInternal<PastDinner>($"Club/{ID}/PastDinners", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
 
-            if (statusCode._statusCode == HttpStatusCode.Unauthorized)
+            if (itemList._statusCode == HttpStatusCode.Unauthorized)
                 throw new UnauthorizedAccessException();
-            throw new Exception("Unable to retrieve a list of items");
+            throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
         }
 
-        public Task<List<Dinner>> ListDinnersAsync(int first, int count)
+        public async Task<PageOfData<Member>> ListClubFoundingFathersAsync(int ID, int first, int count)
+        {
+            await AcquireTokenIfRequired();
+
+            var itemList = await ListItemsInternal<Member>($"Club/{ID}/FoundingFathers", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
+
+            if (itemList._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            itemList = await ListItemsInternal<Member>($"Club/{ID}/FoundingFathers", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
+
+            if (itemList._statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+        }
+
+        public async Task<PageOfData<Member>> ListClubMembersAsync(int ID, int first, int count)
+        {
+            await AcquireTokenIfRequired();
+
+            var itemList = await ListItemsInternal<Member>($"Club/{ID}/Members", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
+
+            if (itemList._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            itemList = await ListItemsInternal<Member>($"Club/{ID}/Members", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
+
+            if (itemList._statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+        }
+
+        public Task<PageOfData<Dinner>> ListDinnersAsync(int first, int count)
         {
             return ListItems<Dinner>("Dinner", first, count);
         }
 
-        public Task<List<Exemption>> ListExemptionsAsync(int first, int count)
+        public Task<PageOfData<Exemption>> ListExemptionsAsync(int first, int count)
         {
             return ListItems<Exemption>("Exemption", first, count);
         }
 
-        public Task<List<KotC>> ListKotCsAsync(int first, int count)
+        public Task<PageOfData<KotC>> ListKotCsAsync(int first, int count)
         {
             return ListItems<KotC>("KotC", first, count);
         }
 
-        public Task<List<Level>> ListLevelsAsync(int first, int count)
+        public Task<PageOfData<Level>> ListLevelsAsync(int first, int count)
         {
             return ListItems<Level>("Level", first, count);
         }
 
-        public Task<List<Member>> ListMembersAsync(int first, int count)
+        public Task<PageOfData<Member>> ListMembersAsync(int first, int count)
         {
             return ListItems<Member>("Member", first, count);
         }
 
-        public Task<List<Notification>> ListNotificationsAsync(int first, int count)
+        public Task<PageOfData<Notification>> ListNotificationsAsync(int first, int count)
         {
             return ListItems<Notification>("Notification", first, count);
         }
 
-        public Task<List<Reservation>> ListReservationsAsync(int first, int count)
+        public Task<PageOfData<Reservation>> ListReservationsAsync(int first, int count)
         {
             return ListItems<Reservation>("Reservation", first, count);
         }
 
-        public Task<List<Restaurant>> ListRestaurantsAsync(int first, int count)
+        public Task<PageOfData<Restaurant>> ListRestaurantsAsync(int first, int count)
         {
             return ListItems<Restaurant>("Restaurant", first, count);
         }
 
-        public Task<List<RotY>> ListRotYsAsync(int first, int count)
+        public Task<PageOfData<RotY>> ListRotYsAsync(int first, int count)
         {
             return ListItems<RotY>("RotY", first, count);
         }
 
-        public Task<List<Violation>> ListViolationsAsync(int first, int count)
+        public Task<PageOfData<Violation>> ListViolationsAsync(int first, int count)
         {
             return ListItems<Violation>("Violation", first, count);
         }
 
-        public Task UpdateAttendeeAsync(Attendee x)
+        public Task<bool> UpdateAttendeeAsync(Attendee x)
         {
-            return UpdateItem("Attendee", x);
+            return UpdateItem("Attendee", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateClubAsync(Club x)
+        public Task<bool> UpdateClubAsync(Club x)
         {
-            return UpdateItem("Club", x);
+            return UpdateItem("Club", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateDinnerAsync(Dinner x)
+        public Task<bool> UpdateDinnerAsync(Dinner x)
         {
-            return UpdateItem("Dinner", x);
+            return UpdateItem("Dinner", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateExemptionAsync(Exemption x)
+        public Task<bool> UpdateExemptionAsync(Exemption x)
         {
-            return UpdateItem("Exemption", x);
+            return UpdateItem("Exemption", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateKotCAsync(KotC x)
+        public Task<bool> UpdateKotCAsync(KotC x)
         {
-            return UpdateItem("KotC", x);
+            return UpdateItem("KotC", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateLevelAsync(Level x)
+        public Task<bool> UpdateLevelAsync(Level x)
         {
-            return UpdateItem("Level", x);
+            return UpdateItem("Level", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateMemberAsync(Member x)
+        public Task<bool> UpdateMemberAsync(Member x)
         {
-            return UpdateItem("Member", x);
+            return UpdateItem("Member", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateNotificationAsync(Notification x)
+        public Task<bool> UpdateNotificationAsync(Notification x)
         {
-            return UpdateItem("Notification", x);
+            return UpdateItem("Notification", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateReservationAsync(Reservation x)
+        public Task<bool> UpdateReservationAsync(Reservation x)
         {
-            return UpdateItem("Reservation", x);
+            return UpdateItem("Reservation", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateRestaurantAsync(Restaurant x)
+        public Task<bool> UpdateRestaurantAsync(Restaurant x)
         {
-            return UpdateItem("Restaurant", x);
+            return UpdateItem("Restaurant", x.ID == null ? 0 : (int)x.ID, x);
         }
 
-        public Task UpdateRotYAsync(RotY x)
+        public Task<bool> UpdateRotYAsync(RotY x)
         {
-            return UpdateItem("RotY", x);
+            return UpdateItem("RotY", x.Year == null ? 0 : (int)x.Year, x);
         }
 
-        public Task UpdateViolationAsync(Violation x)
+        public Task<bool> UpdateViolationAsync(Violation x)
         {
-            return UpdateItem("Violation", x);
+            return UpdateItem("Violation", x.ID == null ? 0 : (int)x.ID, x);
         }
     }
 }

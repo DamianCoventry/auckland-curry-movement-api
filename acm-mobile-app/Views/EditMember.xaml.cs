@@ -28,9 +28,4 @@ public partial class EditMember : ContentPage
         // TODO: actually add it
         await Shell.Current.GoToAsync("//manage_members");
     }
-
-    public async void OnClickCancel(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//home");
-    }
 }

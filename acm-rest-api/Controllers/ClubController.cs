@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using acm_rest_api.Models;
-using auckland_curry_movement_api.Models;
+﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace auckland_curry_movement_api.Controllers
+namespace acm_rest_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,16 +17,28 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Club
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Club>>> GetClub([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
+        public async Task<ActionResult<PageOfData<Club>>> GetClub([FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
-            if (_context.Club == null)
+            if (_context.Club == null || pageSize <= 0)
             {
                 return NotFound();
             }
-            return await _context.Club
-                .Include(x => x.Members)
-                .OrderBy(x => x.ID).Skip(first).Take(count)
-                .ToListAsync();
+
+            int rowCount = await _context.Club.CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<Club>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context.Club
+                                            .Include(x => x.Members)
+                                            .OrderBy(x => x.ID)
+                                            .Skip(first).Take(pageSize)
+                                            .ToListAsync()
+            };
         }
 
         // GET: api/Club/5
@@ -55,9 +65,9 @@ namespace auckland_curry_movement_api.Controllers
 
         // GET: api/Club/5/PastDinners
         [HttpGet("{id}/PastDinners")]
-        public async Task<ActionResult<IEnumerable<PastDinner>>> GetClubPastDinners(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int count)
+        public async Task<ActionResult<PageOfData<PastDinner>>> GetClubPastDinners(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
-            if (_context.Club == null || _context.Dinner == null)
+            if (_context.Club == null || _context.Dinner == null || id == null || pageSize <= 0)
             {
                 return NotFound();
             }
@@ -68,24 +78,108 @@ namespace auckland_curry_movement_api.Controllers
                 return NotFound();
             }
 
-            return await _context
-                .Set<PastDinner>()
-                .FromSqlRaw(
-                    "SELECT d.ID, m.ID AS OrganiserID, m.Name AS OrganiserName, " +
-                    "       rs.ID AS RestaurantID, rs.Name AS RestaurantName, " +
-                    "       rv.ExactDateTime, rv.NegotiatedBeerPrice, rv.NegotiatedBeerDiscount, " +
-                    "       d.CostPerPerson, d.NumBeersConsumed, " +
-                    "       (SELECT IIF(COUNT(*) > 0, 1, 0) FROM KotC k WHERE k.DinnerID = d.ID) AS IsNewKotC, " +
-                    "       (SELECT IIF(COUNT(*) > 0, 1, 0) FROM RotY r1 WHERE r1.RestaurantID = rs.ID AND r1.Year < YEAR(GETDATE())) AS IsFormerRotY, " +
-                    "       (SELECT IIF(COUNT(*) > 0, 1, 0) FROM RotY r2 WHERE r2.RestaurantID = rs.ID AND r2.Year = YEAR(GETDATE())) AS IsCurrentRotY, " +
-                    "       (SELECT IIF(COUNT(*) > 0, 1, 0) FROM Violation v WHERE v.DinnerID = d.ID) AS IsRulesViolation " +
-                    "FROM Dinner d " +
-                    "INNER JOIN Reservation rv ON rv.ID = d.ReservationID " +
-                    "INNER JOIN Restaurant rs ON rs.ID = rv.RestaurantID " +
-                    "INNER JOIN Member m ON m.ID = rv.OrganiserID " +
-                    $"INNER JOIN MemberClub mc ON mc.MemberID = m.ID AND mc.ClubID = {id}")
-                .OrderBy(x => x.ID).Skip(first).Take(count)
-                .ToListAsync();
+            string sql =
+                @"SELECT d.ID, m.ID AS OrganiserID, m.Name AS OrganiserName,
+                        rs.ID AS RestaurantID, rs.Name AS RestaurantName,
+                        rv.ExactDateTime, rv.NegotiatedBeerPrice, rv.NegotiatedBeerDiscount,
+                        d.CostPerPerson, d.NumBeersConsumed,
+                        (SELECT IIF(COUNT(*) > 0, 1, 0) FROM KotC k WHERE k.DinnerID = d.ID) AS IsNewKotC,
+                        (SELECT IIF(COUNT(*) > 0, 1, 0) FROM RotY r1 WHERE r1.RestaurantID = rs.ID AND r1.Year < YEAR(GETDATE())) AS IsFormerRotY,
+                        (SELECT IIF(COUNT(*) > 0, 1, 0) FROM RotY r2 WHERE r2.RestaurantID = rs.ID AND r2.Year = YEAR(GETDATE())) AS IsCurrentRotY,
+                        (SELECT IIF(COUNT(*) > 0, 1, 0) FROM Violation v WHERE v.DinnerID = d.ID) AS IsRulesViolation
+                FROM [dbo].[Dinner] d
+                INNER JOIN [dbo].[Reservation] rv ON rv.ID = d.ReservationID
+                INNER JOIN [dbo].[Restaurant] rs ON rs.ID = rv.RestaurantID
+                INNER JOIN [dbo].[Member] m ON m.ID = rv.OrganiserID
+                INNER JOIN [dbo].[Membership] mc ON mc.MemberID = m.ID AND mc.ClubID = " + id.ToString();
+
+            int rowCount = await _context.Set<PastDinner>().FromSqlRaw(sql).CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<PastDinner>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context
+                                        .Set<PastDinner>()
+                                        .FromSqlRaw(sql)
+                                        .OrderBy(x => x.ID).Skip(first).Take(pageSize)
+                                        .ToListAsync()
+            };
+        }
+
+        // GET: api/Club/43/FoundingFathers
+        [HttpGet("{id}/FoundingFathers")]
+        public async Task<ActionResult<PageOfData<Member>>> GetClubFoundingFathers(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
+        {
+            if (_context.Club == null || _context.Member == null || _context.Membership == null || id == null || pageSize <= 0)
+            {
+                return NotFound();
+            }
+
+            var club = await _context.Club.Where(x => x.ID == id).FirstOrDefaultAsync();
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            int rowCount = await _context.Membership.Where(x => x.ClubID == id && x.IsFoundingFather).CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<Member>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context
+                                    .Set<Member>()
+                                    .FromSqlRaw(
+                                        "SELECT [m].[ID], [m].[Name], [m].[SponsorID], [m].[CurrentLevelID], [m].[AttendanceCount], [m].[IsArchived], [m].[ArchiveReason] " +
+                                        "FROM [dbo].[Member] m " +
+                                        "INNER JOIN Membership mc ON [mc].[MemberID] = [m].[ID] AND [mc].[IsFoundingFather] <> 0 " +
+                                       $"AND [mc].[ClubID] = {id}")
+                                    .OrderBy(x => x.ID).Skip(first).Take(pageSize)
+                                    .ToListAsync()
+            };
+        }
+
+        // GET: api/Club/65/Members
+        [HttpGet("{id}/Members")]
+        public async Task<ActionResult<PageOfData<Member>>> GetClubMembers(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
+        {
+            if (_context.Club == null || _context.Member == null || _context.Membership == null || pageSize <= 0)
+            {
+                return NotFound();
+            }
+
+            var club = await _context.Club.Where(x => x.ID == id).FirstOrDefaultAsync();
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            int rowCount = await _context.Membership.Where(x => x.ClubID == id).CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<Member>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context
+                                    .Set<Member>()
+                                    .FromSqlRaw(
+                                        "SELECT [m].[ID], [m].[Name], [m].[SponsorID], [m].[CurrentLevelID], [m].[AttendanceCount], [m].[IsArchived], [m].[ArchiveReason] " +
+                                        "FROM [dbo].[Member] m " +
+                                        "INNER JOIN Membership mc ON [mc].[MemberID] = [m].[ID] " +
+                                       $"AND [mc].[ClubID] = {id}")
+                                    .OrderBy(x => x.ID).Skip(first).Take(pageSize)
+                                    .ToListAsync()
+            };
         }
 
         // PUT: api/Club/5
@@ -97,6 +191,10 @@ namespace auckland_curry_movement_api.Controllers
             {
                 return BadRequest();
             }
+
+            var foundingFathers = club.Members;
+            club.Members = null;
+            club.Notifications = null;
 
             _context.Entry(club).State = EntityState.Modified;
 
@@ -116,6 +214,23 @@ namespace auckland_curry_movement_api.Controllers
                 }
             }
 
+            if (_context.Membership != null && foundingFathers != null && id != null)
+            {
+                var memberClubs = await _context.Membership.Where(x => x.ClubID == id).ToListAsync();
+                foreach (var mc in memberClubs)
+                    _context.Membership.Remove(mc);
+
+                await _context.SaveChangesAsync();
+
+                foreach (var ff in foundingFathers)
+                {
+                    if (ff.ID != null)
+                        _context.Membership.Add(new Membership() { ClubID = (int)id, MemberID = (int)ff.ID, IsFoundingFather = true });
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
             return NoContent();
         }
 
@@ -126,10 +241,27 @@ namespace auckland_curry_movement_api.Controllers
         {
             if (_context.Club == null)
             {
-                return Problem("Entity set 'AcmDatabaseContext.Club'  is null.");
+                return Problem("Entity set 'AcmDatabaseContext.Club' is null.");
             }
+
+            var foundingFathers = club.Members;
+            club.ID = null;
+            club.Members = null;
+            club.Notifications = null;
             _context.Club.Add(club);
-            await _context.SaveChangesAsync();
+
+            await _context.SaveChangesAsync(); // if this succeeds then club.ID becomes valid to use.
+
+            if (foundingFathers != null && club.ID != null && _context.Membership != null)
+            {
+                foreach (var ff in foundingFathers)
+                {
+                    if (ff.ID != null)
+                        _context.Membership.Add(new Membership() { ClubID = (int)club.ID, MemberID = (int)ff.ID, IsFoundingFather = true });
+                }
+
+                await _context.SaveChangesAsync();
+            }
 
             return CreatedAtAction("GetClub", new { id = club.ID }, club);
         }
@@ -146,6 +278,14 @@ namespace auckland_curry_movement_api.Controllers
             if (club == null)
             {
                 return NotFound();
+            }
+
+            if (_context.Membership != null)
+            {
+                var memberships = await _context.Membership.Where(x => x.ClubID == id).ToListAsync();
+                foreach (var membership in memberships)
+                    _context.Membership.Remove(membership);
+                await _context.SaveChangesAsync();
             }
 
             _context.Club.Remove(club);

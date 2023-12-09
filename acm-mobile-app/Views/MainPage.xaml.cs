@@ -7,7 +7,7 @@ namespace acm_mobile_app
     {
         private const int PAGE_SIZE = 10;
         private int _page = 0;
-        private int _numItemsReturnedLastTime = 0;
+        private int _totalPages = 0;
 
         public MainPage()
         {
@@ -17,7 +17,7 @@ namespace acm_mobile_app
 
         public int CurrentPage { get { return _page + 1; } }
 
-        public ObservableCollection<Models.PastDinner> PastDinners { get; set; } = [];
+        public ObservableCollection<PastDinner> PastDinners { get; set; } = [];
 
         public void OnClickRefreshData(object sender, EventArgs e)
         {
@@ -51,10 +51,20 @@ namespace acm_mobile_app
 
         public async void NavigateToEditClub(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("edit_club");
+            await Shell.Current.GoToAsync("add_club", true);
         }
 
-        public void OnPreviousPage(object o, EventArgs e)
+        public void OnClickFirst(object sender, EventArgs e)
+        {
+            if (_page > 0)
+            {
+                _page = 0;
+                MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+                CurrentPageNumber.Text = (1 + _page).ToString();
+            }
+        }
+
+        public void OnClickPrevious(object sender, EventArgs e)
         {
             if (_page > 0)
             {
@@ -64,11 +74,21 @@ namespace acm_mobile_app
             }
         }
 
-        public void OnNextPage(object o, EventArgs e)
+        public void OnClickNext(object sender, EventArgs e)
         {
-            if (_numItemsReturnedLastTime >= PAGE_SIZE)
+            if (_page < _totalPages - 1)
             {
                 ++_page;
+                MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+                CurrentPageNumber.Text = (1 + _page).ToString();
+            }
+        }
+
+        public void OnClickLast(object sender, EventArgs e)
+        {
+            if (_page < _totalPages - 1)
+            {
+                _page = _totalPages - 1;
                 MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
                 CurrentPageNumber.Text = (1 + _page).ToString();
             }
@@ -93,18 +113,22 @@ namespace acm_mobile_app
                     return;
 
                 IsRefreshingListData.IsRunning = true;
-                await Task.Delay(250);
+                await Task.Delay(150);
 
                 // TODO: Get the club ID from somewhere
                 var dinners = await AcmService.ListClubPastDinnersAsync(1, _page * PAGE_SIZE, PAGE_SIZE);
-                _numItemsReturnedLastTime = dinners.Count;
+                _totalPages = dinners.PageItems == null ? 0 : dinners.TotalPages;
 
-                await Task.Delay(250);
+                await Task.Delay(150);
 
                 DinnerListView.SelectedItem = null;
                 PastDinners.Clear();
-                foreach (var dinner in dinners)
-                    PastDinners.Add(dinner);
+
+                if (dinners.PageItems != null)
+                {
+                    foreach (var dinner in dinners.PageItems)
+                        PastDinners.Add(dinner);
+                }
             }
             catch (Exception ex)
             {

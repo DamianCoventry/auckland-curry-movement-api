@@ -1,4 +1,6 @@
-﻿namespace acm_mobile_app.Services
+﻿using acm_models;
+
+namespace acm_mobile_app.Services
 {
     public interface IAcmService
     {
@@ -7,77 +9,79 @@
         void SignOut();
         string AccessToken { get; }
 
-        Task<List<Models.Attendee>> ListAttendeesAsync(int first, int count);
-        Task<Models.Attendee> GetAttendeeAsync(int ID);
-        Task<Models.Attendee> AddAttendeeAsync(Models.Attendee x);
-        Task UpdateAttendeeAsync(Models.Attendee x);
-        Task DeleteAttendeeAsync(int ID);
+        Task<PageOfData<Attendee>> ListAttendeesAsync(int first, int count);
+        Task<Attendee> GetAttendeeAsync(int ID);
+        Task<Attendee> AddAttendeeAsync(Attendee x);
+        Task<bool> UpdateAttendeeAsync(Attendee x);
+        Task<bool> DeleteAttendeeAsync(int ID);
 
-        Task<List<Models.Club>> ListClubsAsync(int first, int count);
-        Task<List<Models.PastDinner>> ListClubPastDinnersAsync(int ID, int first, int count);
-        Task<Models.Club> GetClubAsync(int ID);
-        Task<Models.Club> AddClubAsync(Models.Club x);
-        Task UpdateClubAsync(Models.Club x);
-        Task DeleteClubAsync(int ID);
+        Task<PageOfData<Club>> ListClubsAsync(int first, int count);
+        Task<PageOfData<PastDinner>> ListClubPastDinnersAsync(int ID, int first, int count);
+        Task<PageOfData<Member>> ListClubFoundingFathersAsync(int ID, int first, int count);
+        Task<PageOfData<Member>> ListClubMembersAsync(int ID, int first, int count);
+        Task<Club> GetClubAsync(int ID);
+        Task<Club> AddClubAsync(Club x);
+        Task<bool> UpdateClubAsync(Club x);
+        Task<bool> DeleteClubAsync(int ID);
 
-        Task<List<Models.Dinner>> ListDinnersAsync(int first, int count);
-        Task<Models.Dinner> GetDinnerAsync(int ID);
-        Task<Models.Dinner> AddDinnerAsync(Models.Dinner x);
-        Task UpdateDinnerAsync(Models.Dinner x);
-        Task DeleteDinnerAsync(int ID);
+        Task<PageOfData<Dinner>> ListDinnersAsync(int first, int count);
+        Task<Dinner> GetDinnerAsync(int ID);
+        Task<Dinner> AddDinnerAsync(Dinner x);
+        Task<bool> UpdateDinnerAsync(Dinner x);
+        Task<bool> DeleteDinnerAsync(int ID);
 
-        Task<List<Models.Exemption>> ListExemptionsAsync(int first, int count);
-        Task<Models.Exemption> GetExemptionAsync(int ID);
-        Task<Models.Exemption> AddExemptionAsync(Models.Exemption x);
-        Task UpdateExemptionAsync(Models.Exemption x);
-        Task DeleteExemptionAsync(int ID);
+        Task<PageOfData<Exemption>> ListExemptionsAsync(int first, int count);
+        Task<Exemption> GetExemptionAsync(int ID);
+        Task<Exemption> AddExemptionAsync(Exemption x);
+        Task<bool> UpdateExemptionAsync(Exemption x);
+        Task<bool> DeleteExemptionAsync(int ID);
 
-        Task<List<Models.KotC>> ListKotCsAsync(int first, int count);
-        Task<Models.KotC> GetKotCAsync(int ID);
-        Task<Models.KotC> AddKotCAsync(Models.KotC x);
-        Task UpdateKotCAsync(Models.KotC x);
-        Task DeleteKotCAsync(int ID);
+        Task<PageOfData<KotC>> ListKotCsAsync(int first, int count);
+        Task<KotC> GetKotCAsync(int ID);
+        Task<KotC> AddKotCAsync(KotC x);
+        Task<bool> UpdateKotCAsync(KotC x);
+        Task<bool> DeleteKotCAsync(int ID);
 
-        Task<List<Models.Level>> ListLevelsAsync(int first, int count);
-        Task<Models.Level> GetLevelAsync(int ID);
-        Task<Models.Level> AddLevelAsync(Models.Level x);
-        Task UpdateLevelAsync(Models.Level x);
-        Task DeleteLevelAsync(int ID);
+        Task<PageOfData<Level>> ListLevelsAsync(int first, int count);
+        Task<Level> GetLevelAsync(int ID);
+        Task<Level> AddLevelAsync(Level x);
+        Task<bool> UpdateLevelAsync(Level x);
+        Task<bool> DeleteLevelAsync(int ID);
 
-        Task<List<Models.Member>> ListMembersAsync(int first, int count);
-        Task<Models.Member> GetMemberAsync(int ID);
-        Task<Models.Member> AddMemberAsync(Models.Member x);
-        Task UpdateMemberAsync(Models.Member x);
-        Task DeleteMemberAsync(int ID);
+        Task<PageOfData<Member>> ListMembersAsync(int first, int count);
+        Task<Member> GetMemberAsync(int ID);
+        Task<Member> AddMemberAsync(Member x);
+        Task<bool> UpdateMemberAsync(Member x);
+        Task<bool> DeleteMemberAsync(int ID);
 
-        Task<List<Models.Notification>> ListNotificationsAsync(int first, int count);
-        Task<Models.Notification> GetNotificationAsync(int ID);
-        Task<Models.Notification> AddNotificationAsync(Models.Notification x);
-        Task UpdateNotificationAsync(Models.Notification x);
-        Task DeleteNotificationAsync(int ID);
+        Task<PageOfData<Notification>> ListNotificationsAsync(int first, int count);
+        Task<Notification> GetNotificationAsync(int ID);
+        Task<Notification> AddNotificationAsync(Notification x);
+        Task<bool> UpdateNotificationAsync(Notification x);
+        Task<bool> DeleteNotificationAsync(int ID);
 
-        Task<List<Models.Reservation>> ListReservationsAsync(int first, int count);
-        Task<Models.Reservation> GetReservationAsync(int ID);
-        Task<Models.Reservation> AddReservationAsync(Models.Reservation x);
-        Task UpdateReservationAsync(Models.Reservation x);
-        Task DeleteReservationAsync(int ID);
+        Task<PageOfData<Reservation>> ListReservationsAsync(int first, int count);
+        Task<Reservation> GetReservationAsync(int ID);
+        Task<Reservation> AddReservationAsync(Reservation x);
+        Task<bool> UpdateReservationAsync(Reservation x);
+        Task<bool> DeleteReservationAsync(int ID);
 
-        Task<List<Models.Restaurant>> ListRestaurantsAsync(int first, int count);
-        Task<Models.Restaurant> GetRestaurantAsync(int ID);
-        Task<Models.Restaurant> AddRestaurantAsync(Models.Restaurant x);
-        Task UpdateRestaurantAsync(Models.Restaurant x);
-        Task DeleteRestaurantAsync(int ID);
+        Task<PageOfData<Restaurant>> ListRestaurantsAsync(int first, int count);
+        Task<Restaurant> GetRestaurantAsync(int ID);
+        Task<Restaurant> AddRestaurantAsync(Restaurant x);
+        Task<bool> UpdateRestaurantAsync(Restaurant x);
+        Task<bool> DeleteRestaurantAsync(int ID);
 
-        Task<List<Models.RotY>> ListRotYsAsync(int first, int count);
-        Task<Models.RotY> GetRotYAsync(int ID);
-        Task<Models.RotY> AddRotYAsync(Models.RotY x);
-        Task UpdateRotYAsync(Models.RotY x);
-        Task DeleteRotYAsync(int ID);
+        Task<PageOfData<RotY>> ListRotYsAsync(int first, int count);
+        Task<RotY> GetRotYAsync(int ID);
+        Task<RotY> AddRotYAsync(RotY x);
+        Task<bool> UpdateRotYAsync(RotY x);
+        Task<bool> DeleteRotYAsync(int ID);
 
-        Task<List<Models.Violation>> ListViolationsAsync(int first, int count);
-        Task<Models.Violation> GetViolationAsync(int ID);
-        Task<Models.Violation> AddViolationAsync(Models.Violation x);
-        Task UpdateViolationAsync(Models.Violation x);
-        Task DeleteViolationAsync(int ID);
+        Task<PageOfData<Violation>> ListViolationsAsync(int first, int count);
+        Task<Violation> GetViolationAsync(int ID);
+        Task<Violation> AddViolationAsync(Violation x);
+        Task<bool> UpdateViolationAsync(Violation x);
+        Task<bool> DeleteViolationAsync(int ID);
     }
 }

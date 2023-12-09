@@ -11,12 +11,22 @@ namespace acm_mobile_app
         {
             InitializeComponent();
 
+            Routing.RegisterRoute("add_club", typeof(AddClub));
             Routing.RegisterRoute("edit_club", typeof(EditClub));
+
             Routing.RegisterRoute("edit_exemption", typeof(EditExemption));
+
             Routing.RegisterRoute("edit_level", typeof(EditLevel));
+
             Routing.RegisterRoute("edit_member", typeof(EditMember));
+            Routing.RegisterRoute("select_members", typeof(SelectMembers));
+
             Routing.RegisterRoute("edit_restaurant", typeof(EditRestaurant));
+
             Routing.RegisterRoute("edit_reservation", typeof(EditReservation));
+
+            Routing.RegisterRoute("view_founding_fathers", typeof(ViewFoundingFathers));
+
             Routing.RegisterRoute("about", typeof(About));
 
             _acmService = new AcmService();

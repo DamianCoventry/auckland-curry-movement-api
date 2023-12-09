@@ -73,7 +73,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\acm.png"/>
+        <MauiIcon Include="Resources\AppIcon\acm.png" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\acm_logo_hi_res.png" Color="#f2fbf8" />
@@ -145,6 +145,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\acm-models\acm-viewmodels:csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Views\EditReservation.xaml.cs">
 	    <DependentUpon>EditReservation.xaml</DependentUpon>
 	  </Compile>
@@ -158,6 +162,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\About.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\AddClub.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditClub.xaml">
@@ -199,7 +206,13 @@
 	  <MauiXaml Update="Views\ManageClubs.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\SelectMembers.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\SignInPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewFoundingFathers.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

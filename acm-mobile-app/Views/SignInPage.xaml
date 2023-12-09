@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="acm_mobile_app.Views.SignInPage"
              xmlns:views="clr-namespace:acm_mobile_app.Views"
-             xmlns:models="clr-namespace:acm_mobile_app.Models"
+             xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
              x:DataType="views:SignInPage"
              Title="SignInPage"
              BackgroundColor="#f2fbf8">

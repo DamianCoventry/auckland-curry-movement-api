@@ -22,9 +22,4 @@ public partial class EditExemption : ContentPage
         // TODO: actually add it
         await Shell.Current.GoToAsync("//manage_exemptions");
     }
-
-    public async void OnClickCancel(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//home");
-    }
 }

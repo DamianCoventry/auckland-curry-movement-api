@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="using:acm_mobile_app"
+             xmlns:views="clr-namespace:acm_mobile_app.Views"
+             xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="acm_mobile_app.Views.AddClub"
+             x:DataType="views:AddClub"
+             Title="AddClub">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
+    </ContentPage.ToolbarItems>
+    <Grid Margin="20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Label Grid.Row="0" Text="Name"/>
+        <Entry Grid.Row="1" x:Name="ClubNameEntry" MaxLength="100" Placeholder="Enter club name"/>
+
+        <Grid Grid.Row="2" Margin="0,15,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Founding Fathers" VerticalTextAlignment="Center"/>
+            <ImageButton x:Name="AddFF" Grid.Column="2" Source="add.png"
+                         WidthRequest="32" HeightRequest="32"
+                         Clicked="OnClickSelectMembers"
+                         HorizontalOptions="End"
+                         ToolTipProperties.Text="Select Founding Fathers"
+                         IsVisible="{Binding AreNoFoundingFatherSelected}"/>
+            <ImageButton x:Name="EditFF" Grid.Column="2" Source="modify.png"
+                         WidthRequest="32" HeightRequest="32"
+                         Clicked="OnClickSelectMembers"
+                         HorizontalOptions="End"
+                         ToolTipProperties.Text="Edit Founding Fathers"
+                         IsVisible="{Binding AreFoundingFatherSelected}"/>
+        </Grid>
+        
+        <ListView Grid.Row="3" ItemsSource="{Binding FoundingFathers}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:Member">
+                    <TextCell Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ImageButton x:Name="OkButton"
+                         Grid.Column="0" Source="yes.png"
+                         WidthRequest="32" HeightRequest="32"
+                         HorizontalOptions="End" Margin="10,0"
+                         ToolTipProperties.Text="Accept"
+                         Clicked="OnClickOK"/>
+            <ImageButton x:Name="CancelButton"
+                         Grid.Column="1" Source="no.png"
+                         WidthRequest="32" HeightRequest="32"
+                         HorizontalOptions="End" Margin="10,0"
+                         ToolTipProperties.Text="Cancel"
+                         Clicked="OnClickCancel"/>
+            <ActivityIndicator x:Name="SavingIndicator"
+                               Grid.Column="1"
+                               HorizontalOptions="End" Margin="10,0"
+                               WidthRequest="32" HeightRequest="32"
+                               IsRunning="False"/>
+        </Grid>
+
+    </Grid>
+</ContentPage>

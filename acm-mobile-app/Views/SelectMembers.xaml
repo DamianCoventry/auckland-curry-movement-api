@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="using:acm_mobile_app"
+             xmlns:views="clr-namespace:acm_mobile_app.Views"
+             xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="acm_mobile_app.Views.SelectMembers"
+             x:DataType="views:SelectMembers"
+             Title="Select Members">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
+    </ContentPage.ToolbarItems>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ActivityIndicator Grid.Row="0" x:Name="IsRefreshing" IsRunning="False"/>
+
+        <ListView Grid.Row="1" x:Name="MemberListView" ItemsSource="{Binding CurrentPageOfMembers}" RowHeight="64"
+                  SelectionMode="None" ItemTapped="MemberListView_ItemTapped">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:SelectedMember">
+                    <ViewCell>
+                        <Grid>
+                            <Grid.Triggers>
+                                <DataTrigger TargetType="Grid" Binding="{Binding Path=IsSelected}" Value="true">
+                                    <Setter Property="BackgroundColor" Value="LightSteelBlue" />
+                                </DataTrigger>
+                            </Grid.Triggers>
+                            
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0">
+                                <CheckBox x:Name="MemberSelectedCheckBox" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" CheckedChanged="MemberSelectedCheckBox_CheckedChanged"/>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Label Text="{Binding Member.Name}" TextColor="CornflowerBlue" FontAttributes="Bold" Margin="0,4"/>
+                                
+                                <HorizontalStackLayout Grid.Row="1">
+                                    <Image WidthRequest="24" IsVisible="false" Source="founding_father.png"
+                                            ToolTipProperties.Text="Founding Father" Margin="4,0"/>
+                                    <Image WidthRequest="24" Source="maharaja.png"
+                                            ToolTipProperties.Text="Maharaja" Margin="4,0"/>
+                                    <Image WidthRequest="24" Source="guru.png"
+                                            ToolTipProperties.Text="Guru" Margin="4,0"/>
+                                    <Image WidthRequest="24" Source="chilli.png"
+                                            ToolTipProperties.Text="Current King of the Chillis" Margin="4,0"/>
+                                    <Image WidthRequest="24" Source="violation.png"
+                                            ToolTipProperties.Text="2 current violations" Margin="4,0"/>
+                                    <Image WidthRequest="24" Source="exemption.png"
+                                            ToolTipProperties.Text="1 current exemption" Margin="4,0"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Label Text="Attendances"/>
+                                <Label Text="{Binding Member.AttendanceCount}"
+                                        FontSize="Large" Grid.Row="1"
+                                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                            </Grid>
+
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <Grid Grid.Row="2" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ImageButton Grid.Column="1" WidthRequest="32" HeightRequest="32" Margin="16,0" Source="angle_double_left.png" Clicked="OnClickFirst"/>
+            <ImageButton Grid.Column="2" WidthRequest="32" HeightRequest="32" Margin="16,0" Source="angle_left.png" Clicked="OnClickPrevious"/>
+            <Label Grid.Column="3"
+                   x:Name="CurrentPageNumber"
+                   Text="{Binding CurrentPage}"
+                   WidthRequest="32" HeightRequest="32"
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                   FontSize="Large"/>
+            <ImageButton Grid.Column="4" WidthRequest="32" HeightRequest="32" Margin="16,0" Source="angle_right.png" Clicked="OnClickNext"/>
+            <ImageButton Grid.Column="5" WidthRequest="32" HeightRequest="32" Margin="16,0" Source="angle_double_right.png" Clicked="OnClickLast"/>
+        </Grid>
+        
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ImageButton Grid.Column="1" Source="yes.png" WidthRequest="32" HeightRequest="32" Margin="10" Clicked="OnClickOK"/>
+            <ImageButton Grid.Column="2" Source="no.png" WidthRequest="32" HeightRequest="32" Margin="10" Clicked="OnClickCancel"/>
+        </Grid>
+    </Grid>
+</ContentPage>

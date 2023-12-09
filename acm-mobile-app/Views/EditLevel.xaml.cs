@@ -34,9 +34,4 @@ public partial class EditLevel : ContentPage
         // TODO: actually add it
         await Shell.Current.GoToAsync("//manage_level");
     }
-
-    public async void OnClickCancel(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//home");
-    }
 }

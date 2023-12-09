@@ -11,7 +11,7 @@ public partial class SignInPage : ContentPage
         BindingContext = this;
     }
 
-    public async void OnClickSignIn(object o, EventArgs e)
+    public async void OnClickSignIn(object sender, EventArgs e)
     {
         try
         {
@@ -20,10 +20,10 @@ public partial class SignInPage : ContentPage
 
             SigningInIndicator.IsRunning = true;
             SignInResult.Text = "Signing in...";
-            await Task.Delay(250);
+            await Task.Delay(150);
 
             bool signedIn = await AcmService.SignIn();
-            await Task.Delay(250);
+            await Task.Delay(150);
 
             SignInResult.Text = signedIn ? "Signed in" : "Failed to sign in";
             Token.Text = AcmService.AccessToken;

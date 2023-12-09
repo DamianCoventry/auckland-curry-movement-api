@@ -9,7 +9,7 @@ public partial class ManageLevels : ContentPage
 {
     private const int PAGE_SIZE = 10;
     private int _page = 0;
-    private int _numItemsReturnedLastTime = 0;
+    private int _totalPages = 0;
 
     public ManageLevels()
     {
@@ -19,7 +19,7 @@ public partial class ManageLevels : ContentPage
 
     public int CurrentPage { get { return _page + 1; } }
 
-    public ObservableCollection<Models.Level> Levels { get; set; } = [];
+    public ObservableCollection<Level> Levels { get; set; } = [];
 
     public void OnClickRefreshData(object sender, EventArgs e)
     {
@@ -56,7 +56,17 @@ public partial class ManageLevels : ContentPage
         }
     }
 
-    public void OnPreviousPage(object o, EventArgs e)
+    public void OnClickFirst(object sender, EventArgs e)
+    {
+        if (_page > 0)
+        {
+            _page = 0;
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+            CurrentPageNumber.Text = (1 + _page).ToString();
+        }
+    }
+
+    public void OnClickPrevious(object sender, EventArgs e)
     {
         if (_page > 0)
         {
@@ -66,11 +76,21 @@ public partial class ManageLevels : ContentPage
         }
     }
 
-    public void OnNextPage(object o, EventArgs e)
+    public void OnClickNext(object sender, EventArgs e)
     {
-        if (_numItemsReturnedLastTime >= PAGE_SIZE)
+        if (_page < _totalPages - 1)
         {
             ++_page;
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+            CurrentPageNumber.Text = (1 + _page).ToString();
+        }
+    }
+
+    public void OnClickLast(object sender, EventArgs e)
+    {
+        if (_page < _totalPages - 1)
+        {
+            _page = _totalPages - 1;
             MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
             CurrentPageNumber.Text = (1 + _page).ToString();
         }
@@ -95,17 +115,21 @@ public partial class ManageLevels : ContentPage
                 return;
 
             IsRefreshingListData.IsRunning = true;
-            await Task.Delay(250);
+            await Task.Delay(150);
 
             var levels = await AcmService.ListLevelsAsync(_page * PAGE_SIZE, PAGE_SIZE);
-            _numItemsReturnedLastTime = levels.Count;
+            _totalPages = levels.PageItems == null ? 0 : levels.TotalPages;
 
-            await Task.Delay(250);
+            await Task.Delay(150);
 
             LevelListView.SelectedItem = null;
             Levels.Clear();
-            foreach (var level in levels)
-                Levels.Add(level);
+
+            if (levels.PageItems != null)
+            {
+                foreach (var level in levels.PageItems)
+                    Levels.Add(level);
+            }
         }
         catch (Exception ex)
         {

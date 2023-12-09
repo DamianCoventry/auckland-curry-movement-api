@@ -9,7 +9,7 @@ public partial class ManageRestaurants : ContentPage
 {
     private const int PAGE_SIZE = 10;
     private int _page = 0;
-    private int _numItemsReturnedLastTime = 0;
+    private int _totalPages = 0;
 
     public ManageRestaurants()
     {
@@ -19,7 +19,7 @@ public partial class ManageRestaurants : ContentPage
 
     public int CurrentPage { get { return _page + 1; } }
 
-    public ObservableCollection<Models.Restaurant> Restaurants { get; set; } = [];
+    public ObservableCollection<Restaurant> Restaurants { get; set; } = [];
 
     public void OnClickRefreshData(object sender, EventArgs e)
     {
@@ -56,7 +56,17 @@ public partial class ManageRestaurants : ContentPage
         }
     }
 
-    public void OnPreviousPage(object o, EventArgs e)
+    public void OnClickFirst(object sender, EventArgs e)
+    {
+        if (_page > 0)
+        {
+            _page = 0;
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+            CurrentPageNumber.Text = (1 + _page).ToString();
+        }
+    }
+
+    public void OnClickPrevious(object sender, EventArgs e)
     {
         if (_page > 0)
         {
@@ -66,11 +76,21 @@ public partial class ManageRestaurants : ContentPage
         }
     }
 
-    public void OnNextPage(object o, EventArgs e)
+    public void OnClickNext(object sender, EventArgs e)
     {
-        if (_numItemsReturnedLastTime >= PAGE_SIZE)
+        if (_page < _totalPages - 1)
         {
             ++_page;
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
+            CurrentPageNumber.Text = (1 + _page).ToString();
+        }
+    }
+
+    public void OnClickLast(object sender, EventArgs e)
+    {
+        if (_page < _totalPages - 1)
+        {
+            _page = _totalPages - 1;
             MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
             CurrentPageNumber.Text = (1 + _page).ToString();
         }
@@ -95,19 +115,23 @@ public partial class ManageRestaurants : ContentPage
                 return;
 
             IsRefreshingListData.IsRunning = true;
-            await Task.Delay(250);
+            await Task.Delay(150);
 
             var restaurants = await AcmService.ListRestaurantsAsync(_page * PAGE_SIZE, PAGE_SIZE);
-            _numItemsReturnedLastTime = restaurants.Count;
+            _totalPages = restaurants.PageItems == null ? 0 : restaurants.TotalPages;
 
-            await Task.Delay(250);
+            await Task.Delay(150);
 
             RestaurantListView.SelectedItem = null;
             Restaurants.Clear();
-            foreach (var restaurant in restaurants)
+
+            if (restaurants.PageItems != null)
             {
-                if (restaurant.Name != "<Unknown>")
-                    Restaurants.Add(restaurant);
+                foreach (var restaurant in restaurants.PageItems)
+                {
+                    if (restaurant.Name != "<Unknown>")
+                        Restaurants.Add(restaurant);
+                }
             }
         }
         catch (Exception ex)

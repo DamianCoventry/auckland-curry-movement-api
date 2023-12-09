@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using auckland_curry_movement_api;
-using auckland_curry_movement_api.Models;
 
-namespace auckland_curry_movement_api.Controllers
+namespace acm_rest_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -104,7 +98,7 @@ namespace auckland_curry_movement_api.Controllers
         {
             if (_context.Member == null)
             {
-                return Problem("Entity set 'AcmDatabaseContext.Member'  is null.");
+                return Problem("Entity set 'AcmDatabaseContext.Member' is null.");
             }
             _context.Member.Add(member);
             await _context.SaveChangesAsync();

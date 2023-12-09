@@ -1,4 +1,5 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Collections.ObjectModel;
@@ -88,13 +89,13 @@ public partial class AddClub : ContentPage
             CancelButton.IsVisible = false;
 
             await Task.Delay(150);
-            var ffs = await AcmService.AddClubAsync(new Viewviewmodels:Club
+            await AcmService.AddClubAsync(new acm_models.Club
             {
                 ID = null,
                 Name = ClubNameEntry.Text,
                 IsArchived = false,
                 ArchiveReason = null,
-                Members = new List<Member>(FoundingFathers)
+                Members = Utils.MemberUtils.ToModelsMemberList(FoundingFathers)
             });
 
             await Task.Delay(150);

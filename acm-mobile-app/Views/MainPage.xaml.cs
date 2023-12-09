@@ -1,4 +1,5 @@
 ﻿using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace acm_mobile_app
@@ -126,8 +127,12 @@ namespace acm_mobile_app
 
                 if (dinners.PageItems != null)
                 {
-                    foreach (var dinner in dinners.PageItems)
-                        PastDinners.Add(dinner);
+                    foreach (var model in dinners.PageItems)
+                    {
+                        var x = PastDinner.FromModel(model);
+                        if (x != null)
+                            PastDinners.Add(x);
+                    }
                 }
             }
             catch (Exception ex)

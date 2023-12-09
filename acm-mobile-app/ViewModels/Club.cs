@@ -4,6 +4,18 @@ namespace acm_mobile_app.ViewModels
 {
     public class Club : INotifyPropertyChanged
     {
+        static public Club? FromModel(acm_models.Club? model)
+        {
+            if (model == null) return null;
+            return new Club()
+            {
+                _id = model.ID,
+                _name = model.Name,
+                _isArchived = model.IsArchived,
+                _archiveReason = model.ArchiveReason,
+            };
+        }
+
         private int? _id;
         private string _name = string.Empty;
         private bool _isArchived;

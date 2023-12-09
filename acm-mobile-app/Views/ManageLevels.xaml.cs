@@ -1,4 +1,5 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Collections.ObjectModel;
@@ -127,8 +128,12 @@ public partial class ManageLevels : ContentPage
 
             if (levels.PageItems != null)
             {
-                foreach (var level in levels.PageItems)
-                    Levels.Add(level);
+                foreach (var model in levels.PageItems)
+                {
+                    var x = Level.FromModel(model);
+                    if (x != null)
+                        Levels.Add(x);
+                }
             }
         }
         catch (Exception ex)

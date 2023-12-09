@@ -1,17 +1,113 @@
-﻿namespace acm_mobile_app.ViewModels
+﻿using System.ComponentModel;
+
+namespace acm_mobile_app.ViewModels
 {
-    public class Dinner
+    public class Dinner : INotifyPropertyChanged
     {
-        public int? ID { get; set; }
-        public int ReservationID { get; set; }
-        public Reservation? Reservation { get; set; }
-        public double? CostPerPerson { get; set; }
-        public double? NumBeersConsumed { get; set; }
-        public KotC? KotC { get; set; }
+        static public Dinner? FromModel(acm_models.Dinner? model)
+        {
+            if (model == null) return null;
+            return new Dinner()
+            {
+                _id = model.ID,
+                _reservationID = model.ReservationID,
+                _reservation = Reservation.FromModel(model.Reservation),
+                _costPerPerson = model.CostPerPerson,
+                _numBeersConsumed = model.NumBeersConsumed,
+                _kotC = KotC.FromModel(model.KotC)
+            };
+        }
+
+        private int? _id;
+        private int _reservationID;
+        private Reservation? _reservation;
+        private double? _costPerPerson;
+        private double? _numBeersConsumed;
+        private KotC? _kotC;
+
+        public int? ID
+        {
+            get => _id;
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ID)));
+                }
+            }
+        }
+
+        public int ReservationID
+        {
+            get => _reservationID;
+            set
+            {
+                if (_reservationID != value)
+                {
+                    _reservationID = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReservationID)));
+                }
+            }
+        }
+
+        public Reservation? Reservation
+        {
+            get => _reservation;
+            set
+            {
+                if (_reservation != value)
+                {
+                    _reservation = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Reservation)));
+                }
+            }
+        }
+
+        public double? CostPerPerson
+        {
+            get => _costPerPerson;
+            set
+            {
+                if (_costPerPerson != value)
+                {
+                    _costPerPerson = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CostPerPerson)));
+                }
+            }
+        }
+
+        public double? NumBeersConsumed
+        {
+            get => _numBeersConsumed;
+            set
+            {
+                if (_numBeersConsumed != value)
+                {
+                    _numBeersConsumed = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NumBeersConsumed)));
+                }
+            }
+        }
+
+        public KotC? KotC
+        {
+            get => _kotC;
+            set
+            {
+                if (_kotC != value)
+                {
+                    _kotC = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(KotC)));
+                }
+            }
+        }
 
         public virtual ICollection<Attendee>? Attendees { get; set; }
         public virtual ICollection<Member>? Members { get; set; }
         public virtual ICollection<Violation>? Violations { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

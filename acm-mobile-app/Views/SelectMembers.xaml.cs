@@ -107,12 +107,12 @@ public partial class SelectMembers : ContentPage
 
             if (members.PageItems != null)
             {
-                foreach (var memberModel in members.PageItems)
+                foreach (var model in members.PageItems)
                 {
                     CurrentPageOfMembers.Add(new SelectedMember()
                     {
-                        IsSelected = IsMemberSelected(memberModel),
-                        Member = Member.FromModel(memberModel)
+                        IsSelected = IsMemberSelected(model),
+                        Member = Member.FromModel(model) ?? throw new NullReferenceException(nameof(model)),
                     });
                 }
             }
@@ -127,18 +127,18 @@ public partial class SelectMembers : ContentPage
         }
     }
 
-    private void MergeReceivedPageIntoMasterList(List<acm_models.Member>? memberModels)
+    private void MergeReceivedPageIntoMasterList(List<acm_models.Member>? members)
     {
-        if (memberModels == null)
+        if (members == null)
             return;
-        foreach (var memberModel in memberModels)
+        foreach (var model in members)
         {
-            if (!MasterListOfMembers.Any(x => x.Member.ID == memberModel.ID))
+            if (!MasterListOfMembers.Any(x => x.Member.ID == model.ID))
             {
                 MasterListOfMembers.Add(new SelectedMember()
                 {
                     IsSelected = false,
-                    Member = Member.FromModel(memberModel)
+                    Member = Member.FromModel(model) ?? throw new NullReferenceException(nameof(model)),
                 });
             }
         }

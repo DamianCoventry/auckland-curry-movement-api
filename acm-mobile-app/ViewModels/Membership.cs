@@ -4,6 +4,17 @@ namespace acm_mobile_app.ViewModels
 {
     public class Membership : INotifyPropertyChanged
     {
+        static public Membership? FromModel(acm_models.Membership? model)
+        {
+            if (model == null) return null;
+            return new Membership()
+            {
+                _memberID = model.MemberID,
+                _clubID = model.ClubID,
+                _isFoundingFather = model.IsFoundingFather,
+            };
+        }
+
         private int _memberID;
         private int _clubID;
         private bool _isFoundingFather;
@@ -46,7 +57,6 @@ namespace acm_mobile_app.ViewModels
                 }
             }
         }
-
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }

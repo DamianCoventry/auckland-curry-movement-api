@@ -4,25 +4,26 @@ namespace acm_mobile_app.ViewModels
 {
     public class Member : INotifyPropertyChanged
     {
+        static public Member? FromModel(acm_models.Member? model)
+        {
+            if (model == null) return null;
+            return new Member()
+            {
+                _id = model.ID,
+                _name = model.Name,
+                _sponsorID = model.SponsorID,
+                _currentLevelID = model.CurrentLevelID,
+                _currentLevel = Level.FromModel(model.CurrentLevel),
+                _attendanceCount = model.AttendanceCount,
+            };
+        }
+
         private int? _id;
         private string _name = string.Empty;
         private int? _sponsorID;
         private int _currentLevelID;
         private Level? _currentLevel;
         private int _attendanceCount;
-
-        static public Member FromModel(acm_models.Member member)
-        {
-            return new Member()
-            {
-                _id = member.ID,
-                _name = member.Name,
-                _sponsorID = member.SponsorID,
-                _currentLevelID = member.CurrentLevelID,
-                _currentLevel = Level.FromModel(member.CurrentLevel),
-                _attendanceCount = member.AttendanceCount,
-            };
-        }
 
         public int? ID
         {

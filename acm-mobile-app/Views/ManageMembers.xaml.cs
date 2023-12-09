@@ -1,4 +1,5 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Collections.ObjectModel;
@@ -127,8 +128,12 @@ public partial class ManageMembers : ContentPage
 
             if (members.PageItems != null)
             {
-                foreach (var member in members.PageItems)
-                    Members.Add(member);
+                foreach (var model in members.PageItems)
+                {
+                    var x = Member.FromModel(model);
+                    if (x != null)
+                        Members.Add(x);
+                }
             }
         }
         catch (Exception ex)

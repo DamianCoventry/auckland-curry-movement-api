@@ -1,4 +1,5 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Collections.ObjectModel;
@@ -41,7 +42,7 @@ namespace acm_mobile_app.Views
                 return;
             }
 
-            if (ClubListView.SelectedItem is Viewviewmodels:Club club)
+            if (ClubListView.SelectedItem is Club club)
             {
                 Dictionary<string, object> parameters = new() { { "ClubID", club.ID ?? 0 }, { "ClubName", club.Name } };
                 await Shell.Current.GoToAsync("edit_club", true, parameters);
@@ -133,8 +134,12 @@ namespace acm_mobile_app.Views
 
                 if (clubs.PageItems != null)
                 {
-                    foreach (var club in clubs.PageItems)
-                        Clubs.Add(club);
+                    foreach (var model in clubs.PageItems)
+                    {
+                        var x = Club.FromModel(model);
+                        if (x != null)
+                            Clubs.Add(x);
+                    }
                 }
             }
             catch (Exception ex)
@@ -154,7 +159,7 @@ namespace acm_mobile_app.Views
                 if (_isDeleting || ClubListView.SelectedItem == null)
                     return;
 
-                if (ClubListView.SelectedItem is not Viewviewmodels:Club selectedClub || selectedClub.ID == null)
+                if (ClubListView.SelectedItem is not Club selectedClub || selectedClub.ID == null)
                     return;
 
                 _isDeleting = true;

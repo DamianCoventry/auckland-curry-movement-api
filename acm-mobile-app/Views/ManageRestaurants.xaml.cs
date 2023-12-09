@@ -1,4 +1,5 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Collections.ObjectModel;
@@ -127,10 +128,14 @@ public partial class ManageRestaurants : ContentPage
 
             if (restaurants.PageItems != null)
             {
-                foreach (var restaurant in restaurants.PageItems)
+                foreach (var model in restaurants.PageItems)
                 {
-                    if (restaurant.Name != "<Unknown>")
-                        Restaurants.Add(restaurant);
+                    if (model.Name != "<Unknown>")
+                    {
+                        var x = Restaurant.FromModel(model);
+                        if (x != null)
+                            Restaurants.Add(x);
+                    }
                 }
             }
         }

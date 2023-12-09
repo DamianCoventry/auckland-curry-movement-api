@@ -1,4 +1,5 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Collections.ObjectModel;
@@ -95,13 +96,13 @@ public partial class EditClub : ContentPage
             CancelButton.IsVisible = false;
 
             await Task.Delay(150);
-            var ffs = await AcmService.UpdateClubAsync(new Viewviewmodels:Club
+            var ffs = await AcmService.UpdateClubAsync(new acm_models.Club
             {
                 ID = ClubID,
                 Name = ClubNameEntry.Text,
                 IsArchived = false,
                 ArchiveReason = null,
-                Members = new List<Member>(FoundingFathers)
+                Members = Utils.MemberUtils.ToModelsMemberList(FoundingFathers),
             });
 
             await Task.Delay(150);
@@ -137,8 +138,12 @@ public partial class EditClub : ContentPage
 
             if (foundingFathers.PageItems != null)
             {
-                foreach (var ff in foundingFathers.PageItems)
-                    FoundingFathers.Add(ff);
+                foreach (var model in foundingFathers.PageItems)
+                {
+                    var x = Member.FromModel(model);
+                    if (x != null)
+                        FoundingFathers.Add(x);
+                }
             }
         }
         catch (Exception ex)

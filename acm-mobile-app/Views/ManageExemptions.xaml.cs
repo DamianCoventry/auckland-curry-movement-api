@@ -1,4 +1,5 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Collections.ObjectModel;
@@ -127,8 +128,12 @@ public partial class ManageExemptions : ContentPage
 
             if (exemptions.PageItems != null)
             {
-                foreach (var exemption in exemptions.PageItems)
-                    Exemptions.Add(exemption);
+                foreach (var model in exemptions.PageItems)
+                {
+                    var x = Exemption.FromModel(model);
+                    if (x != null)
+                        Exemptions.Add(x);
+                }
             }
         }
         catch (Exception ex)

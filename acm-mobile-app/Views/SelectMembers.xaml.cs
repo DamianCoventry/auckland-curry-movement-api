@@ -22,11 +22,17 @@ public partial class SelectMembers : ContentPage
 
     public int ClubID { get; set; }
     public List<SelectedMember> MasterListOfMembers { get; set; } = [];
+    private List<SelectedMember> OriginalMembers { get; set; } = [];
     public ObservableCollection<SelectedMember> CurrentPageOfMembers { get; set; } = [];
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
+
+        OriginalMembers = [];
+        foreach (var m in MasterListOfMembers)
+            OriginalMembers.Add(new SelectedMember() { IsSelected = m.IsSelected, Member = m.Member });
+
         MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
     }
 
@@ -72,13 +78,22 @@ public partial class SelectMembers : ContentPage
 
     public async void OnClickOK(object sender, EventArgs e)
     {
-        Dictionary<string, object> parameters = new() { { "SelectedMembers", MasterListOfMembers } };
+        List<SelectedMember> copy = [];
+        foreach (var x in MasterListOfMembers)
+            copy.Add(new SelectedMember() { IsSelected = x.IsSelected, Member = x.Member });
+
+        Dictionary<string, object> parameters = new() { { "SelectedMembers", copy } };
         await Shell.Current.GoToAsync("..", true, parameters);
     }
 
     public async void OnClickCancel(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("..");
+        List<SelectedMember> copy = [];
+        foreach (var x in OriginalMembers)
+            copy.Add(new SelectedMember() { IsSelected = x.IsSelected, Member = x.Member });
+
+        Dictionary<string, object> parameters = new() { { "SelectedMembers", copy } };
+        await Shell.Current.GoToAsync("..", true, parameters);
     }
 
     private static IAcmService AcmService

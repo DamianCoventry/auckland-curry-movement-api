@@ -3,7 +3,7 @@ using Android.App;
 using Android.Content;
 using Microsoft.Identity.Client;
 
-namespace TodoApp.MAUI
+namespace acm_mobile_app
 {
     [Activity(Exported = true)]
     [IntentFilter(new[] { Intent.ActionView },

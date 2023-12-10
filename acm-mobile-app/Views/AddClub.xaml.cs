@@ -6,11 +6,8 @@ using System.Collections.ObjectModel;
 
 namespace acm_mobile_app.Views;
 
-[QueryProperty(nameof(SelectedMembers), "SelectedMembers")]
 public partial class AddClub : ContentPage
 {
-    private List<SelectedMember> _selectedMembers = [];
-
     public AddClub()
 	{
 		InitializeComponent();
@@ -18,28 +15,6 @@ public partial class AddClub : ContentPage
 	}
 
     public ObservableCollection<Member> FoundingFathers { get; set; } = [];
-
-    public bool AreFoundingFatherSelected { get { return FoundingFathers.Count > 0; } }
-    public bool AreNoFoundingFatherSelected { get { return FoundingFathers.Count == 0; } }
-
-    public List<SelectedMember> SelectedMembers
-    {
-        get => _selectedMembers;
-        set
-        {
-            if (value == null)
-                return;
-            _selectedMembers = value;
-            FoundingFathers.Clear();
-            foreach (var member in _selectedMembers)
-            {
-                if (member.IsSelected)
-                    FoundingFathers.Add(member.Member);
-            }
-            AddFF.IsVisible = AreNoFoundingFatherSelected;
-            EditFF.IsVisible = AreFoundingFatherSelected;
-        }
-    }
 
     public async void OnClickOK(object sender, EventArgs e)
     {
@@ -66,9 +41,29 @@ public partial class AddClub : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
-    public async void OnClickSelectMembers(object sender, EventArgs e)
+    public async void AddFoundingFather_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("select_members", true);
+        string? name = await DisplayPromptAsync("Add Founding Father", "How will the brotherhood refer to this gentleman?", placeholder: "Enter a name", maxLength: 100);
+        if (name != null)
+        {
+            name = name.Trim();
+            if (string.IsNullOrEmpty(name))
+            {
+                var toast = Toast.Make("The name must not be empty or only white space", ToastDuration.Short, 14);
+                await toast.Show();
+            }
+            else if (FoundingFathers.FirstOrDefault(x => string.Compare(x.Name, name, true) == 0) != null)
+            {
+                var toast = Toast.Make("That name is already in use", ToastDuration.Short, 14);
+                await toast.Show();
+            }
+            else
+            {
+                FoundingFathers.Add(new Member() { Name = name });
+                FoudingFathersAbsent.IsVisible = false;
+                FoudingFathersPresent.IsVisible = true;
+            }
+        }
     }
 
     private static IAcmService AcmService

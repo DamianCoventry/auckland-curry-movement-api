@@ -235,27 +235,46 @@ namespace acm_rest_api.Controllers
         public async Task<ActionResult<Club>> PostClub(Club club)
         {
             if (_context.Club == null)
-            {
                 return Problem("Entity set 'AcmDatabaseContext.Club' is null.");
-            }
+            if (_context.Membership == null)
+                return Problem("Entity set 'AcmDatabaseContext.Membership' is null.");
+            if (_context.Member == null)
+                return Problem("Entity set 'AcmDatabaseContext.Member' is null.");
+            if (club.Members == null || club.Members.Count == 0)
+                return Problem("No founding father names were supplied");
 
-            var foundingFathers = club.Members;
+            var memberNamesOnly = club.Members;
             club.ID = null;
             club.Members = null;
             club.Notifications = null;
             _context.Club.Add(club);
 
             await _context.SaveChangesAsync(); // if this succeeds then club.ID becomes valid to use.
+            if (club.ID == null)
+                return Problem("The RDBMS was unable to save the new club.");
 
-            if (foundingFathers != null && club.ID != null && _context.Membership != null)
+            foreach (var memberName in memberNamesOnly)
             {
-                foreach (var ff in foundingFathers)
+                var member = new Member()
                 {
-                    if (ff.ID != null)
-                        _context.Membership.Add(new Membership() { ClubID = (int)club.ID, MemberID = (int)ff.ID, IsFoundingFather = true });
-                }
+                    Name = memberName.Name,
+                    CurrentLevelID = 1,
+                    AttendanceCount = 0
+                };
 
-                await _context.SaveChangesAsync();
+                _context.Member.Add(member);
+                await _context.SaveChangesAsync(); // if this succeeds then member.ID becomes valid to use.
+
+                if (member.ID != null)
+                {
+                    _context.Membership.Add(new Membership()
+                    {
+                        ClubID = (int)club.ID,
+                        MemberID = (int)member.ID,
+                        IsFoundingFather = true
+                    });
+                    await _context.SaveChangesAsync();
+                }
             }
 
             return CreatedAtAction("GetClub", new { id = club.ID }, club);

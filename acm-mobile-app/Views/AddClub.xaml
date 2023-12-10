@@ -7,7 +7,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="acm_mobile_app.Views.AddClub"
              x:DataType="views:AddClub"
-             Title="AddClub">
+             Title="Add Club">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
     </ContentPage.ToolbarItems>
@@ -19,29 +19,48 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-        <Label Grid.Row="0" Text="Name"/>
-        <Entry Grid.Row="1" x:Name="ClubNameEntry" MaxLength="100" Placeholder="Enter club name"/>
 
-        <Grid Grid.Row="2" Margin="0,15,0,0">
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Text="Every curry club needs a name. What will you call yours?" LineBreakMode="WordWrap"/>
+            <Entry Grid.Row="1" x:Name="ClubNameEntry" MaxLength="100" Placeholder="Enter club name" Margin="0,10"/>
+        </Grid>
+
+        <Grid Grid.Row="1" x:Name="FoudingFathersPresent" IsVisible="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Label Text="Founding Fathers" VerticalTextAlignment="Center"/>
-            <ImageButton x:Name="AddFF" Grid.Column="2" Source="add.png"
+            <ImageButton x:Name="AddFoundingFather" Grid.Column="2" Source="add.png"
                          WidthRequest="32" HeightRequest="32"
-                         Clicked="OnClickSelectMembers"
+                         Clicked="AddFoundingFather_Clicked"
                          HorizontalOptions="End"
-                         ToolTipProperties.Text="Select Founding Fathers"
-                         IsVisible="{Binding AreNoFoundingFatherSelected}"/>
-            <ImageButton x:Name="EditFF" Grid.Column="2" Source="modify.png"
-                         WidthRequest="32" HeightRequest="32"
-                         Clicked="OnClickSelectMembers"
-                         HorizontalOptions="End"
-                         ToolTipProperties.Text="Edit Founding Fathers"
-                         IsVisible="{Binding AreFoundingFatherSelected}"/>
+                         ToolTipProperties.Text="Add a Founding Father"/>
+        </Grid>
+
+        <Grid Grid.Row="2" x:Name="FoudingFathersAbsent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Image Grid.Column="0" Source="founding_father.png" WidthRequest="64" HeightRequest="64" Margin="10"/>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Text="Founding fathers are the men that started the Curry Club, from which an atmosphere of camraderie and sharing a curry begins." HorizontalOptions="Start" Margin="0,10"/>
+                <Label Grid.Row="1" Text="Add your first founding father." HorizontalOptions="Start" Margin="0,10"/>
+                <Button Grid.Row="2" Text="Add" WidthRequest="80" HeightRequest="40" HorizontalOptions="Start" Clicked="AddFoundingFather_Clicked"/>
+            </Grid>
+
         </Grid>
         
         <ListView Grid.Row="3" ItemsSource="{Binding FoundingFathers}">

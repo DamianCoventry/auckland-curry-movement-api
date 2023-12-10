@@ -39,13 +39,20 @@
                          ToolTipProperties.Text="Edit Founding Fathers"/>
         </Grid>
 
-        <ListView Grid.Row="3" x:Name="FoundingFathersListView" ItemsSource="{Binding FoundingFathers}" SelectionMode="None">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="viewmodels:Member">
-                    <TextCell Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListView x:Name="FoundingFathersListView" ItemsSource="{Binding FoundingFathers}" SelectionMode="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:Member">
+                        <TextCell Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button x:Name="ShowMoreButton" Grid.Row="1" Text="Show More" Clicked="ShowMoreButton_Clicked" WidthRequest="150"/>
+        </Grid>
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>

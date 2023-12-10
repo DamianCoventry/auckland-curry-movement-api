@@ -2,8 +2,6 @@ using acm_mobile_app.Services;
 using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using Microsoft.VisualBasic;
-using System.Collections;
 using System.Collections.ObjectModel;
 
 namespace acm_mobile_app.Views;
@@ -14,7 +12,10 @@ namespace acm_mobile_app.Views;
 public partial class EditClub : ContentPage
 {
     private const int PAGE_SIZE = 10;
-    private List<SelectedMember> _selectedMembers = [];
+    private int _page = 0;
+    private int _totalPages = 0;
+
+    private readonly List<SelectedMember> _selectedMembers = [];
 
     public EditClub()
 	{
@@ -29,20 +30,13 @@ public partial class EditClub : ContentPage
 
     public List<SelectedMember> SelectedMembers
     {
-        get
-        {
-            _selectedMembers = [];
-            foreach (var foundingFather in FoundingFathers)
-                _selectedMembers.Add(new SelectedMember() { IsSelected = true, Member = foundingFather });
-            return _selectedMembers;
-        }
+        get => _selectedMembers;
         set
         {
-            if (value == null)
-                return;
-            _selectedMembers = value;
-            FoundingFathers.Clear();
-            SynchroniseFoundingFatherContainer();
+            foreach (var x in value)
+                AddOrUpdate(x);
+
+            CopySelectedMembersToFoundingFathers();
         }
     }
 
@@ -73,7 +67,11 @@ public partial class EditClub : ContentPage
 
     public async void OnClickSelectMembers(object sender, EventArgs e)
     {
-        Dictionary<string, object> parameters = new() { { "ClubID", ClubID }, { "SelectedMembers", SelectedMembers } };
+        List<SelectedMember> copy = [];
+        foreach (var x in SelectedMembers)
+            copy.Add(new SelectedMember() { IsSelected = x.IsSelected, Member = x.Member });
+
+        Dictionary<string, object> parameters = new() { { "ClubID", ClubID }, { "SelectedMembers", copy } };
         await Shell.Current.GoToAsync("select_members", true, parameters);
     }
 
@@ -81,7 +79,7 @@ public partial class EditClub : ContentPage
     {
         base.OnAppearing();
         ClubNameEntry.Text = ClubName;
-        MainThread.BeginInvokeOnMainThread(async () => { await RefreshFoundingFathers(); });
+        MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
     }
 
     private static IAcmService AcmService
@@ -127,7 +125,7 @@ public partial class EditClub : ContentPage
         return rv;
     }
 
-    private async Task RefreshFoundingFathers()
+    private async Task RefreshListData()
     {
         try
         {
@@ -137,22 +135,23 @@ public partial class EditClub : ContentPage
             LoadingIndicator.IsRunning = true;
 
             await Task.Delay(150);
-            var foundingFathers = await AcmService.ListClubFoundingFathersAsync(ClubID, 0, PAGE_SIZE); // TODO: request different pages
+            var foundingFathers = await AcmService.ListClubFoundingFathersAsync(ClubID, _page * PAGE_SIZE, PAGE_SIZE);
+            _totalPages = foundingFathers.PageItems == null ? 0 : foundingFathers.TotalPages;
+
+            ShowMoreButton.IsVisible = _totalPages > 1 && _page < (_totalPages - 1);
 
             await Task.Delay(150);
-            FoundingFathers.Clear();
-
             if (foundingFathers.PageItems != null)
             {
                 foreach (var model in foundingFathers.PageItems)
                 {
                     var x = Member.FromModel(model);
                     if (x != null)
-                        FoundingFathers.Add(x);
+                        AddIfAbsent(new SelectedMember() { IsSelected = true, Member = x });
                 }
-            }
 
-            SynchroniseFoundingFatherContainer();
+                CopySelectedMembersToFoundingFathers();
+            }
         }
         catch (Exception ex)
         {
@@ -164,15 +163,38 @@ public partial class EditClub : ContentPage
         }
     }
 
-    private void SynchroniseFoundingFatherContainer()
+    private void AddIfAbsent(SelectedMember selectedMember)
     {
-        foreach (var member in _selectedMembers)
+        var x = _selectedMembers.Where(x => x.Member.ID == selectedMember.Member.ID).FirstOrDefault();
+        if (x == null)
+            _selectedMembers.Add(selectedMember);
+    }
+
+    private void AddOrUpdate(SelectedMember selectedMember)
+    {
+        var x = _selectedMembers.Where(x => x.Member.ID == selectedMember.Member.ID).FirstOrDefault();
+        if (x == null)
+            _selectedMembers.Add(selectedMember);
+        else
+            x.IsSelected = selectedMember.IsSelected;
+    }
+
+    private void CopySelectedMembersToFoundingFathers()
+    {
+        FoundingFathers.Clear();
+        foreach (var x in _selectedMembers)
         {
-            var existingFoundingFather = FoundingFathers.FirstOrDefault(x => x.ID == member.Member.ID);
-            if (member.IsSelected && existingFoundingFather == null)
-                FoundingFathers.Add(member.Member);
-            else if (!member.IsSelected && existingFoundingFather != null)
-                FoundingFathers.Remove(existingFoundingFather);
+            if (x.IsSelected)
+                FoundingFathers.Add(x.Member);
+        }
+    }
+
+    private void ShowMoreButton_Clicked(object sender, EventArgs e)
+    {
+        if (_page < _totalPages - 1)
+        {
+            ++_page;
+            MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
         }
     }
 }

@@ -14,12 +14,14 @@ namespace acm_mobile_app
             Routing.RegisterRoute("add_club", typeof(AddClub));
             Routing.RegisterRoute("edit_club", typeof(EditClub));
 
+            Routing.RegisterRoute("add_exemption", typeof(AddExemption));
             Routing.RegisterRoute("edit_exemption", typeof(EditExemption));
 
             Routing.RegisterRoute("edit_level", typeof(EditLevel));
 
             Routing.RegisterRoute("edit_member", typeof(EditMember));
-            Routing.RegisterRoute("select_members", typeof(SelectMembers));
+            Routing.RegisterRoute("select_1_member", typeof(SelectOneMember));
+            Routing.RegisterRoute("select_0_1_or_more_members", typeof(SelectZeroOneOrMoreMembers));
 
             Routing.RegisterRoute("edit_restaurant", typeof(EditRestaurant));
 

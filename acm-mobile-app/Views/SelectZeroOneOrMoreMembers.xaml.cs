@@ -6,13 +6,13 @@ namespace acm_mobile_app.Views;
 
 [QueryProperty(nameof(ClubID), "ClubID")]
 [QueryProperty(nameof(MasterListOfMembers), "SelectedMembers")]
-public partial class SelectMembers : ContentPage
+public partial class SelectZeroOneOrMoreMembers : ContentPage
 {
     private const int PAGE_SIZE = 10;
     private int _page = 0;
     private int _totalPages = 0;
 
-    public SelectMembers()
+    public SelectZeroOneOrMoreMembers()
 	{
 		InitializeComponent();
         BindingContext = this;

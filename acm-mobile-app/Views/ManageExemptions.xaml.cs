@@ -11,6 +11,7 @@ public partial class ManageExemptions : ContentPage
     private const int PAGE_SIZE = 10;
     private int _page = 0;
     private int _totalPages = 0;
+    private bool _isDeleting = false;
 
     public ManageExemptions()
 	{
@@ -29,7 +30,7 @@ public partial class ManageExemptions : ContentPage
 
     public async void OnClickAdd(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("edit_exemption");
+        await Shell.Current.GoToAsync("add_exemption");
     }
 
     public async void OnClickModify(object sender, EventArgs e)
@@ -40,7 +41,24 @@ public partial class ManageExemptions : ContentPage
             await toast.Show();
             return;
         }
-        await Shell.Current.GoToAsync("edit_exemption");
+
+        if (ExemptionListView.SelectedItem is Exemption exemption)
+        {
+            Exemption copy = new()
+            {
+                ID = exemption.ID,
+                FoundingFatherID = exemption.FoundingFatherID,
+                MemberID = exemption.MemberID,
+                Date = exemption.Date,
+                ShortReason = exemption.ShortReason,
+                LongReason = exemption.LongReason,
+                IsArchived = exemption.IsArchived,
+                ArchiveReason = exemption.ArchiveReason,
+            };
+
+            Dictionary<string, object> parameters = new() { { "Exemption", copy } };
+            await Shell.Current.GoToAsync("edit_exemption", true, parameters);
+        }
     }
 
     public async void OnClickDelete(object sender, EventArgs e)
@@ -51,9 +69,10 @@ public partial class ManageExemptions : ContentPage
             await toast.Show();
             return;
         }
+
         if (await DisplayAlert("Delete Exemption", "Are you sure you want to delete the selected exemption?", "Yes", "No"))
         {
-            // TODO: actually delete the exemption
+            MainThread.BeginInvokeOnMainThread(async () => { await DeleteSelectedItem(); });
         }
     }
 
@@ -143,6 +162,34 @@ public partial class ManageExemptions : ContentPage
         finally
         {
             IsRefreshingListData.IsRunning = false;
+        }
+    }
+
+    private async Task DeleteSelectedItem()
+    {
+        try
+        {
+            if (_isDeleting || ExemptionListView.SelectedItem == null)
+                return;
+
+            if (ExemptionListView.SelectedItem is not Exemption selectedExemption || selectedExemption.ID == null)
+                return;
+
+            _isDeleting = true;
+            await Task.Delay(150);
+
+            // TODO: don't actually delete the exemption, archive it.
+            await AcmService.DeleteExemptionAsync((int)selectedExemption.ID);
+
+            await RefreshListData();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "Close");
+        }
+        finally
+        {
+            _isDeleting = false;
         }
     }
 }

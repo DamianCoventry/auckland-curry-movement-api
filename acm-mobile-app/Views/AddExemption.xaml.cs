@@ -1,21 +1,21 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 
 namespace acm_mobile_app.Views;
 
-[QueryProperty(nameof(Exemption), "Exemption")]
-public partial class EditExemption : ContentPage
+public partial class AddExemption : ContentPage
 {
-    private readonly ViewModels.Exemption _exemption = new();
+    private readonly Exemption _exemption = new();
 
-    public EditExemption()
+    public AddExemption()
 	{
 		InitializeComponent();
         BindingContext = Exemption;
     }
 
-    public ViewModels.Exemption Exemption
+    public Exemption Exemption
     {
         get => _exemption;
         set
@@ -54,7 +54,7 @@ public partial class EditExemption : ContentPage
             return;
         }
 
-        if (await EditExistingExemptionAsync())
+        if (await AddExistingExemptionAsync())
             await Shell.Current.GoToAsync("//manage_exemptions");
     }
 
@@ -68,7 +68,49 @@ public partial class EditExemption : ContentPage
         get { return ((AppShell)Shell.Current).AcmService; }
     }
 
-    private async Task<bool> EditExistingExemptionAsync()
+    private async void SelectFoundingFather_Clicked(object sender, EventArgs e)
+    {
+        Dictionary<string, object> parameters = new()
+        {
+            { "ClubID", 1 }, // TODO: Where should we get this from?
+            { "SelectedMember", new SelectedMember()
+                {
+                    IsSelected = _exemption.FoundingFatherID > 0,
+                    IsFoundingFather = true,
+                    Member = new Member() { ID = _exemption.FoundingFatherID }
+                }
+            },
+        };
+
+        await Navigation.PushAsync(new SelectOneMember(parameters, x =>
+            {
+                if (x.Member.ID != null)
+                    _exemption.FoundingFatherID = (int)x.Member.ID;
+            }), true);
+    }
+
+    private async void SelectMember_Clicked(object sender, EventArgs e)
+    {
+        Dictionary<string, object> parameters = new()
+        {
+            { "ClubID", 1 }, // TODO: Where should we get this from?
+            { "SelectedMember", new SelectedMember()
+                {
+                    IsSelected = _exemption.MemberID > 0,
+                    IsFoundingFather = false,
+                    Member = new Member() { ID = _exemption.MemberID }
+                }
+            },
+        };
+
+        await Navigation.PushAsync(new SelectOneMember(parameters, x =>
+            {
+                if (x.Member.ID != null)
+                    _exemption.MemberID = (int)x.Member.ID;
+            }), true);
+    }
+
+    private async Task<bool> AddExistingExemptionAsync()
     {
         bool rv = false;
         try
@@ -81,9 +123,8 @@ public partial class EditExemption : ContentPage
             CancelButton.IsVisible = false;
 
             await Task.Delay(150);
-            await AcmService.UpdateExemptionAsync(new acm_models.Exemption
+            await AcmService.AddExemptionAsync(new acm_models.Exemption
             {
-                ID = Exemption.ID,
                 FoundingFatherID = Exemption.FoundingFatherID,
                 MemberID = Exemption.MemberID,
                 Date = Exemption.Date,

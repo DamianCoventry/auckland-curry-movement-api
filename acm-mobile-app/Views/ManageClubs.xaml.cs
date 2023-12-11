@@ -57,6 +57,7 @@ namespace acm_mobile_app.Views
                 await toast.Show();
                 return;
             }
+
             if (await DisplayAlert("Delete Club", "Are you sure you want to delete the selected club?", "Yes", "No"))
             {
                 MainThread.BeginInvokeOnMainThread(async () => { await DeleteSelectedItem(); });

@@ -5,6 +5,7 @@ namespace acm_mobile_app.ViewModels
     public class SelectedMember : INotifyPropertyChanged
     {
         private bool _selected;
+        private bool _isFoundingFather;
         private Member _member = new();
 
         public bool IsSelected
@@ -16,6 +17,19 @@ namespace acm_mobile_app.ViewModels
                 {
                     _selected = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+                }
+            }
+        }
+
+        public bool IsFoundingFather
+        {
+            get => _isFoundingFather;
+            set
+            {
+                if (_isFoundingFather != value)
+                {
+                    _isFoundingFather = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFoundingFather)));
                 }
             }
         }

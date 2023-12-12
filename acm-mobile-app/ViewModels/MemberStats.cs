@@ -240,7 +240,7 @@ namespace acm_mobile_app.ViewModels
         }
 
         public bool HasReceivedViolations { get => ViolationsReceivedCount > 0; }
-        public string ViolationsReceivedToolTip { get { return ReservationOrganiserCount.ToString() + " " + Plural("violation", ViolationsReceivedCount) + " received"; } }
+        public string ViolationsReceivedToolTip { get { return ViolationsReceivedCount.ToString() + " " + Plural("violation", ViolationsReceivedCount) + " received"; } }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

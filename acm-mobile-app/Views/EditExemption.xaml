@@ -27,17 +27,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="90"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Label Text="Founding Father" VerticalOptions="Center" HorizontalOptions="Start"/>
-            <Entry x:Name="FoundingFather"
-                   MaxLength="50"
-                   Placeholder="Choose founding father"
-                   VerticalOptions="Fill"
-                   Grid.Column="1"
-                   Text="{Binding FoundingFatherID}"/>
+            <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -48,12 +38,15 @@
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Member" VerticalOptions="Start" HorizontalOptions="Start" Margin="0,10,0,0"/>
-            <Entry x:Name="MemberName"
-                   MaxLength="200"
-                   Placeholder="Choose member"
-                   Grid.Column="1"
-                   Text="{Binding MemberID}"/>
+            <Label Text="Founding Father" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="FoundingFather" Grid.Column="0" Text="{Binding FoundingFather.Name}" VerticalOptions="Center"/>
+                <ImageButton Grid.Column="1" Source="founding_father.png" WidthRequest="32" HeightRequest="32" Clicked="SelectFoundingFather_Clicked"/>
+            </Grid>
         </Grid>
 
         <Grid Grid.Row="2">
@@ -64,11 +57,30 @@
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Date/Time" VerticalOptions="Start" HorizontalOptions="Start" Margin="0,10,0,0"/>
-            <DatePicker x:Name="DateTime" Grid.Column="1" Date="{Binding Date}"/>
+            <Label Text="Member" VerticalOptions="Start" HorizontalOptions="Start" Margin="0,10,0,0"/>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="MemberName" Grid.Column="0" Text="{Binding Member.Name}" VerticalOptions="Center"/>
+                <ImageButton Grid.Column="1" Source="member.png" WidthRequest="32" HeightRequest="32" Clicked="SelectMember_Clicked"/>
+            </Grid>
         </Grid>
 
         <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Date/Time" VerticalOptions="Start" HorizontalOptions="Start" Margin="0,10,0,0"/>
+            <DatePicker x:Name="DateTime" Grid.Column="1" Date="{Binding Date}" MinimumDate="01/01/2010" Format="dd MMM yyyy"/>
+        </Grid>
+
+        <Grid Grid.Row="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -84,7 +96,7 @@
                    Text="{Binding ShortReason}"/>
         </Grid>
 
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -100,7 +112,7 @@
                    Text="{Binding LongReason}"/>
         </Grid>
 
-        <Grid Grid.Row="6">
+        <Grid Grid.Row="7">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>

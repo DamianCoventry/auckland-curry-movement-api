@@ -9,8 +9,8 @@
         public bool IsArchived { get; set; }
         public string? ArchiveReason { get; set; }
 
-        public virtual ICollection<Attendee>? Attendees { get; set; }
-        public virtual ICollection<Member>? Members { get; set; }
+        public ICollection<Attendee>? Attendees { get; set; }
+        public ICollection<Member>? Members { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
     }
 }

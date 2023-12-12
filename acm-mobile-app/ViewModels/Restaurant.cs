@@ -121,8 +121,8 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public virtual ICollection<Reservation>? Reservations { get; set; }
-        public virtual ICollection<RotY>? RotYs { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
+        public ICollection<RotY>? RotYs { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -37,7 +37,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Label x:Name="FoundingFather" Grid.Column="0" Text="{Binding FoundingFatherID}"/>
+                <Label x:Name="FoundingFather" Grid.Column="0" Text="{Binding FoundingFather.Name}" VerticalOptions="Center"/>
                 <ImageButton Grid.Column="1" Source="founding_father.png" WidthRequest="32" HeightRequest="32" Clicked="SelectFoundingFather_Clicked"/>
             </Grid>
         </Grid>
@@ -56,7 +56,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Label x:Name="MemberName" Grid.Column="0" Text="{Binding MemberID}"/>
+                <Label x:Name="MemberName" Grid.Column="0" Text="{Binding Member.Name}" VerticalOptions="Center"/>
                 <ImageButton Grid.Column="1" Source="member.png" WidthRequest="32" HeightRequest="32" Clicked="SelectMember_Clicked"/>
             </Grid>
         </Grid>
@@ -70,7 +70,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Text="Date/Time" VerticalOptions="Start" HorizontalOptions="Start" Margin="0,10,0,0"/>
-            <DatePicker x:Name="DateTime" Grid.Column="1" Date="{Binding Date}"/>
+            <DatePicker x:Name="DateTime" Grid.Column="1" Date="{Binding Date}" MinimumDate="01/01/2010" Format="dd MMM yyyy"/>
         </Grid>
 
         <Grid Grid.Row="3">

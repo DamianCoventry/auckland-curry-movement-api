@@ -11,6 +11,7 @@ public partial class ManageMembers : ContentPage
     private const int PAGE_SIZE = 10;
     private int _page = 0;
     private int _totalPages = 0;
+    private bool _isDeleting = false;
 
     public ManageMembers()
     {
@@ -20,7 +21,7 @@ public partial class ManageMembers : ContentPage
 
     public int CurrentPage { get { return _page + 1; } }
 
-    public ObservableCollection<Member> Members { get; set; } = [];
+    public ObservableCollection<MemberStats> MemberStats { get; set; } = [];
 
     public void OnClickRefreshData(object sender, EventArgs e)
     {
@@ -40,7 +41,18 @@ public partial class ManageMembers : ContentPage
             await toast.Show();
             return;
         }
-        await Shell.Current.GoToAsync("edit_member");
+
+        if (MemberListView.SelectedItem is MemberStats memberStats)
+        {
+            Member copy = new()
+            {
+                ID = memberStats.ID,
+                Name = memberStats.Name,
+            };
+
+            Dictionary<string, object> parameters = new() { { "Member", copy } };
+            await Shell.Current.GoToAsync("edit_member", true, parameters);
+        }
     }
 
     public async void OnClickDelete(object sender, EventArgs e)
@@ -51,9 +63,10 @@ public partial class ManageMembers : ContentPage
             await toast.Show();
             return;
         }
-        if (await DisplayAlert("Delete Member", "Are you sure you want to delete the selected member?", "Yes", "No"))
+
+        if (await DisplayAlert("Delete MemberStats", "Are you sure you want to delete the selected member?", "Yes", "No"))
         {
-            // TODO: actually delete the member
+            MainThread.BeginInvokeOnMainThread(async () => { await DeleteSelectedItem(); });
         }
     }
 
@@ -118,21 +131,22 @@ public partial class ManageMembers : ContentPage
             IsRefreshingListData.IsRunning = true;
             await Task.Delay(150);
 
-            var members = await AcmService.ListMembersAsync(_page * PAGE_SIZE, PAGE_SIZE);
-            _totalPages = members.PageItems == null ? 0 : members.TotalPages;
+            // TODO: Get the club ID from somewhere
+            var memberStats = await AcmService.ListClubMemberStatsAsync(1, _page * PAGE_SIZE, PAGE_SIZE);
+            _totalPages = memberStats.PageItems == null ? 0 : memberStats.TotalPages;
 
             await Task.Delay(150);
 
             MemberListView.SelectedItem = null;
-            Members.Clear();
+            MemberStats.Clear();
 
-            if (members.PageItems != null)
+            if (memberStats.PageItems != null)
             {
-                foreach (var model in members.PageItems)
+                foreach (var model in memberStats.PageItems)
                 {
-                    var x = Member.FromModel(model);
+                    var x = ViewModels.MemberStats.FromModel(model);
                     if (x != null)
-                        Members.Add(x);
+                        MemberStats.Add(x);
                 }
             }
         }
@@ -143,6 +157,34 @@ public partial class ManageMembers : ContentPage
         finally
         {
             IsRefreshingListData.IsRunning = false;
+        }
+    }
+
+    private async Task DeleteSelectedItem()
+    {
+        try
+        {
+            if (_isDeleting || MemberListView.SelectedItem == null)
+                return;
+
+            if (MemberListView.SelectedItem is not MemberStats selectedMember || selectedMember.ID == null)
+                return;
+
+            _isDeleting = true;
+            await Task.Delay(150);
+
+            // TODO: don't actually delete the member, archive it.
+            await AcmService.DeleteMemberAsync((int)selectedMember.ID);
+
+            await RefreshListData();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "Close");
+        }
+        finally
+        {
+            _isDeleting = false;
         }
     }
 }

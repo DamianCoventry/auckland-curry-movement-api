@@ -12,6 +12,7 @@ namespace acm_mobile_app.ViewModels
                 _id = model.ID,
                 _name = model.Name,
                 _sponsorID = model.SponsorID,
+                _sponsor = FromModel(model.Sponsor),
                 _currentLevelID = model.CurrentLevelID,
                 _currentLevel = Level.FromModel(model.CurrentLevel),
                 _attendanceCount = model.AttendanceCount,
@@ -21,9 +22,12 @@ namespace acm_mobile_app.ViewModels
         private int? _id;
         private string _name = string.Empty;
         private int? _sponsorID;
+        private Member? _sponsor;
         private int _currentLevelID;
         private Level? _currentLevel;
         private int _attendanceCount;
+        public bool _isArchived;
+        public string? _archiveReason = string.Empty;
 
         public int? ID
         {
@@ -60,6 +64,19 @@ namespace acm_mobile_app.ViewModels
                 {
                     _sponsorID = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SponsorID)));
+                }
+            }
+        }
+
+        public Member? Sponsor
+        {
+            get => _sponsor;
+            set
+            {
+                if (_sponsor != value)
+                {
+                    _sponsor = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sponsor)));
                 }
             }
         }
@@ -103,20 +120,43 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public virtual ICollection<Club>? Clubs { get; set; }
-        public virtual ICollection<Dinner>? Dinners { get; set; }
-        public virtual ICollection<Attendee>? Attendees { get; set; }
-        public virtual ICollection<Exemption>? ExemptionsGiven { get; set; }
-        public virtual ICollection<Exemption>? ExemptionsReceived { get; set; }
-        public virtual ICollection<KotC>? KotCs { get; set; }
-        public virtual ICollection<Reservation>? Reservations { get; set; }
-        public virtual ICollection<RotY>? RotYs { get; set; }
-        public virtual ICollection<Violation>? ViolationsGiven { get; set; }
-        public virtual ICollection<Violation>? ViolationsReceived { get; set; }
-        public ICollection<Notification>? Notifications { get; set; }
+        public bool IsArchived
+        {
+            get => _isArchived;
+            set
+            {
+                if (_isArchived != value)
+                {
+                    _isArchived = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsArchived)));
+                }
+            }
+        }
 
-        public bool IsArchived { get; set; }
-        public string? ArchiveReason { get; set; }
+        public string? ArchiveReason
+        {
+            get => _archiveReason;
+            set
+            {
+                if (_archiveReason != value)
+                {
+                    _archiveReason = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ArchiveReason)));
+                }
+            }
+        }
+
+        public ICollection<Club>? Clubs { get; set; }
+        public ICollection<Dinner>? Dinners { get; set; }
+        public ICollection<Attendee>? Attendees { get; set; }
+        public ICollection<Exemption>? ExemptionsGiven { get; set; }
+        public ICollection<Exemption>? ExemptionsReceived { get; set; }
+        public ICollection<KotC>? KotCs { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
+        public ICollection<RotY>? RotYs { get; set; }
+        public ICollection<Violation>? ViolationsGiven { get; set; }
+        public ICollection<Violation>? ViolationsReceived { get; set; }
+        public ICollection<Notification>? Notifications { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }

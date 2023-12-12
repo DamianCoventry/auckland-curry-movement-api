@@ -62,7 +62,7 @@
                                 <Label Text="{Binding ShortReason}" TextColor="CornflowerBlue" FontAttributes="Bold"/>
                                 <Label Grid.Row="1"  Text="{Binding LongReason}" LineBreakMode="WordWrap"/>
                             </Grid>
-                            <Label Grid.Column="1" Text="{Binding Date}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                            <Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd MMM yyyy}'}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

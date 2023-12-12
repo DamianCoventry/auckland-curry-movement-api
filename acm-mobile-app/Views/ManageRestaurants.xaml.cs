@@ -11,6 +11,7 @@ public partial class ManageRestaurants : ContentPage
     private const int PAGE_SIZE = 10;
     private int _page = 0;
     private int _totalPages = 0;
+    private bool _isDeleting = false;
 
     public ManageRestaurants()
     {
@@ -29,7 +30,7 @@ public partial class ManageRestaurants : ContentPage
 
     public async void OnClickAdd(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("edit_restaurant");
+        await Shell.Current.GoToAsync("add_restaurant");
     }
 
     public async void OnClickModify(object sender, EventArgs e)
@@ -40,7 +41,23 @@ public partial class ManageRestaurants : ContentPage
             await toast.Show();
             return;
         }
-        await Shell.Current.GoToAsync("edit_restaurant");
+
+        if (RestaurantListView.SelectedItem is Restaurant restaurant)
+        {
+            Restaurant copy = new()
+            {
+                ID = restaurant.ID,
+                Name = restaurant.Name,
+                StreetAddress = restaurant.StreetAddress,
+                Suburb = restaurant.Suburb,
+                PhoneNumber = restaurant.PhoneNumber,
+                IsArchived = restaurant.IsArchived,
+                ArchiveReason = restaurant.ArchiveReason,
+            };
+
+            Dictionary<string, object> parameters = new() { { "Restaurant", copy } };
+            await Shell.Current.GoToAsync("edit_restaurant", true, parameters);
+        }
     }
 
     public async void OnClickDelete(object sender, EventArgs e)
@@ -51,9 +68,10 @@ public partial class ManageRestaurants : ContentPage
             await toast.Show();
             return;
         }
+
         if (await DisplayAlert("Delete Restaurant", "Are you sure you want to delete the selected restaurant?", "Yes", "No"))
         {
-            // TODO: actually delete the restaurant
+            MainThread.BeginInvokeOnMainThread(async () => { await DeleteSelectedItem(); });
         }
     }
 
@@ -146,6 +164,34 @@ public partial class ManageRestaurants : ContentPage
         finally
         {
             IsRefreshingListData.IsRunning = false;
+        }
+    }
+
+    private async Task DeleteSelectedItem()
+    {
+        try
+        {
+            if (_isDeleting || RestaurantListView.SelectedItem == null)
+                return;
+
+            if (RestaurantListView.SelectedItem is not Restaurant selectedRestaurant || selectedRestaurant.ID == null)
+                return;
+
+            _isDeleting = true;
+            await Task.Delay(150);
+
+            // TODO: don't actually delete the restaurant, archive it.
+            await AcmService.DeleteRestaurantAsync((int)selectedRestaurant.ID);
+
+            await RefreshListData();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "Close");
+        }
+        finally
+        {
+            _isDeleting = false;
         }
     }
 }

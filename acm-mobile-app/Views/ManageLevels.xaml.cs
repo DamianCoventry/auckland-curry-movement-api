@@ -11,6 +11,7 @@ public partial class ManageLevels : ContentPage
     private const int PAGE_SIZE = 10;
     private int _page = 0;
     private int _totalPages = 0;
+    private bool _isDeleting = false;
 
     public ManageLevels()
     {
@@ -29,7 +30,7 @@ public partial class ManageLevels : ContentPage
 
     public async void OnClickAdd(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("edit_level");
+        await Shell.Current.GoToAsync("add_level");
     }
 
     public async void OnClickModify(object sender, EventArgs e)
@@ -40,7 +41,22 @@ public partial class ManageLevels : ContentPage
             await toast.Show();
             return;
         }
-        await Shell.Current.GoToAsync("edit_level");
+
+        if (LevelListView.SelectedItem is Level level)
+        {
+            Level copy = new()
+            {
+                ID = level.ID,
+                RequiredAttendances = level.RequiredAttendances,
+                Name = level.Name,
+                Description = level.Description,
+                IsArchived = level.IsArchived,
+                ArchiveReason = level.ArchiveReason,
+            };
+
+            Dictionary<string, object> parameters = new() { { "Level", copy } };
+            await Shell.Current.GoToAsync("edit_level", true, parameters);
+        }
     }
 
     public async void OnClickDelete(object sender, EventArgs e)
@@ -51,9 +67,10 @@ public partial class ManageLevels : ContentPage
             await toast.Show();
             return;
         }
+
         if (await DisplayAlert("Delete Level", "Are you sure you want to delete the selected level?", "Yes", "No"))
         {
-            // TODO: actually delete the level
+            MainThread.BeginInvokeOnMainThread(async () => { await DeleteSelectedItem(); });
         }
     }
 
@@ -143,6 +160,34 @@ public partial class ManageLevels : ContentPage
         finally
         {
             IsRefreshingListData.IsRunning = false;
+        }
+    }
+
+    private async Task DeleteSelectedItem()
+    {
+        try
+        {
+            if (_isDeleting || LevelListView.SelectedItem == null)
+                return;
+
+            if (LevelListView.SelectedItem is not Level selectedLevel || selectedLevel.ID == null)
+                return;
+
+            _isDeleting = true;
+            await Task.Delay(150);
+
+            // TODO: don't actually delete the level, archive it.
+            await AcmService.DeleteLevelAsync((int)selectedLevel.ID);
+
+            await RefreshListData();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "Close");
+        }
+        finally
+        {
+            _isDeleting = false;
         }
     }
 }

@@ -19,6 +19,7 @@ namespace acm_mobile_app.Services
         Task<PageOfData<PastDinner>> ListClubPastDinnersAsync(int ID, int first, int count);
         Task<PageOfData<Member>> ListClubFoundingFathersAsync(int ID, int first, int count);
         Task<PageOfData<Member>> ListClubMembersAsync(int ID, int first, int count);
+        Task<PageOfData<MemberStats>> ListClubMemberStatsAsync(int ID, int first, int count);
         Task<Club> GetClubAsync(int ID);
         Task<Club> AddClubAsync(Club x);
         Task<bool> UpdateClubAsync(Club x);

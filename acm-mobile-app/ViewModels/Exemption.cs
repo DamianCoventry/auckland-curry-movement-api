@@ -27,7 +27,7 @@ namespace acm_mobile_app.ViewModels
         private Member? _foundingFather;
         private int _memberID;
         private Member? _member;
-        private DateTime _date;
+        private DateTime _date = DateTime.Now;
         private string _shortReason = string.Empty;
         private string _longReason = string.Empty;
         private bool _isArchived;

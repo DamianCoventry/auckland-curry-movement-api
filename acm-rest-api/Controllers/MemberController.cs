@@ -51,6 +51,7 @@ namespace acm_rest_api.Controllers
             }
 
             var member = await _context.Member
+                .Include(x => x.Sponsor)
                 .Include(x => x.Clubs)
                 .Include(x => x.Dinners)
                 .Include(x => x.Attendees)

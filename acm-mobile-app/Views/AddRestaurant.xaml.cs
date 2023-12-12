@@ -5,30 +5,14 @@ using CommunityToolkit.Maui.Core;
 
 namespace acm_mobile_app.Views;
 
-[QueryProperty(nameof(Restaurant), "Restaurant")]
-public partial class EditRestaurant : ContentPage
+public partial class AddRestaurant : ContentPage
 {
     private readonly Restaurant _restaurant = new();
 
-    public EditRestaurant()
+    public AddRestaurant()
     {
         InitializeComponent();
-        BindingContext = Restaurant;
-    }
-
-    public Restaurant Restaurant
-    {
-        get => _restaurant;
-        set
-        {
-            _restaurant.ID = value.ID;
-            _restaurant.Name = value.Name;
-            _restaurant.StreetAddress = value.StreetAddress;
-            _restaurant.Suburb = value.Suburb;
-            _restaurant.PhoneNumber = value.PhoneNumber;
-            _restaurant.IsArchived = value.IsArchived;
-            _restaurant.ArchiveReason = value.ArchiveReason;
-        }
+        BindingContext = _restaurant;
     }
 
     public async void OnClickOK(object sender, EventArgs e)
@@ -47,7 +31,7 @@ public partial class EditRestaurant : ContentPage
             return;
         }
 
-        if (await EditExistingRestaurantAsync())
+        if (await AddNewRestaurantAsync())
             await Shell.Current.GoToAsync("//manage_restaurants");
     }
 
@@ -61,7 +45,7 @@ public partial class EditRestaurant : ContentPage
         get { return ((AppShell)Shell.Current).AcmService; }
     }
 
-    private async Task<bool> EditExistingRestaurantAsync()
+    private async Task<bool> AddNewRestaurantAsync()
     {
         bool rv = false;
         try
@@ -74,15 +58,14 @@ public partial class EditRestaurant : ContentPage
             CancelButton.IsVisible = false;
 
             await Task.Delay(150);
-            await AcmService.UpdateRestaurantAsync(new acm_models.Restaurant
+            await AcmService.AddRestaurantAsync(new acm_models.Restaurant
             {
-                ID = Restaurant.ID,
-                Name = Restaurant.Name,
-                StreetAddress = Restaurant.StreetAddress,
-                Suburb = Restaurant.Suburb,
-                PhoneNumber = Restaurant.PhoneNumber,
-                IsArchived = Restaurant.IsArchived,
-                ArchiveReason = Restaurant.ArchiveReason,
+                Name = _restaurant.Name,
+                StreetAddress = _restaurant.StreetAddress,
+                Suburb = _restaurant.Suburb,
+                PhoneNumber = _restaurant.PhoneNumber,
+                IsArchived = _restaurant.IsArchived,
+                ArchiveReason = _restaurant.ArchiveReason,
             });
 
             await Task.Delay(150);

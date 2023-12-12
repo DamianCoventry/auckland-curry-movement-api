@@ -85,7 +85,10 @@ public partial class AddExemption : ContentPage
         await Navigation.PushAsync(new SelectOneMember(parameters, x =>
             {
                 if (x.Member.ID != null)
+                {
                     _exemption.FoundingFatherID = (int)x.Member.ID;
+                    _exemption.FoundingFather = x.Member;
+                }
             }), true);
     }
 
@@ -106,7 +109,10 @@ public partial class AddExemption : ContentPage
         await Navigation.PushAsync(new SelectOneMember(parameters, x =>
             {
                 if (x.Member.ID != null)
+                {
                     _exemption.MemberID = (int)x.Member.ID;
+                    _exemption.Member = x.Member;
+                }
             }), true);
     }
 

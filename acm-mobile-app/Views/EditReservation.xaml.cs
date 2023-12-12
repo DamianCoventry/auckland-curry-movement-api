@@ -28,4 +28,9 @@ public partial class EditReservation : ContentPage
         // TODO: actually add it
         await Shell.Current.GoToAsync("//home");
     }
+
+    public void OnClickCancel(object sender, EventArgs e)
+    {
+
+    }
 }

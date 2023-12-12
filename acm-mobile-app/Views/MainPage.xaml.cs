@@ -37,7 +37,7 @@ namespace acm_mobile_app
 
         public async void OnAddRestaurant(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("edit_restaurant");
+            await Shell.Current.GoToAsync("add_restaurant");
         }
 
         public async void OnAddDinner(object sender, EventArgs e)
@@ -47,7 +47,7 @@ namespace acm_mobile_app
 
         public async void NavigateToEditLevel(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("edit_level");
+            await Shell.Current.GoToAsync("add_level");
         }
 
         public async void NavigateToEditClub(object sender, EventArgs e)

@@ -3,15 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
-             x:Class="acm_mobile_app.Views.EditMember"
-             x:DataType="viewmodels:Member"
-             Title="Member">
+             x:Class="acm_mobile_app.Views.AddLevel"
+             x:DataType="viewmodels:Level"
+             Title="Level">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
     </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red"/>
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Black"/>
+        </Style>
+    </ContentPage.Resources>
+
     <Grid Margin="20,20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -26,50 +34,61 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Name" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Entry x:Name="LevelName"
+                   MaxLength="50"
+                   Placeholder="Enter level name"
+                   VerticalOptions="Fill"
+                   Grid.Column="1" Text="{Binding Name}"/>
         </Grid>
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Text="Member Name" VerticalTextAlignment="Center"/>
-            <Entry Grid.Row="1" x:Name="MemberName" MaxLength="50" Placeholder="Enter member name" Text="{Binding Name}" VerticalOptions="Fill"/>
-        </Grid>
-
-        <Grid Grid.Row="2" Margin="0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Text="Sponsor" VerticalTextAlignment="Center"/>
-            <Grid Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" x:Name="SponsorName" Text="{Binding Sponsor.Name}" VerticalOptions="Center"/>
-                <ImageButton Grid.Column="1" Source="member.png" WidthRequest="32" HeightRequest="32" Clicked="SelectSponsor_Clicked"/>
-            </Grid>
+            <Label Text="Description" VerticalOptions="Start" HorizontalOptions="Start" Margin="0,10,0,0"/>
+            <Editor x:Name="LevelDescription"
+                   MaxLength="200" HeightRequest="100"
+                   Placeholder="Enter level description"
+                   Grid.Column="1" Text="{Binding Description}"/>
         </Grid>
 
-        <Grid Margin="0,15,0,0" Grid.Row="3">
+        <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Text="Current Level" Margin="0,0,20,0"/>
-            <Label Grid.Row="0" Grid.Column="1" x:Name="CurrentLevel" Text="{Binding CurrentLevel.Name}" VerticalTextAlignment="Center"/>
-            <Label Grid.Row="1" Grid.Column="0" Text="Attendance Count" Margin="0,0,20,0"/>
-            <Label Grid.Row="1" Grid.Column="1" x:Name="AttendanceCount" Text="{Binding AttendanceCount}" VerticalTextAlignment="Center"/>
+
+            <Label Text="Required Attendances" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="WordWrap"/>
+            <Entry x:Name="RequiredAttendances" Keyboard="Numeric"
+                   MaxLength="10"
+                   Placeholder="Enter number of required attendances"
+                   VerticalOptions="Fill"
+                   Grid.Column="1" Text="{Binding RequiredAttendances}">
+                <Entry.Behaviors>
+                    <toolkit:NumericValidationBehavior 
+                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                        ValidStyle="{StaticResource ValidEntryStyle}"
+                        Flags="ValidateOnValueChanged"
+                        MinimumValue="0"
+                        MaximumValue="10000"
+                        MaximumDecimalPlaces="0"/>
+                </Entry.Behaviors>
+            </Entry>
         </Grid>
 
-        <Grid Grid.Row="5">
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>

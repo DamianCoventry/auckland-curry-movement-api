@@ -103,8 +103,8 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public virtual ICollection<Attendee>? Attendees { get; set; }
-        public virtual ICollection<Member>? Members { get; set; }
+        public ICollection<Attendee>? Attendees { get; set; }
+        public ICollection<Member>? Members { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;

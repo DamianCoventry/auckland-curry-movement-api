@@ -63,6 +63,55 @@ namespace acm_rest_api.Controllers
             return club;
         }
 
+        // GET: api/Club/5/MemberStats
+        [HttpGet("{id}/MemberStats")]
+        public async Task<ActionResult<PageOfData<MemberStats>>> GetMemberStats(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
+        {
+            if (_context.Club == null || _context.Dinner == null || id == null || pageSize <= 0)
+            {
+                return NotFound();
+            }
+
+            var club = await _context.Club.Where(x => x.ID == id).FirstOrDefaultAsync();
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            string sql =
+                @"SELECT m.[ID]
+                         ,m.[Name]
+                         ,m.[CurrentLevelID]
+                         ,(SELECT COUNT(*) FROM [dbo].[Membership] ms1 WHERE ms1.[MemberID] = m.ID) AS MembershipCount
+                         ,(SELECT COUNT(*) FROM [dbo].[Membership] ms2 WHERE ms2.[MemberID] = m.ID AND ms2.ClubID = " + id.ToString() + @" AND ms2.IsFoundingFather <> 0) AS IsFoundingFather
+                         ,(SELECT COUNT(*) FROM [dbo].[Attendee] a WHERE a.[MemberID] = m.ID) AS DinnersAttendedCount
+                         ,(SELECT COUNT(*) FROM [dbo].[Exemption] e1 WHERE e1.[FoundingFatherID] = m.ID) AS ExemptionsAwardedCount
+                         ,(SELECT COUNT(*) FROM [dbo].[Exemption] e2 WHERE e2.[MemberID] = m.ID) AS ExemptionsReceivedCount
+                         ,(SELECT COUNT(*) FROM [dbo].[KotC] k WHERE k.[MemberID] = m.ID) AS KotCCount
+                         ,(SELECT COUNT(*) FROM [dbo].[Reservation] re WHERE re.[OrganiserID] = m.ID) AS ReservationOrganiserCount
+                         ,(SELECT COUNT(*) FROM [dbo].[RotY] r WHERE r.[PresenterID] = m.ID) AS RotYPresenterCount
+                         ,(SELECT COUNT(*) FROM [dbo].[Violation] v1 WHERE v1.[FoundingFatherID] = m.ID) AS ViolationsAwardedCount
+                         ,(SELECT COUNT(*) FROM [dbo].[Violation] v2 WHERE v2.[MemberID] = m.ID) AS ViolationsReceivedCount
+                  FROM [dbo].[Member] m
+                  INNER JOIN [dbo].[Membership] ms3 ON ms3.MemberID = m.ID AND ms3.ClubID = " + id.ToString();
+
+            int rowCount = await _context.Set<MemberStats>().FromSqlRaw(sql).CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<MemberStats>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context
+                                        .Set<MemberStats>()
+                                        .FromSqlRaw(sql)
+                                        .OrderBy(x => x.ID).Skip(first).Take(pageSize)
+                                        .ToListAsync()
+            };
+        }
+
         // GET: api/Club/5/PastDinners
         [HttpGet("{id}/PastDinners")]
         public async Task<ActionResult<PageOfData<PastDinner>>> GetClubPastDinners(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)

@@ -607,6 +607,30 @@ namespace acm_mobile_app.Services
             throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
         }
 
+        public async Task<PageOfData<MemberStats>> ListClubMemberStatsAsync(int ID, int first, int count)
+        {
+            await AcquireTokenIfRequired();
+
+            var itemList = await ListItemsInternal<MemberStats>($"Club/{ID}/MemberStats", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
+
+            if (itemList._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            itemList = await ListItemsInternal<MemberStats>($"Club/{ID}/Members", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
+
+            if (itemList._statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+        }
+
         public Task<PageOfData<Dinner>> ListDinnersAsync(int first, int count)
         {
             return ListItems<Dinner>("Dinner", first, count);

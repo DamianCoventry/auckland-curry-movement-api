@@ -5,29 +5,14 @@ using CommunityToolkit.Maui.Core;
 
 namespace acm_mobile_app.Views;
 
-[QueryProperty(nameof(Level), "Level")]
-public partial class EditLevel : ContentPage
+public partial class AddLevel : ContentPage
 {
     private readonly Level _level = new();
 
-    public EditLevel()
+    public AddLevel()
     {
         InitializeComponent();
-        BindingContext = Level;
-    }
-
-    public Level Level
-    {
-        get => _level;
-        set
-        {
-            _level.ID = value.ID;
-            _level.Name = value.Name;
-            _level.RequiredAttendances = value.RequiredAttendances;
-            _level.Description = value.Description;
-            _level.IsArchived = value.IsArchived;
-            _level.ArchiveReason = value.ArchiveReason;
-        }
+        BindingContext = _level;
     }
 
     public async void OnClickOK(object sender, EventArgs e)
@@ -53,7 +38,7 @@ public partial class EditLevel : ContentPage
             return;
         }
 
-        if (await EditExistingLevelAsync())
+        if (await AddNewLevelAsync())
             await Shell.Current.GoToAsync("//manage_levels");
     }
 
@@ -67,7 +52,7 @@ public partial class EditLevel : ContentPage
         get { return ((AppShell)Shell.Current).AcmService; }
     }
 
-    private async Task<bool> EditExistingLevelAsync()
+    private async Task<bool> AddNewLevelAsync()
     {
         bool rv = false;
         try
@@ -80,14 +65,13 @@ public partial class EditLevel : ContentPage
             CancelButton.IsVisible = false;
 
             await Task.Delay(150);
-            await AcmService.UpdateLevelAsync(new acm_models.Level
+            await AcmService.AddLevelAsync(new acm_models.Level
             {
-                ID = Level.ID,
-                Name = Level.Name,
-                Description = Level.Description,
-                RequiredAttendances = Level.RequiredAttendances,
-                IsArchived = Level.IsArchived,
-                ArchiveReason = Level.ArchiveReason,
+                Name = _level.Name,
+                Description = _level.Description,
+                RequiredAttendances = _level.RequiredAttendances,
+                IsArchived = _level.IsArchived,
+                ArchiveReason = _level.ArchiveReason,
             });
 
             await Task.Delay(150);

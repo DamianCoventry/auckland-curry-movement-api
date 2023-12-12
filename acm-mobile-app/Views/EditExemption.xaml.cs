@@ -1,4 +1,5 @@
 using acm_mobile_app.Services;
+using acm_mobile_app.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 
@@ -7,7 +8,9 @@ namespace acm_mobile_app.Views;
 [QueryProperty(nameof(Exemption), "Exemption")]
 public partial class EditExemption : ContentPage
 {
-    private readonly ViewModels.Exemption _exemption = new();
+    private readonly Exemption _exemption = new();
+    private Member? _foundingFather = null;
+    private Member? _member = null;
 
     public EditExemption()
 	{
@@ -15,14 +18,12 @@ public partial class EditExemption : ContentPage
         BindingContext = Exemption;
     }
 
-    public ViewModels.Exemption Exemption
+    public Exemption Exemption
     {
         get => _exemption;
         set
         {
             _exemption.ID = value.ID;
-            _exemption.FoundingFatherID = value.FoundingFatherID;
-            _exemption.MemberID = value.MemberID;
             _exemption.Date = value.Date;
             _exemption.ShortReason = value.ShortReason;
             _exemption.LongReason = value.LongReason;
@@ -63,9 +64,100 @@ public partial class EditExemption : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        MainThread.BeginInvokeOnMainThread(async () => { await LoadExemptionData(); });
+    }
+
     private static IAcmService AcmService
     {
         get { return ((AppShell)Shell.Current).AcmService; }
+    }
+
+    private async void SelectFoundingFather_Clicked(object sender, EventArgs e)
+    {
+        Dictionary<string, object> parameters = new()
+        {
+            { "ClubID", 1 }, // TODO: Where should we get this from?
+            { "SelectedMember", new SelectedMember()
+                {
+                    IsSelected = _exemption.FoundingFatherID > 0,
+                    IsFoundingFather = true,
+                    Member = new Member() { ID = _exemption.FoundingFatherID }
+                }
+            },
+        };
+
+        await Navigation.PushAsync(new SelectOneMember(parameters, x =>
+            {
+                if (x.Member.ID != null)
+                {
+                    _foundingFather = new Member() { ID = x.Member.ID, Name = x.Member.Name };
+                    CopyLocalStateToGui();
+                }
+            }), true);
+    }
+
+    private async void SelectMember_Clicked(object sender, EventArgs e)
+    {
+        Dictionary<string, object> parameters = new()
+        {
+            { "ClubID", 1 }, // TODO: Where should we get this from?
+            { "SelectedMember", new SelectedMember()
+                {
+                    IsSelected = _exemption.MemberID > 0,
+                    IsFoundingFather = false,
+                    Member = new Member() { ID = _exemption.MemberID }
+                }
+            },
+        };
+
+        await Navigation.PushAsync(new SelectOneMember(parameters, x =>
+            {
+                if (x.Member.ID != null)
+                {
+                    _member = new Member() { ID = x.Member.ID, Name = x.Member.Name };
+                    CopyLocalStateToGui();
+                }
+            }), true);
+    }
+
+    private async Task LoadExemptionData()
+    {
+        try
+        {
+            if (LoadingIndicator.IsRunning || _exemption.ID == null)
+                return;
+
+            LoadingIndicator.IsRunning = true;
+
+            await Task.Delay(150);
+            var model = await AcmService.GetExemptionAsync((int)_exemption.ID);
+
+            await Task.Delay(150);
+            var x = Exemption.FromModel(model);
+            if (x != null)
+            {
+                Exemption = x;
+
+                if (_foundingFather == null && x.FoundingFather != null)
+                    _foundingFather = new Member() { ID = x.FoundingFather.ID, Name = x.FoundingFather.Name };
+
+                if (_member == null && x.Member != null)
+                    _member = new Member() { ID = x.Member.ID, Name = x.Member.Name };
+
+                CopyLocalStateToGui();
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "Close");
+        }
+        finally
+        {
+            LoadingIndicator.IsRunning = false;
+        }
     }
 
     private async Task<bool> EditExistingExemptionAsync()
@@ -105,5 +197,19 @@ public partial class EditExemption : ContentPage
             CancelButton.IsVisible = true;
         }
         return rv;
+    }
+
+    private void CopyLocalStateToGui()
+    {
+        if (_foundingFather != null)
+        {
+            _exemption.FoundingFatherID = _foundingFather.ID != null ? (int)_foundingFather.ID : 0;
+            _exemption.FoundingFather = _foundingFather;
+        }
+        if (_member != null)
+        {
+            _exemption.MemberID = _member.ID != null ? (int)_member.ID : 0;
+            _exemption.Member = _member;
+        }
     }
 }

@@ -1,9 +1,10 @@
 ﻿                L E A D
-club            ✓      
-level           ✓      
-member          ✓      
-restaurant      ✓      
-exemption       ✓      
+club            ✓ ✓ ✓ ✓ 
+level           ✓ ✓ ✓ ✓ 
+member          ✓ ✓ ✓ ✓ 
+membership
+restaurant      ✓ ✓ ✓ ✓ 
+exemption       ✓ ✓ ✓ ✓ 
 attendee               
 dinner          ✓      
 kotc                   
@@ -12,14 +13,20 @@ reservation
 roty                   
 violation              
 
-custom picker
-better pagination GUI
+custom picker           ✓ 
+better pagination GUI   ✓ 
 add a search ability
-toast popups
-snackbars
+toast popups            ✓ 
 
 signin          ✓
 signin GUI      ✓
 signout
 signout GUI
 check for internet connectivity before signing in
+
+Cancelling the ""select member/founding father" content page in the edit exemption page causes empty strings to be set
+Update the ""select one member"", and ""select many members"" content pages to use the icons correctly
+How/where do members subscribe to a club?
+Where does the user choose the club they're working with?
+Archiving... when and how does it work?
+Logging in as a non-auditor

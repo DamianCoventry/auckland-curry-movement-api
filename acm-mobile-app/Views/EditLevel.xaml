@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
              x:Class="acm_mobile_app.Views.EditLevel"
+             x:DataType="viewmodels:Level"
              Title="Level">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
@@ -41,7 +43,7 @@
                    MaxLength="50"
                    Placeholder="Enter level name"
                    VerticalOptions="Fill"
-                   Grid.Column="1"/>
+                   Grid.Column="1" Text="{Binding Name}"/>
         </Grid>
         
         <Grid Grid.Row="1">
@@ -56,7 +58,7 @@
             <Editor x:Name="LevelDescription"
                    MaxLength="200" HeightRequest="100"
                    Placeholder="Enter level description"
-                   Grid.Column="1"/>
+                   Grid.Column="1" Text="{Binding Description}"/>
         </Grid>
         
         <Grid Grid.Row="2">
@@ -73,7 +75,7 @@
                    MaxLength="10"
                    Placeholder="Enter number of required attendances"
                    VerticalOptions="Fill"
-                   Grid.Column="1">
+                   Grid.Column="1" Text="{Binding RequiredAttendances}">
                 <Entry.Behaviors>
                     <toolkit:NumericValidationBehavior 
                         InvalidStyle="{StaticResource InvalidEntryStyle}"
@@ -86,9 +88,28 @@
             </Entry>
         </Grid>
 
-        <HorizontalStackLayout FlowDirection="RightToLeft" Margin="0,15" Grid.Row="4">
-            <ImageButton Source="yes.png" Margin="10,0" Clicked="OnClickOK"
-                         WidthRequest="32" HeightRequest="32" ToolTipProperties.Text="Save"/>
-        </HorizontalStackLayout>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ImageButton x:Name="OkButton"
+                         Grid.Column="0" Source="yes.png"
+                         WidthRequest="32" HeightRequest="32"
+                         HorizontalOptions="End" Margin="10,0"
+                         ToolTipProperties.Text="Accept"
+                         Clicked="OnClickOK"/>
+            <ImageButton x:Name="CancelButton"
+                         Grid.Column="1" Source="no.png"
+                         WidthRequest="32" HeightRequest="32"
+                         HorizontalOptions="End" Margin="10,0"
+                         ToolTipProperties.Text="Cancel"
+                         Clicked="OnClickCancel"/>
+            <ActivityIndicator x:Name="SavingIndicator"
+                               Grid.Column="1"
+                               HorizontalOptions="End" Margin="10,0"
+                               WidthRequest="32" HeightRequest="32"
+                               IsRunning="False"/>
+        </Grid>
     </Grid>
 </ContentPage>

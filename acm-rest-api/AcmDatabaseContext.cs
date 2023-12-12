@@ -28,6 +28,8 @@ namespace acm_rest_api
 
         public DbSet<Member>? Member { get; set; }
 
+        public DbSet<MemberStats>? MemberStats { get; set; }
+
         public DbSet<Notification>? Notification { get; set; }
 
         public DbSet<Reservation>? Reservation { get; set; }
@@ -58,6 +60,12 @@ namespace acm_rest_api
                 .WithMany(x => x.Members)
                 .HasForeignKey(x => x.CurrentLevelID)
                 .IsRequired();
+
+            modelBuilder.Entity<Member>()
+                .HasMany(x => x.Inductees)
+                .WithOne(x => x.Sponsor)
+                .HasForeignKey(x => x.SponsorID)
+                .IsRequired(false);
 
             modelBuilder.Entity<Reservation>()
                 .HasOne(x => x.Organiser)

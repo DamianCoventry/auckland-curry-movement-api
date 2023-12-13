@@ -7,7 +7,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="acm_mobile_app.Views.SelectOneMember"
              x:DataType="views:SelectOneMember"
-             Title="Select Members">
+             Title="Select One Member">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
     </ContentPage.ToolbarItems>
@@ -21,55 +21,10 @@
 
         <ActivityIndicator Grid.Row="0" x:Name="IsRefreshing" IsRunning="False"/>
 
-        <ListView Grid.Row="1" x:Name="MemberListView" ItemsSource="{Binding CurrentPageOfMembers}" RowHeight="64" SelectionMode="Single" ItemSelected="MemberListView_ItemSelected">
+        <ListView Grid.Row="1" x:Name="MemberListView" ItemsSource="{Binding CurrentPageOfMembers}" ItemSelected="MemberListView_ItemSelected">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodels:SelectedMember">
-                    <ViewCell>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Grid Grid.Column="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-
-                                <Label Text="{Binding Member.Name}" TextColor="CornflowerBlue" FontAttributes="Bold" Margin="0,4"/>
-                                
-                                <HorizontalStackLayout Grid.Row="1">
-                                    <Image WidthRequest="24" IsVisible="false" Source="founding_father.png"
-                                            ToolTipProperties.Text="Founding Father" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="maharaja.png"
-                                            ToolTipProperties.Text="Maharaja" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="guru.png"
-                                            ToolTipProperties.Text="Guru" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="chilli.png"
-                                            ToolTipProperties.Text="Current King of the Chillis" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="violation.png"
-                                            ToolTipProperties.Text="2 current violations" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="exemption.png"
-                                            ToolTipProperties.Text="1 current exemption" Margin="4,0"/>
-                                </HorizontalStackLayout>
-                            </Grid>
-
-                            <Grid Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-
-                                <Label Text="Attendances"/>
-                                <Label Text="{Binding Member.AttendanceCount}"
-                                        FontSize="Large" Grid.Row="1"
-                                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                            </Grid>
-
-                        </Grid>
-                    </ViewCell>
+                    <TextCell Text="{Binding Member.Name}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

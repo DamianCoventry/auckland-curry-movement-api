@@ -51,8 +51,8 @@
                     <ViewCell>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <Grid>
@@ -69,7 +69,6 @@
                                     <Image WidthRequest="24" IsVisible="{Binding HasMultipleMemberships}" Source="club.png" ToolTipProperties.Text="{Binding MembershipToolTip}" Margin="4,0"/>
                                     <Image WidthRequest="24" IsVisible="{Binding IsGuru}" Source="guru.png" ToolTipProperties.Text="Guru" Margin="4,0"/>
                                     <Image WidthRequest="24" IsVisible="{Binding IsMaharaja}" Source="maharaja.png" ToolTipProperties.Text="Maharaja" Margin="4,0"/>
-                                    <Image WidthRequest="24" IsVisible="{Binding HasAttendedDinners}" Source="dinner.png" ToolTipProperties.Text="{Binding DinnersAttendedToolTip}" Margin="4,0"/>
 
                                     <!-- TODO: is current kotc -->
                                     <!--<Image WidthRequest="24" Source="chilli.png" ToolTipProperties.Text="Current King of the Chillis" Margin="4,0"/>-->
@@ -94,6 +93,7 @@
                                 <Label Text="Attendances"/>
                                 <Label Text="{Binding DinnersAttendedCount}"
                                         FontSize="Large" Grid.Row="1"
+                                        ToolTipProperties.Text="{Binding DinnersAttendedToolTip}"
                                         HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                             </Grid>
 

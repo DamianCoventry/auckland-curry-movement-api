@@ -192,7 +192,7 @@ namespace acm_mobile_app.ViewModels
         }
 
         public bool HasOrganisedReservations { get => ReservationOrganiserCount > 0; }
-        public string ReservationOrganiserToolTip { get { return ReservationOrganiserCount.ToString() + " " + Plural("reservation", ReservationOrganiserCount) + " organised"; } }
+        public string ReservationOrganiserToolTip { get { return ReservationOrganiserCount.ToString() + " " + Plural("reservation", ReservationOrganiserCount) + " made"; } }
 
         public int RotYPresenterCount
         {
@@ -244,9 +244,9 @@ namespace acm_mobile_app.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private static string Plural(string text, int count, string suffix = "s")
+        private static string Plural(string singularText, int count, string suffix = "s")
         {
-            return count > 1 ? text + suffix : text;
+            return count == 1 ? singularText : singularText + suffix;
         }
     }
 }

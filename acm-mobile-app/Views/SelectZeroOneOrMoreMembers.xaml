@@ -21,8 +21,7 @@
 
         <ActivityIndicator Grid.Row="0" x:Name="IsRefreshing" IsRunning="False"/>
 
-        <ListView Grid.Row="1" x:Name="MemberListView" ItemsSource="{Binding CurrentPageOfMembers}" RowHeight="64"
-                  SelectionMode="None" ItemTapped="MemberListView_ItemTapped">
+        <ListView Grid.Row="1" x:Name="MemberListView" ItemsSource="{Binding CurrentPageOfMembers}" SelectionMode="None" ItemTapped="MemberListView_ItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodels:SelectedMember">
                     <ViewCell>
@@ -36,48 +35,10 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Grid Grid.Column="0">
-                                <CheckBox x:Name="MemberSelectedCheckBox" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" CheckedChanged="MemberSelectedCheckBox_CheckedChanged"/>
-                            </Grid>
-
-                            <Grid Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-
-                                <Label Text="{Binding Member.Name}" TextColor="CornflowerBlue" FontAttributes="Bold" Margin="0,4"/>
-                                
-                                <HorizontalStackLayout Grid.Row="1">
-                                    <Image WidthRequest="24" IsVisible="false" Source="founding_father.png"
-                                            ToolTipProperties.Text="Founding Father" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="maharaja.png"
-                                            ToolTipProperties.Text="Maharaja" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="guru.png"
-                                            ToolTipProperties.Text="Guru" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="chilli.png"
-                                            ToolTipProperties.Text="Current King of the Chillis" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="violation.png"
-                                            ToolTipProperties.Text="2 current violations" Margin="4,0"/>
-                                    <Image WidthRequest="24" Source="exemption.png"
-                                            ToolTipProperties.Text="1 current exemption" Margin="4,0"/>
-                                </HorizontalStackLayout>
-                            </Grid>
-
-                            <Grid Grid.Column="2">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-
-                                <Label Text="Attendances"/>
-                                <Label Text="{Binding Member.AttendanceCount}"
-                                        FontSize="Large" Grid.Row="1"
-                                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                            </Grid>
+                            <CheckBox x:Name="SelectedCheckBox" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" CheckedChanged="SelectedCheckBox_CheckedChanged"/>
+                            <Label Grid.Column="1" Text="{Binding Member.Name}" VerticalTextAlignment="Center"/>
 
                         </Grid>
                     </ViewCell>

@@ -79,7 +79,7 @@
 
                             <Label Grid.Row="0" Grid.Column="0" Text="{Binding RestaurantName}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
                             <Label Grid.Row="1" Grid.Column="0" Text="{Binding OrganiserName}" FontAttributes="Bold"/>
-                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding ExactDateTime}" HorizontalTextAlignment="End"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding ExactDateTime, StringFormat='{0:dd MMM yyyy}'}" HorizontalTextAlignment="End"/>
                             <Label Grid.Row="1" Grid.Column="1" Text="{Binding CostPerPerson}" HorizontalTextAlignment="End" />
 
                             <HorizontalStackLayout Grid.Row="2">

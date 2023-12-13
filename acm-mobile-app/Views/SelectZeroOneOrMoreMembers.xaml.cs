@@ -80,7 +80,13 @@ public partial class SelectZeroOneOrMoreMembers : ContentPage
     {
         List<SelectedMember> copy = [];
         foreach (var x in MasterListOfMembers)
-            copy.Add(new SelectedMember() { IsSelected = x.IsSelected, Member = x.Member });
+        {
+            copy.Add(new SelectedMember()
+            {
+                IsSelected = x.IsSelected,
+                Member = new Member() { ID = x.Member.ID, Name = x.Member.Name }
+            });
+        }
 
         Dictionary<string, object> parameters = new() { { "SelectedMembers", copy } };
         await Shell.Current.GoToAsync("..", true, parameters);
@@ -90,7 +96,13 @@ public partial class SelectZeroOneOrMoreMembers : ContentPage
     {
         List<SelectedMember> copy = [];
         foreach (var x in OriginalMembers)
-            copy.Add(new SelectedMember() { IsSelected = x.IsSelected, Member = x.Member });
+        { 
+            copy.Add(new SelectedMember()
+            {
+                IsSelected = x.IsSelected,
+                Member = new Member() { ID = x.Member.ID, Name = x.Member.Name }
+            });
+        }
 
         Dictionary<string, object> parameters = new() { { "SelectedMembers", copy } };
         await Shell.Current.GoToAsync("..", true, parameters);
@@ -177,7 +189,7 @@ public partial class SelectZeroOneOrMoreMembers : ContentPage
         }
     }
 
-    private void MemberSelectedCheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    private void SelectedCheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         SynchroniseCurrentPageWithMasterList();
     }

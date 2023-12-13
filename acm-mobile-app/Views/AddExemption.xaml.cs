@@ -70,6 +70,13 @@ public partial class AddExemption : ContentPage
 
     private async void SelectFoundingFather_Clicked(object sender, EventArgs e)
     {
+        Member member = new();
+        if (_exemption.FoundingFather != null)
+        {
+            member.ID = _exemption.FoundingFather.ID;
+            member.Name = _exemption.FoundingFather.Name;
+        }
+
         Dictionary<string, object> parameters = new()
         {
             { "ClubID", 1 }, // TODO: Where should we get this from?
@@ -77,7 +84,7 @@ public partial class AddExemption : ContentPage
                 {
                     IsSelected = _exemption.FoundingFatherID > 0,
                     IsFoundingFather = true,
-                    Member = new Member() { ID = _exemption.FoundingFatherID }
+                    Member = member
                 }
             },
         };
@@ -94,6 +101,13 @@ public partial class AddExemption : ContentPage
 
     private async void SelectMember_Clicked(object sender, EventArgs e)
     {
+        Member member = new();
+        if (_exemption.Member != null)
+        {
+            member.ID = _exemption.Member.ID;
+            member.Name = _exemption.Member.Name;
+        }
+
         Dictionary<string, object> parameters = new()
         {
             { "ClubID", 1 }, // TODO: Where should we get this from?
@@ -101,7 +115,7 @@ public partial class AddExemption : ContentPage
                 {
                     IsSelected = _exemption.MemberID > 0,
                     IsFoundingFather = false,
-                    Member = new Member() { ID = _exemption.MemberID }
+                    Member = member
                 }
             },
         };

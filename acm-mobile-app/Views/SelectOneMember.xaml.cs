@@ -34,7 +34,10 @@ public partial class SelectOneMember : ContentPage
             ClubID = (int)clubID;
 
         if (parameters.TryGetValue("SelectedMember", out object? selectedMember) && selectedMember != null)
-            SelectedMember = (SelectedMember)selectedMember;
+        {
+            var x = (SelectedMember)selectedMember;
+            SelectedMember = new SelectedMember() { IsFoundingFather = x.IsFoundingFather, IsSelected = x.IsSelected, Member = x.Member };
+        }
 
         _returnValue = returnValue;
     }
@@ -62,6 +65,7 @@ public partial class SelectOneMember : ContentPage
         set
         {
             _originalMember.IsSelected = value.IsSelected;
+            _originalMember.IsFoundingFather = value.IsFoundingFather;
             _originalMember.Member = value.Member;
         }
     }
@@ -70,7 +74,12 @@ public partial class SelectOneMember : ContentPage
     {
         base.OnAppearing();
 
-        OriginalMember = SelectedMember;
+        OriginalMember = new SelectedMember()
+        {
+            IsSelected = SelectedMember.IsSelected,
+            IsFoundingFather = SelectedMember.IsFoundingFather,
+            Member = SelectedMember.Member
+        };
 
         MainThread.BeginInvokeOnMainThread(async () => { await RefreshListData(); });
     }
@@ -125,22 +134,22 @@ public partial class SelectOneMember : ContentPage
         }
 
         _returnValue?.Invoke(new()
-            {
-                IsSelected = SelectedMember.IsSelected,
-                IsFoundingFather = SelectedMember.IsFoundingFather,
-                Member = SelectedMember.Member
-            });
+        {
+            IsSelected = SelectedMember.IsSelected,
+            IsFoundingFather = SelectedMember.IsFoundingFather,
+            Member = new ViewModels.Member() { ID = SelectedMember.Member.ID, Name = SelectedMember.Member.Name },
+        });
         await Navigation.PopAsync(true);
     }
 
     public async void OnClickCancel(object sender, EventArgs e)
     {
         _returnValue?.Invoke(new()
-            {
-                IsSelected = OriginalMember.IsSelected,
-                IsFoundingFather = OriginalMember.IsFoundingFather,
-                Member = OriginalMember.Member
-            });
+        {
+            IsSelected = OriginalMember.IsSelected,
+            IsFoundingFather = OriginalMember.IsFoundingFather,
+            Member = new ViewModels.Member() { ID = OriginalMember.Member.ID, Name = OriginalMember.Member.Name },
+        });
         await Navigation.PopAsync(true);
     }
 

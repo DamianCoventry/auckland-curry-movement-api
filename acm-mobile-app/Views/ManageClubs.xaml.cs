@@ -141,6 +141,9 @@ namespace acm_mobile_app.Views
                         if (x != null)
                             Clubs.Add(x);
                     }
+
+                    if (Clubs.Count > 0)
+                        ClubListView.ScrollTo(Clubs[0], ScrollToPosition.Start, true);
                 }
             }
             catch (Exception ex)

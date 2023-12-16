@@ -148,6 +148,9 @@ public partial class ManageMembers : ContentPage
                     if (x != null)
                         MemberStats.Add(x);
                 }
+
+                if (MemberStats.Count > 0)
+                    MemberListView.ScrollTo(MemberStats[0], ScrollToPosition.Start, true);
             }
         }
         catch (Exception ex)

@@ -128,9 +128,9 @@ namespace acm_rest_api.Controllers
             }
 
             string sql =
-                @"SELECT d.ID, m.ID AS OrganiserID, m.Name AS OrganiserName,
+                @"SELECT d.ID, m.ID AS OrganiserID, m.Name AS OrganiserName, m.CurrentLevelID AS OrganiserLevelID, mc.IsFoundingFather AS IsOrganiserFoundingFather,
                         rs.ID AS RestaurantID, rs.Name AS RestaurantName,
-                        rv.ExactDateTime, rv.NegotiatedBeerPrice, rv.NegotiatedBeerDiscount,
+                        rv.ExactDateTime, rv.NegotiatedBeerPrice, rv.NegotiatedBeerDiscount, rv.IsAmnesty,
                         d.CostPerPerson, d.NumBeersConsumed,
                         (SELECT IIF(COUNT(*) > 0, 1, 0) FROM KotC k WHERE k.DinnerID = d.ID) AS IsNewKotC,
                         (SELECT IIF(COUNT(*) > 0, 1, 0) FROM RotY r1 WHERE r1.RestaurantID = rs.ID AND r1.Year < YEAR(GETDATE())) AS IsFormerRotY,
@@ -154,7 +154,7 @@ namespace acm_rest_api.Controllers
                 PageItems = await _context
                                         .Set<PastDinner>()
                                         .FromSqlRaw(sql)
-                                        .OrderBy(x => x.ID).Skip(first).Take(pageSize)
+                                        .OrderByDescending(x => x.ExactDateTime).Skip(first).Take(pageSize)
                                         .ToListAsync()
             };
         }

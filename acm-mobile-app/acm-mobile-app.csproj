@@ -24,7 +24,7 @@
 		<ApplicationTitle>acm-mobile-app</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.acm_mobile_app</ApplicationId>
+		<ApplicationId>com.omenware.acm</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -39,36 +39,36 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-	  <ApplicationId>com.omenware.acm_mobile_app</ApplicationId>
+	  <ApplicationId>com.omenware.acm</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-	  <ApplicationId>com.omenware.acm_mobile_app</ApplicationId>
+	  <ApplicationId>com.omenware.acm</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
-	  <ApplicationId>com.omenware.acm_mobile_app</ApplicationId>
+	  <ApplicationId>com.omenware.acm</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationId>com.omenware.acm_mobile_app</ApplicationId>
+	  <ApplicationId>com.omenware.acm</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
-	  <ApplicationId>com.omenware.acm_mobile_app</ApplicationId>
+	  <ApplicationId>com.omenware.acm</ApplicationId>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
-	  <ApplicationId>com.omenware.acm_mobile_app</ApplicationId>
+	  <ApplicationId>com.omenware.acm</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
-	  <ApplicationId>com.omenware.acm_mobile_app</ApplicationId>
+	  <ApplicationId>com.omenware.acm</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationId>com.omenware.acm_mobile_app</ApplicationId>
+	  <ApplicationId>com.omenware.acm</ApplicationId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -168,9 +168,6 @@
         <Compile Update="Views\SelectZeroOneOrMoreMembers.xaml.cs">
           <DependentUpon>SelectZeroOneOrMoreMembers.xaml</DependentUpon>
         </Compile>
-        <Compile Update="Views\ViewMembers.xaml.cs">
-          <DependentUpon>ViewMembers.xaml</DependentUpon>
-        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -238,9 +235,6 @@
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
         <MauiXaml Update="Views\SignInPage.xaml">
-            <Generator>MSBuild:Compile</Generator>
-        </MauiXaml>
-        <MauiXaml Update="Views\ViewMembers.xaml">
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
     </ItemGroup>

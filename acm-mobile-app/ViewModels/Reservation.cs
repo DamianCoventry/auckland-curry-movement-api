@@ -19,6 +19,7 @@ namespace acm_mobile_app.ViewModels
                 _exactDateTime = model.ExactDateTime,
                 _negotiatedBeerPrice = model.NegotiatedBeerPrice,
                 _negotiatedBeerDiscount = model.NegotiatedBeerDiscount,
+                _isAmnesty = model.IsAmnesty,
             };
         }
 
@@ -32,6 +33,7 @@ namespace acm_mobile_app.ViewModels
         private DateTime _exactDateTime;
         private double? _negotiatedBeerPrice;
         private double? _negotiatedBeerDiscount;
+        public bool _isAmnesty;
 
         public int? ID
         {
@@ -159,6 +161,19 @@ namespace acm_mobile_app.ViewModels
                 {
                     _negotiatedBeerDiscount = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NegotiatedBeerDiscount)));
+                }
+            }
+        }
+
+        public bool IsAmnesty
+        {
+            get => _isAmnesty;
+            set
+            {
+                if (_isAmnesty != value)
+                {
+                    _isAmnesty = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsAmnesty)));
                 }
             }
         }

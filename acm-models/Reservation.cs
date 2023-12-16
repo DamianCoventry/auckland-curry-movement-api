@@ -12,6 +12,7 @@
         public DateTime ExactDateTime { get; set; }
         public double? NegotiatedBeerPrice { get; set; }
         public double? NegotiatedBeerDiscount { get; set; }
+        public bool IsAmnesty { get; set; }
 
         public Dinner? Dinner { get; set; }
         public ICollection<Notification>? Notifications { get; set; }

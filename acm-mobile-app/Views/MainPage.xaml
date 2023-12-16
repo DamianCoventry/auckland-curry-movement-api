@@ -5,7 +5,8 @@
              xmlns:views="clr-namespace:acm_mobile_app.Views"
              xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
              x:Class="acm_mobile_app.MainPage"
-             Title="MainPage">
+             x:DataType="local:MainPage"
+             Title="Dinners">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
     </ContentPage.ToolbarItems>
@@ -62,38 +63,82 @@
 
         <ActivityIndicator x:Name="IsRefreshingListData" Grid.Row="2"/>
 
-        <ListView x:Name="DinnerListView" ItemsSource="{Binding PastDinners}" Grid.Row="3" RowHeight="96">
+        <ListView x:Name="DinnerListView" ItemsSource="{Binding PastDinners}" Grid.Row="3" SeparatorVisibility="None" RowHeight="160" SelectionMode="None">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="viewmodels:PastDinner">
                     <ViewCell>
+
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="65"/>
+                                <ColumnDefinition Width="10"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding RestaurantName}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
-                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding OrganiserName}" FontAttributes="Bold"/>
-                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding ExactDateTime, StringFormat='{0:dd MMM yyyy}'}" HorizontalTextAlignment="End"/>
-                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding CostPerPerson}" HorizontalTextAlignment="End" />
+                            <Label Text="{Binding ExactDateTime, StringFormat='{0:dd MMM yyyy}'}" Margin="4" FontAttributes="Bold"
+                                   FontSize="16" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
 
-                            <HorizontalStackLayout Grid.Row="2">
-                                <ImageButton Source="chilli.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
-                                             ToolTipProperties.Text="A new KotC was crowned" IsVisible="{Binding NewKotC}"/>
-                                <ImageButton Source="time.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
-                                             ToolTipProperties.Text="This restaurant is a former RotY" IsVisible="{Binding FormerRotY}"/>
-                                <ImageButton Source="roty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
-                                             ToolTipProperties.Text="This restaurant is the current RotY" IsVisible="{Binding CurrentRotY}"/>
-                                <ImageButton Source="violation.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
-                                             ToolTipProperties.Text="A rules violation occurred" IsVisible="{Binding RulesViolation}"/>
-                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="2" Color="Black" WidthRequest="1"/>
 
+                            <Ellipse Grid.Column="1" Stroke="Black" StrokeThickness="5" Fill="CornflowerBlue" WidthRequest="16"
+                                     HeightRequest="16" Margin="10,0,0,0"/>
+
+                            <Border Grid.Column="3" Margin="8" VerticalOptions="Center" BackgroundColor="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10"/>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Offset="5,5" Radius="10" Opacity="0.75"/>
+                                </Border.Shadow>
+                                <Grid Margin="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <HorizontalStackLayout Grid.Row="0" Margin="0,2">
+                                        <Image Source="dinner.png" HeightRequest="16" Margin="0,0,4,0" ToolTipProperties.Text="Restaurant"/>
+                                        <Label Text="Dinner Reservation" FontAttributes="Bold" TextColor="CornflowerBlue" FontSize="16"/>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Row="1" Margin="0,2">
+                                        <Image Source="restaurant.png" HeightRequest="16" Margin="0,0,4,0" ToolTipProperties.Text="Restaurant"/>
+                                        <Label Text="{Binding RestaurantName}" FontAttributes="Bold" FontSize="14"/>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Row="2" Margin="0,2">
+                                        <Image Source="founding_father.png" HeightRequest="16" IsVisible="{Binding IsOrganiserFoundingFather}"
+                                               Margin="0,0,4,0" ToolTipProperties.Text="Founding Father"/>
+                                        <Image Source="guru.png" HeightRequest="16" IsVisible="{Binding IsOrganiserGuru}"
+                                               Margin="0,0,4,0" ToolTipProperties.Text="Guru"/>
+                                        <Image Source="maharaja.png" HeightRequest="16" IsVisible="{Binding IsOrganiserMaharaja}"
+                                               Margin="0,0,4,0" ToolTipProperties.Text="Maharaja"/>
+                                        <Image Source="nerd.png" HeightRequest="16" IsVisible="{Binding IsOrganiserAuditor}"
+                                               Margin="0,0,4,0" ToolTipProperties.Text="Auditor"/>
+                                        <Label Text="Hosted by "/><Label Text="{Binding OrganiserName}"/>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Row="3">
+                                        <ImageButton Source="chilli.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                                    ToolTipProperties.Text="A new KotC was crowned" IsVisible="{Binding IsNewKotC}"/>
+                                        <ImageButton Source="time.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                                    ToolTipProperties.Text="This restaurant is a former RotY" IsVisible="{Binding IsFormerRotY}"/>
+                                        <ImageButton Source="roty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                                    ToolTipProperties.Text="This restaurant is the current RotY" IsVisible="{Binding IsCurrentRotY}"/>
+                                        <ImageButton Source="violation.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                                    ToolTipProperties.Text="A rules violation occurred" IsVisible="{Binding IsRulesViolation}"/>
+                                        <ImageButton Source="amnesty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                                    ToolTipProperties.Text="An amnesty was in effect" IsVisible="{Binding IsAmnesty}"/>
+                                    </HorizontalStackLayout>
+
+                                </Grid>
+                            </Border>
                         </Grid>
+                        
+
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

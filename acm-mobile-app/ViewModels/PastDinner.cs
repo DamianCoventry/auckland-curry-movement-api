@@ -12,6 +12,8 @@ namespace acm_mobile_app.ViewModels
                 _id = model.ID,
                 _organiserID = model.OrganiserID,
                 _organiserName = model.OrganiserName,
+                _organiserLevelID = model.OrganiserLevelID,
+                _isOrganiserFoundingFather = model.IsOrganiserFoundingFather,
                 _restaurantID = model.RestaurantID,
                 _restaurantName = model.RestaurantName,
                 _exactDateTime = model.ExactDateTime,
@@ -19,16 +21,19 @@ namespace acm_mobile_app.ViewModels
                 _negotiatedBeerDiscount = model.NegotiatedBeerDiscount,
                 _costPerPerson = model.CostPerPerson,
                 _numBeersConsumed = model.NumBeersConsumed,
-                _isNewKotC = model.IsNewKotC,
-                _isFormerRotY = model.IsFormerRotY,
-                _isCurrentRotY = model.IsCurrentRotY,
-                _isRulesViolation = model.IsRulesViolation,
+                _isNewKotC = model.IsNewKotC != 0,
+                _isFormerRotY = model.IsFormerRotY != 0,
+                _isCurrentRotY = model.IsCurrentRotY != 0,
+                _isRulesViolation = model.IsRulesViolation != 0,
+                _isAmnesty = model.IsAmnesty,
             };
         }
 
         private int? _id;
         private int _organiserID;
         private string _organiserName = string.Empty;
+        private int _organiserLevelID;
+        private bool _isOrganiserFoundingFather;
         private int _restaurantID;
         private string _restaurantName = string.Empty;
         private DateTime _exactDateTime;
@@ -36,10 +41,11 @@ namespace acm_mobile_app.ViewModels
         private double? _negotiatedBeerDiscount;
         private double? _costPerPerson;
         private int? _numBeersConsumed;
-        private int _isNewKotC;
-        private int _isFormerRotY;
-        private int _isCurrentRotY;
-        private int _isRulesViolation;
+        private bool _isNewKotC;
+        private bool _isFormerRotY;
+        private bool _isCurrentRotY;
+        private bool _isRulesViolation;
+        private bool _isAmnesty;
 
         public int? ID
         {
@@ -76,6 +82,39 @@ namespace acm_mobile_app.ViewModels
                 {
                     _organiserName = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OrganiserName)));
+                }
+            }
+        }
+
+        public int OrganiserLevelID
+        {
+            get => _organiserLevelID;
+            set
+            {
+                if (_organiserLevelID != value)
+                {
+                    _organiserLevelID = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OrganiserLevelID)));
+                }
+            }
+        }
+
+        // TODO: How to make this programatic?
+        public bool IsOrganiserAuditor { get => OrganiserName == "Damian Coventry" && OrganiserID == 6; }
+
+        // TODO: How to make this programatic?
+        public bool IsOrganiserGuru { get => OrganiserLevelID == 2; }
+        public bool IsOrganiserMaharaja { get => OrganiserLevelID == 3; }
+
+        public bool IsOrganiserFoundingFather
+        {
+            get => _isOrganiserFoundingFather;
+            set
+            {
+                if (_isOrganiserFoundingFather != value)
+                {
+                    _isOrganiserFoundingFather = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsOrganiserFoundingFather)));
                 }
             }
         }
@@ -171,7 +210,7 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public int IsNewKotC
+        public bool IsNewKotC
         {
             get => _isNewKotC;
             set
@@ -184,7 +223,7 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public int IsFormerRotY
+        public bool IsFormerRotY
         {
             get => _isFormerRotY;
             set
@@ -197,7 +236,7 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public int IsCurrentRotY
+        public bool IsCurrentRotY
         {
             get => _isCurrentRotY;
             set
@@ -210,7 +249,7 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public int IsRulesViolation
+        public bool IsRulesViolation
         {
             get => _isRulesViolation;
             set
@@ -223,10 +262,18 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public bool NewKotC { get { return IsNewKotC != 0; } }
-        public bool FormerRotY { get { return IsFormerRotY != 0; } }
-        public bool CurrentRotY { get { return IsCurrentRotY != 0; } }
-        public bool RulesViolation { get { return IsRulesViolation != 0; } }
+        public bool IsAmnesty
+        {
+            get => _isAmnesty;
+            set
+            {
+                if (_isAmnesty != value)
+                {
+                    _isAmnesty = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsAmnesty)));
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }

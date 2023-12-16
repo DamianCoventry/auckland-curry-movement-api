@@ -155,6 +155,9 @@ public partial class ManageRestaurants : ContentPage
                             Restaurants.Add(x);
                     }
                 }
+
+                if (Restaurants.Count > 0)
+                    RestaurantListView.ScrollTo(Restaurants[0], ScrollToPosition.Start, true);
             }
         }
         catch (Exception ex)

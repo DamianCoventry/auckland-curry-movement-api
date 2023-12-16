@@ -4,3 +4,4 @@
 <a href="https://www.flaticon.com/free-icons/log-in" title="log in icons">Log in icons created by sonnycandra - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/logout" title="logout icons">Logout icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/nerd" title="nerd icons">Nerd icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/candle" title="candle icons">Candle icons created by Freepik - Flaticon</a>

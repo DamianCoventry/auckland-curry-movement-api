@@ -191,9 +191,13 @@ public partial class SelectOneMember : ContentPage
                         Member = ViewModels.Member.FromModel(model) ?? throw new NullReferenceException(nameof(model)),
                     };
                     CurrentPageOfMembers.Add(member);
+
                     if (member.IsSelected)
                         MemberListView.SelectedItem = member;
                 }
+
+                if (CurrentPageOfMembers.Count > 0)
+                    MemberListView.ScrollTo(CurrentPageOfMembers[0], ScrollToPosition.Start, true);
             }
         }
         catch (Exception ex)

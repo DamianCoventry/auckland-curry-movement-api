@@ -151,6 +151,9 @@ public partial class ManageLevels : ContentPage
                     if (x != null)
                         Levels.Add(x);
                 }
+
+                if (Levels.Count > 0)
+                    LevelListView.ScrollTo(Levels[0], ScrollToPosition.Start, true);
             }
         }
         catch (Exception ex)

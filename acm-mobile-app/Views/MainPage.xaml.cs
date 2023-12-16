@@ -133,6 +133,9 @@ namespace acm_mobile_app
                         if (x != null)
                             PastDinners.Add(x);
                     }
+
+                    if (PastDinners.Count > 0)
+                        DinnerListView.ScrollTo(PastDinners[0], ScrollToPosition.Start, true);
                 }
             }
             catch (Exception ex)

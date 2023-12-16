@@ -153,6 +153,9 @@ public partial class ManageExemptions : ContentPage
                     if (x != null)
                         Exemptions.Add(x);
                 }
+
+                if (Exemptions.Count > 0)
+                    ExemptionListView.ScrollTo(Exemptions[0], ScrollToPosition.Start, true);
             }
         }
         catch (Exception ex)

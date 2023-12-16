@@ -29,8 +29,6 @@ namespace acm_mobile_app
 
             Routing.RegisterRoute("edit_reservation", typeof(EditReservation));
 
-            Routing.RegisterRoute("view_members", typeof(ViewMembers));
-
             Routing.RegisterRoute("about", typeof(About));
 
             _acmService = new AcmService();

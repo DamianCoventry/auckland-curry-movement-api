@@ -151,6 +151,8 @@ public partial class EditClub : ContentPage
                 }
 
                 CopySelectedMembersToFoundingFathers();
+                if (_selectedMembers.Count > 0)
+                    FoundingFathersListView.ScrollTo(_selectedMembers[0], ScrollToPosition.Start, true);
             }
         }
         catch (Exception ex)

@@ -143,6 +143,9 @@ public partial class SelectZeroOneOrMoreMembers : ContentPage
                         Member = Member.FromModel(model) ?? throw new NullReferenceException(nameof(model)),
                     });
                 }
+
+                if (CurrentPageOfMembers.Count > 0)
+                    MemberListView.ScrollTo(CurrentPageOfMembers[0], ScrollToPosition.Start, true);
             }
         }
         catch (Exception ex)

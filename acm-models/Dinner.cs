@@ -6,7 +6,7 @@
         public int ReservationID { get; set; }
         public Reservation? Reservation { get; set; }
         public double? CostPerPerson { get; set; }
-        public double? NumBeersConsumed { get; set; }
+        public int? NumBeersConsumed { get; set; }
         public KotC? KotC { get; set; }
 
         public ICollection<Attendee>? Attendees { get; set; }

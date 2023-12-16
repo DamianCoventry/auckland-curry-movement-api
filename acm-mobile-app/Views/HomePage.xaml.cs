@@ -4,13 +4,13 @@ using System.Collections.ObjectModel;
 
 namespace acm_mobile_app
 {
-    public partial class MainPage : ContentPage
+    public partial class HomePage : ContentPage
     {
         private const int PAGE_SIZE = 10;
         private int _page = 0;
         private int _totalPages = 0;
 
-        public MainPage()
+        public HomePage()
         {
             InitializeComponent();
             BindingContext = this;

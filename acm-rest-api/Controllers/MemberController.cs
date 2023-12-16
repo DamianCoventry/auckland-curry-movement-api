@@ -71,6 +71,18 @@ namespace acm_rest_api.Controllers
                 return NotFound();
             }
 
+            if (_context.Attendee != null)
+            {
+                // Update the cached attendance count if it's changed.
+                int count = await _context.Attendee.CountAsync(x => x.MemberID == id);
+                if (count != member.AttendanceCount)
+                {
+                    member.AttendanceCount = count;
+                    _context.Entry(member).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
             return member;
         }
 

@@ -31,7 +31,7 @@ How/where do members subscribe to a club?
 Where does the user choose the club they're working with?
 Archiving... when and how does it work?
 Logging in as a non-auditor
-The membership ID column will either need to:
+Multi-tenanted: The membership ID column will either need to:
         - replace the MemberID FK relationship in when joining to other tables, OR
         - added alongside the MemberID FK relationship in when joining to other tables
 Beer and curry prices from 2019 onwards have not been located

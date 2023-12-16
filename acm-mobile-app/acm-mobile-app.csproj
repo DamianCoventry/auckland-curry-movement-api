@@ -156,6 +156,9 @@
         <Compile Update="Views\EditReservation.xaml.cs">
             <DependentUpon>EditReservation.xaml</DependentUpon>
         </Compile>
+        <Compile Update="Views\HomePage.xaml.cs">
+          <DependentUpon>HomePage.xaml</DependentUpon>
+        </Compile>
         <Compile Update="Views\ManageClubs.xaml.cs">
             <DependentUpon>ManageClubs.xaml</DependentUpon>
         </Compile>

@@ -4,8 +4,8 @@
              xmlns:local="clr-namespace:acm_mobile_app"
              xmlns:views="clr-namespace:acm_mobile_app.Views"
              xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
-             x:Class="acm_mobile_app.MainPage"
-             x:DataType="local:MainPage"
+             x:Class="acm_mobile_app.HomePage"
+             x:DataType="local:HomePage"
              Title="Dinners">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
@@ -100,7 +100,7 @@
                                     </Grid.RowDefinitions>
 
                                     <HorizontalStackLayout Grid.Row="0" Margin="0,2">
-                                        <Image Source="dinner.png" HeightRequest="16" Margin="0,0,4,0" ToolTipProperties.Text="Restaurant"/>
+                                        <Image Source="dinner.png" HeightRequest="16" Margin="0,0,4,0" ToolTipProperties.Text="Dinner"/>
                                         <Label Text="Dinner Reservation" FontAttributes="Bold" TextColor="CornflowerBlue" FontSize="16"/>
                                     </HorizontalStackLayout>
 
@@ -121,18 +121,28 @@
                                         <Label Text="Hosted by "/><Label Text="{Binding OrganiserName}"/>
                                     </HorizontalStackLayout>
 
-                                    <HorizontalStackLayout Grid.Row="3">
-                                        <ImageButton Source="chilli.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                    <Grid Grid.Row="3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <HorizontalStackLayout>
+                                            <Image Source="chilli.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
                                                     ToolTipProperties.Text="A new KotC was crowned" IsVisible="{Binding IsNewKotC}"/>
-                                        <ImageButton Source="time.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                            <Image Source="time.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
                                                     ToolTipProperties.Text="This restaurant is a former RotY" IsVisible="{Binding IsFormerRotY}"/>
-                                        <ImageButton Source="roty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                            <Image Source="roty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
                                                     ToolTipProperties.Text="This restaurant is the current RotY" IsVisible="{Binding IsCurrentRotY}"/>
-                                        <ImageButton Source="violation.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                            <Image Source="violation.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
                                                     ToolTipProperties.Text="A rules violation occurred" IsVisible="{Binding IsRulesViolation}"/>
-                                        <ImageButton Source="amnesty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
+                                            <Image Source="amnesty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
                                                     ToolTipProperties.Text="An amnesty was in effect" IsVisible="{Binding IsAmnesty}"/>
-                                    </HorizontalStackLayout>
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout Grid.Column="1" IsVisible="{Binding HaveCostPerPerson}">
+                                            <Label Text="{Binding CostPerPerson, StringFormat='0:C'}"/>
+                                            <Image Source="cost.png" Margin="4,0,0,0"/>
+                                        </HorizontalStackLayout>
+                                    </Grid>
 
                                 </Grid>
                             </Border>

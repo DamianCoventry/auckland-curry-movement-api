@@ -184,6 +184,8 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
+        public bool HaveCostPerPerson { get => _costPerPerson != null; }
+
         public double? CostPerPerson
         {
             get => _costPerPerson;

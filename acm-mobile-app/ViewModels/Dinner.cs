@@ -22,7 +22,7 @@ namespace acm_mobile_app.ViewModels
         private int _reservationID;
         private Reservation? _reservation;
         private double? _costPerPerson;
-        private double? _numBeersConsumed;
+        private int? _numBeersConsumed;
         private KotC? _kotC;
 
         public int? ID
@@ -77,7 +77,7 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public double? NumBeersConsumed
+        public int? NumBeersConsumed
         {
             get => _numBeersConsumed;
             set

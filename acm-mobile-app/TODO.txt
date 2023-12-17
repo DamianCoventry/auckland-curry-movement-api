@@ -18,15 +18,18 @@ better pagination GUI   ✓
 add a search ability      
 toast popups            ✓ 
 
-graphs
-view associated/linked data for each item type
 
 signin          ✓
 signin GUI      ✓
-signout
-signout GUI
+signout         ✓
+signout GUI     ✓
+
+graphs
+
 check for internet connectivity before signing in
 
+Alternate sign in for non-auditor
+View associated/linked data for each item type
 How/where do members subscribe to a club?
 Where does the user choose the club they're working with?
 Archiving... when and how does it work?

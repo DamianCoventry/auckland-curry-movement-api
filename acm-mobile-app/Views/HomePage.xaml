@@ -6,7 +6,7 @@
              xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
              x:Class="acm_mobile_app.HomePage"
              x:DataType="local:HomePage"
-             Title="Dinners">
+             Title="Home">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
     </ContentPage.ToolbarItems>
@@ -63,7 +63,9 @@
 
         <ActivityIndicator x:Name="IsRefreshingListData" Grid.Row="2"/>
 
-        <ListView x:Name="DinnerListView" ItemsSource="{Binding PastDinners}" Grid.Row="3" SeparatorVisibility="None" RowHeight="160" SelectionMode="None">
+        <ListView x:Name="DinnerListView" ItemsSource="{Binding PastDinners}" Grid.Row="3"
+                  SeparatorVisibility="None" RowHeight="160" SelectionMode="None"
+                  ItemTapped="DinnerListView_ItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodels:PastDinner">
                     <ViewCell>

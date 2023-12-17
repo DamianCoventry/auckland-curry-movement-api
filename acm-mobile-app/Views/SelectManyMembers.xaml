@@ -5,8 +5,8 @@
              xmlns:views="clr-namespace:acm_mobile_app.Views"
              xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="acm_mobile_app.Views.SelectZeroOneOrMoreMembers"
-             x:DataType="views:SelectZeroOneOrMoreMembers"
+             x:Class="acm_mobile_app.Views.SelectManyMembers"
+             x:DataType="views:SelectManyMembers"
              Title="Select Members">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Notifications" IconImageSource="notification.png" />

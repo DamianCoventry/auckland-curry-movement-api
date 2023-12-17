@@ -13,6 +13,7 @@ namespace acm_mobile_app.ViewModels
                 _restaurantID = model.RestaurantID,
                 _restaurant = Restaurant.FromModel(model.Restaurant),
                 _numVotes = model.NumVotes,
+                _totalVotes = model.TotalVotes,
                 _winningScore = model.WinningScore,
                 _presenterID = model.PresenterID,
                 _presenter = Member.FromModel(model.Presenter)
@@ -23,6 +24,7 @@ namespace acm_mobile_app.ViewModels
         private int _restaurantID;
         private Restaurant? _restaurant;
         private int _numVotes;
+        private int _totalVotes;
         private double _winningScore;
         private int? _presenterID;
         private Member? _presenter;
@@ -75,6 +77,19 @@ namespace acm_mobile_app.ViewModels
                 {
                     _numVotes = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NumVotes)));
+                }
+            }
+        }
+
+        public int TotalVotes
+        {
+            get => _totalVotes;
+            set
+            {
+                if (_totalVotes != value)
+                {
+                    _totalVotes = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalVotes)));
                 }
             }
         }

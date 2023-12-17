@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodels="clr-namespace:acm_mobile_app.ViewModels"
+             x:Class="acm_mobile_app.Views.EditDinner"
+             x:DataType="viewmodels:Dinner"
+             Title="EditDinner">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Notifications" IconImageSource="notification.png" />
+    </ContentPage.ToolbarItems>
+    <Grid Margin="20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
+
+        <Grid Grid.Row="1">
+            <!-- reservation Organiser -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Organiser" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+            <Label Grid.Column="1" Text="{Binding Reservation.OrganiserID}" VerticalTextAlignment="Center"/> <!-- TODO: get the name -->
+            <ImageButton Grid.Column="2" Source="member.png" WidthRequest="32" HeightRequest="32"/>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <!-- reservation Restaurant -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Restaurant" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+            <Label Grid.Column="1" Text="{Binding Reservation.RestaurantID}" VerticalTextAlignment="Center"/> <!-- TODO: get the name -->
+            <ImageButton Grid.Column="2" Source="restaurant.png" WidthRequest="32" HeightRequest="32"/>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <!-- reservation _exactDateTime -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Exact date/time" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+            <Label Grid.Column="1" Text="{Binding Reservation.ExactDateTime, StringFormat='{0:dd MMM yyyy, hh:mm}'}" VerticalTextAlignment="Center"/> <!-- TODO: format the date better -->
+        </Grid>
+
+        <Grid Grid.Row="4"> <!-- TODO: hide if not relevant -->
+            <!-- reservation _negotiatedBeerPrice -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Negotiated Beer Price" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+            <Label Grid.Column="1" Text="{Binding Reservation.NegotiatedBeerPrice, StringFormat='{0:C}'}" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+        </Grid>
+
+        <Grid Grid.Row="5"> <!-- TODO: hide if not relevant -->
+            <!-- reservation _negotiatedBeerDiscount -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Negotiated Beer Discount" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+            <Label Grid.Column="1" Text="{Binding Reservation.NegotiatedBeerDiscount, StringFormat='{0:C}'}" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+        </Grid>
+
+        <Grid Grid.Row="6">
+            <!-- reservation _isAmnesty -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox IsChecked="{Binding Reservation.IsAmnesty}" VerticalOptions="Center"/>
+            <Label Grid.Column="1" Text="Is Amnesty" VerticalTextAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="7">
+            <!-- dinner _costPerPerson -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Cost per person" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+            <Label Grid.Column="1" Text="{Binding CostPerPerson, StringFormat='{0:C}'}" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+        </Grid>
+
+        <Grid Grid.Row="8">
+            <!-- dinner _numBeersConsumed -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Num Beers Consumed" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+            <Label Grid.Column="1" Text="{Binding NumBeersConsumed, StringFormat='{0:C}'}" VerticalTextAlignment="Center" Margin="0,10,30,10"/>
+        </Grid>
+
+        <!--
+        inductees and their sponsor
+        whether a kotC challenged occurred, and the result
+        roty trophy that was awarded
+        this restaurant is a former roty
+        this restaurant is a former kotc location
+        violations that occurred
+        members that attended
+        exemptions that were applied
+        members that went up a level
+        -->
+        
+        <Grid Grid.Row="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ImageButton x:Name="OkButton"
+                         Grid.Column="0" Source="yes.png"
+                         WidthRequest="32" HeightRequest="32"
+                         HorizontalOptions="End" Margin="10,0"
+                         ToolTipProperties.Text="Accept"
+                         Clicked="OnClickOK"/>
+            <ImageButton x:Name="CancelButton"
+                         Grid.Column="1" Source="no.png"
+                         WidthRequest="32" HeightRequest="32"
+                         HorizontalOptions="End" Margin="10,0"
+                         ToolTipProperties.Text="Cancel"
+                         Clicked="OnClickCancel"/>
+            <ActivityIndicator x:Name="SavingIndicator"
+                               Grid.Column="1"
+                               HorizontalOptions="End" Margin="10,0"
+                               WidthRequest="32" HeightRequest="32"
+                               IsRunning="False"/>
+        </Grid>
+
+    </Grid>
+</ContentPage>

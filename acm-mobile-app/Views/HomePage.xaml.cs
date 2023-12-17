@@ -147,5 +147,22 @@ namespace acm_mobile_app
                 IsRefreshingListData.IsRunning = false;
             }
         }
+
+        private async void DinnerListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is PastDinner dinner)
+            {
+                Dinner copy = new()
+                {
+                    ID = dinner.ID,
+                    ReservationID = dinner.RestaurantID,
+                    CostPerPerson = dinner.CostPerPerson,
+                    NumBeersConsumed = dinner.NumBeersConsumed,
+                };
+
+                Dictionary<string, object> parameters = new() { { "Dinner", copy } };
+                await Shell.Current.GoToAsync("edit_dinner", true, parameters);
+            }
+        }
     }
 }

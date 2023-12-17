@@ -168,15 +168,12 @@
         <Compile Update="Views\SelectOneMember.xaml.cs">
           <DependentUpon>SelectOneMember.xaml</DependentUpon>
         </Compile>
-        <Compile Update="Views\SelectZeroOneOrMoreMembers.xaml.cs">
-          <DependentUpon>SelectZeroOneOrMoreMembers.xaml</DependentUpon>
+        <Compile Update="Views\SelectManyMembers.xaml.cs">
+          <DependentUpon>SelectManyMembers.xaml</DependentUpon>
         </Compile>
     </ItemGroup>
 
     <ItemGroup>
-        <MauiXaml Update="ViewModels\AddMember.xaml">
-          <Generator>MSBuild:Compile</Generator>
-        </MauiXaml>
         <MauiXaml Update="Views\About.xaml">
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
@@ -193,6 +190,9 @@
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
         <MauiXaml Update="Views\AddExemption.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Views\EditDinner.xaml">
           <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
         <MauiXaml Update="Views\EditExemption.xaml">
@@ -234,7 +234,7 @@
         <MauiXaml Update="Views\SelectOneMember.xaml">
           <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
-        <MauiXaml Update="Views\SelectZeroOneOrMoreMembers.xaml">
+        <MauiXaml Update="Views\SelectManyMembers.xaml">
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
         <MauiXaml Update="Views\SignInPage.xaml">

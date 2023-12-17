@@ -14,6 +14,8 @@ namespace acm_mobile_app
             Routing.RegisterRoute("add_club", typeof(AddClub));
             Routing.RegisterRoute("edit_club", typeof(EditClub));
 
+            Routing.RegisterRoute("edit_dinner", typeof(EditDinner));
+
             Routing.RegisterRoute("add_exemption", typeof(AddExemption));
             Routing.RegisterRoute("edit_exemption", typeof(EditExemption));
 
@@ -21,8 +23,8 @@ namespace acm_mobile_app
             Routing.RegisterRoute("edit_level", typeof(EditLevel));
 
             Routing.RegisterRoute("edit_member", typeof(EditMember));
-            Routing.RegisterRoute("select_1_member", typeof(SelectOneMember));
-            Routing.RegisterRoute("select_0_1_or_more_members", typeof(SelectZeroOneOrMoreMembers));
+            Routing.RegisterRoute("select_one_member", typeof(SelectOneMember));
+            Routing.RegisterRoute("select_many_members", typeof(SelectManyMembers));
 
             Routing.RegisterRoute("add_restaurant", typeof(AddRestaurant));
             Routing.RegisterRoute("edit_restaurant", typeof(EditRestaurant));

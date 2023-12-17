@@ -72,7 +72,7 @@ public partial class EditClub : ContentPage
             copy.Add(new SelectedMember() { IsSelected = x.IsSelected, Member = x.Member });
 
         Dictionary<string, object> parameters = new() { { "ClubID", ClubID }, { "SelectedMembers", copy } };
-        await Shell.Current.GoToAsync("select_0_1_or_more_members", true, parameters);
+        await Shell.Current.GoToAsync("select_many_members", true, parameters);
     }
 
     protected override void OnAppearing()

@@ -18,7 +18,7 @@
         <views:FlyoutFooter />
     </Shell.FlyoutFooter>
 
-    <FlyoutItem Title="Sign In" Icon="sign_in.png">
+    <FlyoutItem Title="Sign In" Icon="sign_in.png" FlyoutItemIsVisible="False">
         <Tab>
             <ShellContent Route="signin" ContentTemplate="{DataTemplate views:SignInPage}"/>
         </Tab>
@@ -59,7 +59,13 @@
             <ShellContent Route="manage_exemptions" ContentTemplate="{DataTemplate views:ManageExemptions}"/>
         </Tab>
     </FlyoutItem>
+    
+    <FlyoutItem Title="Sign Out" Icon="sign_out.png">
+        <Tab>
+            <ShellContent Route="signout" ContentTemplate="{DataTemplate views:SignOutPage}"/>
+        </Tab>
+    </FlyoutItem>
 
-    <MenuItem Text="About" IconImageSource="help.png" Clicked="NavigateToAbout"/>
+    <ShellContent Title="About" Icon="help.png" ContentTemplate="{DataTemplate views:About}"/>
 
 </Shell>

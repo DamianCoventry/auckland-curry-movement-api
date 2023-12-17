@@ -139,8 +139,8 @@
                                                     ToolTipProperties.Text="An amnesty was in effect" IsVisible="{Binding IsAmnesty}"/>
                                         </HorizontalStackLayout>
                                         <HorizontalStackLayout Grid.Column="1" IsVisible="{Binding HaveCostPerPerson}">
-                                            <Label Text="{Binding CostPerPerson, StringFormat='0:C'}"/>
-                                            <Image Source="cost.png" Margin="4,0,0,0"/>
+                                            <Label Text="{Binding CostPerPerson, StringFormat='Cost {0:C}'}" VerticalTextAlignment="Center"/>
+                                            <Image Source="cost.png" Margin="4,0,0,0" WidthRequest="16" HeightRequest="16" VerticalOptions="Center"/>
                                         </HorizontalStackLayout>
                                     </Grid>
 

@@ -1,5 +1,4 @@
 using acm_mobile_app.Services;
-using System.Collections.ObjectModel;
 
 namespace acm_mobile_app.Views;
 
@@ -18,24 +17,37 @@ public partial class SignInPage : ContentPage
             if (SigningInIndicator.IsRunning)
                 return;
 
+            SignInButton.IsEnabled = false;
             SigningInIndicator.IsRunning = true;
             SignInResult.Text = "Signing in...";
-            await Task.Delay(150);
+            await Task.Delay(250);
 
             bool signedIn = await AcmService.SignIn();
-            await Task.Delay(150);
+            await Task.Delay(250);
 
             SignInResult.Text = signedIn ? "Signed in" : "Failed to sign in";
-            Token.Text = AcmService.AccessToken;
+            SigningInIndicator.IsRunning = false;
+            await Task.Delay(1500);
+
+            await Shell.Current.GoToAsync("//home");
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", ex.Message, "Close");
+            SignInButton.IsEnabled = true;
         }
         finally
         {
             SigningInIndicator.IsRunning = false;
         }
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        SignInButton.IsEnabled = true;
+        SigningInIndicator.IsRunning = false;
+        SignInResult.Text = string.Empty;
     }
 
     private static IAcmService AcmService

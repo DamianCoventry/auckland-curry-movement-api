@@ -35,11 +35,5 @@ namespace acm_mobile_app
         }
 
         public IAcmService AcmService { get { return _acmService; } }
-
-        public async void NavigateToAbout(object sender, EventArgs e)
-        {
-            FlyoutIsPresented = false;
-            await GoToAsync("about");
-        }
     }
 }

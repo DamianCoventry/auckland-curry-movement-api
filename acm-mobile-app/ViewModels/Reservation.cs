@@ -139,6 +139,8 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
+        public bool HaveNegotiatedBeerPrice { get => _negotiatedBeerPrice != null; }
+
         public double? NegotiatedBeerPrice
         {
             get => _negotiatedBeerPrice;
@@ -151,6 +153,8 @@ namespace acm_mobile_app.ViewModels
                 }
             }
         }
+
+        public bool HaveNegotiatedBeerDiscount { get => _negotiatedBeerDiscount != null; }
 
         public double? NegotiatedBeerDiscount
         {

@@ -28,6 +28,10 @@ graphs
 
 check for internet connectivity before signing in
 
+Add an auditor flag to the member table?
+Make the dinner content page suck less.
+Make the sign in + out content pages scrollable.
+What happens when there's too many icons for the area inside the 'Past Dinner' card?
 Alternate sign in for non-auditor
 View associated/linked data for each item type
 How/where do members subscribe to a club?

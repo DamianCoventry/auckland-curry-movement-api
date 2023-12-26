@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="hi_fi_prototype.Views.SignInPage"
+             Shell.FlyoutBehavior="Disabled"
+             Title="Sign In">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Image Source="sign_in.png" WidthRequest="64" HorizontalOptions="Center" Margin="16"/>
+            <Grid ColumnDefinitions="Auto,Auto" HorizontalOptions="Center">
+                <CheckBox x:Name="IsAuditor" IsChecked="True" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="Sign in as Auditor" VerticalOptions="Center"/>
+            </Grid>
+            <Button x:Name="SignInButton" Text="Sign In" Margin="64,32" Clicked="SignInButton_Clicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

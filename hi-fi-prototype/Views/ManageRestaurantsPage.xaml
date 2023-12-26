@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:hi_fi_prototype.Views"
+             xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
+             x:Class="hi_fi_prototype.Views.ManageRestaurantsPage"
+             x:DataType="views:ManageRestaurantsPage"
+             Title="Manage Restaurants">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
+    </ContentPage.ToolbarItems>
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <HorizontalStackLayout FlowDirection="RightToLeft">
+                <ImageButton x:Name="AddNewRestaurant" Source="add.png" WidthRequest="32" Margin="8"
+                            ToolTipProperties.Text="Add New Restaurant" Clicked="AddNewRestaurant_Clicked"/>
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
+            </HorizontalStackLayout>
+
+            <ListView x:Name="RestaurantItems" ItemsSource="{Binding Restaurants}" ItemTapped="RestaurantItems_ItemTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:RestaurantViewModel">
+                        <ViewCell>
+                            <Grid ColumnDefinitions="Auto,*">
+                                <Image Source="restaurant.png" WidthRequest="32" Margin="8,0"/>
+                                <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="4,0">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue" Margin="0,0,8,0"/>
+                                    <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                        <Label Grid.Column="0" Grid.Row="0" Text="{Binding StreetAddress}"/>
+                                        <Label Grid.Column="0" Grid.Row="1" Text="{Binding Suburb}" Margin="0,0,0,8"/>
+                                        <Label Grid.Column="2" Grid.Row="0" Text="{Binding PhoneNumber}"/>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Button x:Name="LoadMoreButton" Text="Load More" Margin="100,8" IsVisible="False" Clicked="LoadMoreButton_Clicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

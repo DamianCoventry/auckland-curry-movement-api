@@ -130,7 +130,7 @@
                                         </Grid.ColumnDefinitions>
                                         <HorizontalStackLayout>
                                             <Image Source="chilli.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
-                                                    ToolTipProperties.Text="A new KotC was crowned" IsVisible="{Binding IsNewKotC}"/>
+                                                    ToolTipProperties.Text="A new KotC was crowned" IsVisible="{Binding HaveKotC}"/>
                                             <Image Source="time.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
                                                     ToolTipProperties.Text="This restaurant is a former RotY" IsVisible="{Binding IsFormerRotY}"/>
                                             <Image Source="roty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
@@ -139,6 +139,7 @@
                                                     ToolTipProperties.Text="A rules violation occurred" IsVisible="{Binding IsRulesViolation}"/>
                                             <Image Source="amnesty.png" WidthRequest="32" HeightRequest="32" Margin="0,5,10,0"
                                                     ToolTipProperties.Text="An amnesty was in effect" IsVisible="{Binding IsAmnesty}"/>
+                                            <!-- TODO: icon for inductee -->
                                         </HorizontalStackLayout>
                                         <HorizontalStackLayout Grid.Column="1" IsVisible="{Binding HaveCostPerPerson}">
                                             <Label Text="{Binding CostPerPerson, StringFormat='Cost {0:C}'}" VerticalTextAlignment="Center"/>

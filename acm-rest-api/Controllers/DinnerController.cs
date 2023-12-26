@@ -1,6 +1,7 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
@@ -65,6 +66,48 @@ namespace acm_rest_api.Controllers
             }
 
             return dinner;
+        }
+
+        // GET: api/Dinner/5/Attendees
+        [HttpGet("{id}/Attendees")]
+        public async Task<ActionResult<IEnumerable<AttendeeStats>>> GetDinnerAttendeeStats(int? id, [FromQuery(Name = "clubID")] int clubID)
+        {
+            if (_context.Attendee == null || _context.Membership == null || _context.Exemption == null || _context.Violation == null || id == null)
+            {
+                return NotFound();
+            }
+
+            List<Attendee> attendees = await _context.Attendee
+                .Include(x => x.Dinner)
+                .Include(x => x.Member)
+                .Include(x => x.Level)
+                .Where(x => x.DinnerID == id)
+                .ToListAsync();
+
+            List<AttendeeStats> attendeeStats = new();
+            foreach (var a in attendees)
+            {
+                AttendeeStats att = new() { Attendee = a };
+
+                int count = await _context.Attendee.Where(x => x.MemberID == a.MemberID && x.DinnerID <= id).CountAsync();
+                att.NthAttendance = (count % 10) switch
+                {
+                    1 => count.ToString() + "st",
+                    2 => count.ToString() + "nd",
+                    3 => count.ToString() + "rd",
+                    _ => count.ToString() + "th",
+                };
+
+                att.IsFoundingFather = await _context.Membership.Where(x => x.ClubID == clubID && x.MemberID == a.MemberID && x.IsFoundingFather).AnyAsync();
+
+                att.IsExemptionUsed = await _context.Exemption.Where(x => x.MemberID == a.MemberID).AnyAsync();
+
+                att.IsReceivedViolation = await _context.Violation.Where(x => x.MemberID == a.MemberID && x.DinnerID == id).AnyAsync();
+
+                attendeeStats.Add(att);
+            }
+
+            return attendeeStats;
         }
 
         // PUT: api/Dinner/5

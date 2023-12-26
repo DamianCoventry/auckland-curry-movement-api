@@ -1,0 +1,229 @@
+using CommunityToolkit.Maui.Alerts;
+using hi_fi_prototype.ViewModels;
+using System.Collections.ObjectModel;
+
+namespace hi_fi_prototype.Views
+{
+    public partial class SelectMultipleMembersPage : ContentPage
+    {
+        private ObservableCollection<SelectedMemberViewModel> _members = [];
+        private int _totalPages = 0;
+        private int _currentPage = 0;
+
+        public SelectMultipleMembersPage()
+        {
+            InitializeComponent();
+            BindingContext = this;
+        }
+
+        public Action<List<MemberViewModel>>? AcceptFunction { get; set; } = null;
+        public Action? CancelFunction { get; set; } = null;
+        public List<MemberViewModel>? SelectedMembers { get; set; } = null;
+        private List<MemberViewModel>? OriginalSelection { get; set; } = null;
+        public int PageSize { get; set; } = 10;
+
+        public ObservableCollection<SelectedMemberViewModel> Members
+        {
+            get => _members;
+            set
+            {
+                _members = [];
+                foreach (var member in value)
+                {
+                    _members.Add(new SelectedMemberViewModel()
+                    {
+                        IsSelected = member.IsSelected,
+                        ID = member.ID,
+                        Name = member.Name,
+                        ArchiveReason = member.ArchiveReason,
+                        IsArchived = member.IsArchived,
+                    });
+                }
+                OnPropertyChanged(nameof(Members));
+            }
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (SelectedMembers != null)
+            {
+                OriginalSelection = [];
+                foreach (var  selectedMember in SelectedMembers)
+                {
+                    OriginalSelection.Add(new MemberViewModel()
+                    {
+                        ID = selectedMember.ID, Name = selectedMember.Name,
+                        ArchiveReason = selectedMember.ArchiveReason,
+                        IsArchived = selectedMember.IsArchived,
+                    });
+                }
+            }
+
+            MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
+        }
+
+        private async Task LoadData()
+        {
+            try
+            {
+                LoadingIndicator.IsRunning = true;
+                AcceptChanges.IsEnabled = false;
+                DiscardChanges.IsEnabled = false;
+
+                await Task.Delay(750);
+                var pretendRdbms = new List<MemberViewModel>() {
+                    new() { ID = 1, Name = "Alfred Sanchez" },
+                    new() { ID = 2, Name = "Kyle Scott" },
+                    new() { ID = 3, Name = "Kaiser Farley" },
+                    new() { ID = 4, Name = "Reginald Weber" },
+                    new() { ID = 5, Name = "Cullen Schmitt" },
+                    new() { ID = 6, Name = "Kenneth Allen" },
+                    new() { ID = 7, Name = "Jaxtyn Erickson" },
+                    new() { ID = 8, Name = "Barrett Herrera" },
+                    new() { ID = 9, Name = "Lee Dickerson" },
+                    new() { ID = 10, Name = "Edwin Spears" },
+                    new() { ID = 11, Name = "Luke Wood" },
+                    new() { ID = 12, Name = "Ben Vega" },
+                    new() { ID = 13, Name = "Marlowe Ho" },
+                    new() { ID = 14, Name = "Jaxton Hopkins" },
+                    new() { ID = 15, Name = "Allen Rangel" },
+                    new() { ID = 16, Name = "Fisher Willis" },
+                    new() { ID = 17, Name = "Terrance Cain" },
+                    new() { ID = 18, Name = "Alonso Pratt" },
+                    new() { ID = 19, Name = "Sonny Brandt" },
+                    new() { ID = 20, Name = "Asher Gates" },
+                    new() { ID = 21, Name = "Bruno Holmes" },
+                    new() { ID = 22, Name = "Hunter Gonzalez" },
+                    new() { ID = 23, Name = "Kendrick Shields" },
+                    new() { ID = 24, Name = "Braydon Brooks" },
+                    new() { ID = 25, Name = "Thomas Norris" },
+                    new() { ID = 26, Name = "Gage Suarez" },
+                    new() { ID = 27, Name = "Kolby Stone" },
+                    new() { ID = 28, Name = "Eden Berger" },
+                    new() { ID = 29, Name = "Memphis Blake" },
+                    new() { ID = 30, Name = "Eugene Callahan" },
+                    new() { ID = 31, Name = "Landin Mayer" },
+                    new() { ID = 32, Name = "Reginald Cervantes" },
+                    new() { ID = 33, Name = "Trevon Bird" },
+                    new() { ID = 34, Name = "Mauricio Patterson" },
+                };
+
+                _totalPages = pretendRdbms.Count / PageSize;
+                if (pretendRdbms.Count % PageSize > 0)
+                    _totalPages++;
+                _currentPage = Math.Min(Math.Max(0, _currentPage), _totalPages - 1);
+
+                LoadMoreButton.IsVisible = _currentPage < _totalPages - 1;
+
+                MergePageOfMembers(pretendRdbms.Skip(_currentPage * PageSize).Take(PageSize).ToList());
+
+                await Task.Delay(750);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Exception", ex.ToString(), "Close");
+            }
+            finally
+            {
+                LoadingIndicator.IsRunning = false;
+                AcceptChanges.IsEnabled = true;
+                DiscardChanges.IsEnabled = true;
+            }
+        }
+
+        private async void DiscardChanges_Clicked(object sender, EventArgs e)
+        {
+            CancelFunction?.Invoke();
+            await Navigation.PopAsync();
+        }
+
+        private async void AcceptChanges_Clicked(object sender, EventArgs e)
+        {
+            if (!IsMemberSelected)
+            {
+                var toast = Toast.Make("Please select at fewest 1 member");
+                await toast.Show();
+                return;
+            }
+
+            SelectedMembers = [];
+            foreach (var member in _members)
+            {
+                if (member.IsSelected)
+                {
+                    SelectedMembers.Add(new MemberViewModel()
+                    {
+                        ID = member.ID, Name = member.Name,
+                        ArchiveReason = member.ArchiveReason,
+                        IsArchived = member.IsArchived,
+                    });
+                }
+            }
+            AcceptFunction?.Invoke(SelectedMembers);
+            await Navigation.PopAsync();
+        }
+
+        private void MergePageOfMembers(List<MemberViewModel> pageOfMembers)
+        {
+            bool changed = false;
+            foreach (var member in pageOfMembers)
+            {
+                var x = _members.FirstOrDefault(y => y.ID == member.ID);
+                if (x == null)
+                {
+                    _members.Add(new SelectedMemberViewModel()
+                    {
+                        ID = member.ID, Name = member.Name,
+                        ArchiveReason = member.ArchiveReason,
+                        IsArchived = member.IsArchived,
+                        IsSelected = IsOriginallySelected(member),
+                    });
+                    changed = true;
+                }
+            }
+            if (changed)
+                OnPropertyChanged(nameof(Members));
+        }
+
+        private bool IsOriginallySelected(MemberViewModel member)
+        {
+            if (OriginalSelection == null || OriginalSelection.Count == 0)
+                return false;
+
+            var originallySelected = OriginalSelection.FirstOrDefault(x => x.ID == member.ID && x.Name == member.Name);
+            if (originallySelected != null)
+            {
+                OriginalSelection.Remove(originallySelected);
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsMemberSelected
+        {
+            get
+            {
+                foreach (var member in _members)
+                    if (member.IsSelected) return true;
+                return false;
+            }
+        }
+
+        private void LoadMoreButton_Clicked(object sender, EventArgs e)
+        {
+            if (_currentPage < _totalPages - 1)
+            {
+                ++_currentPage;
+                MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
+            }
+        }
+
+        private async void ManageNotifications_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("manage_notifications");
+        }
+    }
+}

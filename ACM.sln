@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "acm-models", "acm-models\ac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "acm-mobile-app", "acm-mobile-app\acm-mobile-app.csproj", "{C92FBCAF-054E-410B-AF3F-3EA22B53BE30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hi-fi-prototype", "hi-fi-prototype\hi-fi-prototype.csproj", "{B25E09D3-653E-4E46-B2BD-6C37B18BCDB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,12 @@ Global
 		{C92FBCAF-054E-410B-AF3F-3EA22B53BE30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C92FBCAF-054E-410B-AF3F-3EA22B53BE30}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C92FBCAF-054E-410B-AF3F-3EA22B53BE30}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B25E09D3-653E-4E46-B2BD-6C37B18BCDB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B25E09D3-653E-4E46-B2BD-6C37B18BCDB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B25E09D3-653E-4E46-B2BD-6C37B18BCDB7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B25E09D3-653E-4E46-B2BD-6C37B18BCDB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B25E09D3-653E-4E46-B2BD-6C37B18BCDB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B25E09D3-653E-4E46-B2BD-6C37B18BCDB7}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

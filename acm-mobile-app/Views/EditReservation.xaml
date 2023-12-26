@@ -72,12 +72,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Text="Time" VerticalOptions="Start" HorizontalOptions="Start" Margin="0,10,0,0"/>
-            <TimePicker Grid.Column="1"/>
+            <TimePicker Grid.Column="1" Time="07:00"/>
         </Grid>
 
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <ImageButton x:Name="OkButton"
@@ -93,11 +94,10 @@
                          ToolTipProperties.Text="Cancel"
                          Clicked="OnClickCancel"/>
             <ActivityIndicator x:Name="SavingIndicator"
-                               Grid.Column="1"
+                               Grid.Column="2"
                                HorizontalOptions="End" Margin="10,0"
                                WidthRequest="32" HeightRequest="32"
                                IsRunning="False"/>
         </Grid>
-
     </Grid>
 </ContentPage>

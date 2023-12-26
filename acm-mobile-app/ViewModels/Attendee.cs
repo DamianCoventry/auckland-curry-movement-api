@@ -4,6 +4,27 @@ namespace acm_mobile_app.ViewModels
 {
     public class Attendee : INotifyPropertyChanged
     {
+        static public Attendee? FromModel(acm_models.AttendeeStats? model)
+        {
+            if (model == null || model.Attendee == null) return null;
+            return new Attendee()
+            {
+                _id = model.Attendee.ID,
+                _dinnerID = model.Attendee.DinnerID,
+                _dinner = Dinner.FromModel(model.Attendee.Dinner),
+                _memberID = model.Attendee.MemberID,
+                _member = Member.FromModel(model.Attendee.Member),
+                _levelID = model.Attendee.LevelID,
+                _level = Level.FromModel(model.Attendee.Level),
+                _isSponsor = model.Attendee.IsSponsor,
+                _isInductee = model.Attendee.IsInductee,
+                _nthAttendance = model.NthAttendance,
+                _isExemptionUsed = model.IsExemptionUsed,
+                _isReceivedViolation = model.IsReceivedViolation,
+                _isFoundingFather = model.IsFoundingFather,
+            };
+        }
+
         static public Attendee? FromModel(acm_models.Attendee? model)
         {
             if (model == null) return null;
@@ -30,6 +51,10 @@ namespace acm_mobile_app.ViewModels
         private Level? _level;
         private bool _isSponsor;
         private bool _isInductee;
+        private string _nthAttendance = string.Empty;
+        private bool _isExemptionUsed;
+        private bool _isReceivedViolation;
+        private bool _isFoundingFather;
 
         public int? ID
         {
@@ -147,6 +172,18 @@ namespace acm_mobile_app.ViewModels
                 }
             }
         }
+
+        // TODO: How to make this programatic?
+        public bool IsAuditor { get => Member != null && Member.Name == "Damian Coventry" && Member.ID == 6; }
+
+        // TODO: How to make this programatic?
+        public bool IsGuru { get => LevelID == 2; }
+        public bool IsMaharaja { get => LevelID == 3; }
+
+        public string NthAttendance { get => _nthAttendance; }
+        public bool IsExemptionUsed { get => _isExemptionUsed; }
+        public bool IsReceivedViolation { get => _isReceivedViolation; }
+        public bool IsFoundingFather { get => _isFoundingFather; }
 
         public ICollection<Notification>? Notifications { get; set; }
 

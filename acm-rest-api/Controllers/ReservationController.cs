@@ -35,9 +35,9 @@ namespace acm_rest_api.Controllers
                 CurrentPage = first,
                 TotalPages = totalPages,
                 PageItems = await _context.Reservation
-                .OrderBy(x => x.ID)
-                    .Skip(first).Take(pageSize)
-                    .ToListAsync()
+                                .OrderBy(x => x.ID)
+                                    .Skip(first).Take(pageSize)
+                                    .ToListAsync()
             };
         }
 

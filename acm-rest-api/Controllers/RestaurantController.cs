@@ -64,6 +64,35 @@ namespace acm_rest_api.Controllers
             return restaurant;
         }
 
+        // GET: api/Restaurant/5/RotYStats
+        [HttpGet("{id}/RotYStats")]
+        public async Task<ActionResult<RotYStats>> GetRestaurantRotYStats(int? id)
+        {
+            if (_context.Restaurant == null || _context.RotY == null || id == null)
+            {
+                return NotFound();
+            }
+
+            int year = DateTime.Now.Year;
+
+            bool isCurrentRotY = await _context.RotY
+                .Where(x => x.Year == year && x.RestaurantID == (int)id)
+                .AnyAsync();
+
+            List<int> formerYears = await _context.RotY
+                .Where(x => x.Year != year && x.RestaurantID == (int)id)
+                .Select(x => x.Year.GetValueOrDefault())
+                .ToListAsync();
+
+            return new RotYStats()
+            {
+                RestaurantID = (int)id,
+                CurrentYear = year,
+                IsCurrentRotY = isCurrentRotY,
+                FormerYears = formerYears,
+            };
+        }
+
         // PUT: api/Restaurant/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

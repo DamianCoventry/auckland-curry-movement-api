@@ -68,6 +68,12 @@ namespace acm_mobile_app.Services
 
         public string AccessToken { get { return _accessToken; } }
 
+        private struct ListItemsResult<T>
+        {
+            public List<T>? _items;
+            public HttpStatusCode _statusCode;
+        }
+
         private struct MultipleItemsResult<T>
         {
             public PageOfData<T>? _pageOfData;
@@ -181,6 +187,27 @@ namespace acm_mobile_app.Services
             return statusCode;
         }
 
+        private async Task<ListItemsResult<T>> ListInternal<T>(string path)
+        {
+            Uri uri = new($"{UriBase}{path}");
+
+            HttpResponseMessage response = await _client.GetAsync(uri)
+                ?? throw new Exception("Unable to request a list of items");
+
+            ListItemsResult<T> statusCode = new() { _statusCode = response.StatusCode };
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync()
+                    ?? throw new Exception("Unable to read returned data");
+
+                statusCode._items = JsonSerializer.Deserialize<List<T>>(content, _serializerOptions)
+                    ?? throw new Exception("Unable to parse returned data as JSON");
+            }
+
+            return statusCode;
+        }
+
         private async Task<T> GetItem<T>(string path, int ID)
         {
             await AcquireTokenIfRequired();
@@ -208,6 +235,27 @@ namespace acm_mobile_app.Services
         private async Task<SingleItemResult<T>> GetItemInternal<T>(string path, int ID)
         {
             Uri uri = new($"{UriBase}{path}/{ID}");
+
+            HttpResponseMessage response = await _client.GetAsync(uri)
+                ?? throw new Exception("Unable to request an item");
+
+            SingleItemResult<T> statusCode = new() { _statusCode = response.StatusCode };
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync()
+                    ?? throw new Exception("Unable to read returned data");
+
+                statusCode._item = JsonSerializer.Deserialize<T>(content, _serializerOptions)
+                    ?? throw new Exception("Unable to parse returned data as JSON");
+            }
+
+            return statusCode;
+        }
+
+        private async Task<SingleItemResult<T>> GetInternal<T>(string path)
+        {
+            Uri uri = new($"{UriBase}{path}");
 
             HttpResponseMessage response = await _client.GetAsync(uri)
                 ?? throw new Exception("Unable to request an item");
@@ -515,6 +563,30 @@ namespace acm_mobile_app.Services
             return GetItem<Restaurant>("Restaurant", ID);
         }
 
+        public async Task<RotYStats> GetRestaurantRotYStatsAsync(int ID)
+        {
+            await AcquireTokenIfRequired();
+
+            var item = await GetInternal<RotYStats>($"Restaurant/{ID}/RotYStats");
+            if (IsSuccessfulStatusCode(item._statusCode) && item._item != null)
+                return item._item;
+
+            if (item._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve an item ({item._statusCode})");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            item = await GetInternal<RotYStats>($"Restaurant/{ID}/RotYStats");
+            if (IsSuccessfulStatusCode(item._statusCode) && item._item != null)
+                return item._item;
+
+            if (item._statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception($"Unable to retrieve an item ({item._statusCode})");
+        }
+
         public Task<RotY> GetRotYAsync(int ID)
         {
             return GetItem<RotY>("RotY", ID);
@@ -634,6 +706,30 @@ namespace acm_mobile_app.Services
         public Task<PageOfData<Dinner>> ListDinnersAsync(int first, int count)
         {
             return ListItems<Dinner>("Dinner", first, count);
+        }
+
+        public async Task<List<AttendeeStats>?> ListDinnerAttendeeStatsAsync(int clubID, int dinnerID)
+        {
+            await AcquireTokenIfRequired();
+
+            var itemList = await ListInternal<AttendeeStats>($"Dinner/{dinnerID}/Attendees?clubID={clubID}");
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._items != null)
+                return itemList._items;
+
+            if (itemList._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            itemList = await ListInternal<AttendeeStats>($"Dinner/{dinnerID}/Attendees?clubID={clubID}");
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._items != null)
+                return itemList._items;
+
+            if (itemList._statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
         }
 
         public Task<PageOfData<Exemption>> ListExemptionsAsync(int first, int count)

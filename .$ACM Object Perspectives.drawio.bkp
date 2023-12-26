@@ -1,0 +1,85 @@
+<mxfile host="Electron" modified="2023-12-21T09:17:25.912Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="OKXjOUsqQY6dSw_lRe3-" version="21.2.8" type="device">
+  <diagram name="Page-1" id="4G9E3kZbgDNTA6c4ENk4">
+    <mxGraphModel dx="657" dy="729" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-17" value="Notification&#39;s perspective" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="440" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-2" value="Level&#39;s perspective" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="280" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-1" value="Level" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-3" value="It has no knowledge of any other entities" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="220" y="40" width="80" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-4" value="Notification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="60" y="300" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-5" value="Member" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="390" y="240" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-6" value="Club" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="270" y="280" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-7" value="Level" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-8" value="Restaurant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="330" y="240" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-9" value="Membership" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="270" y="320" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-10" value="Exemption" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="390" y="280" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-11" value="Reservation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="330" y="320" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-12" value="RotY" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="390" y="320" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-13" value="KotC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="270" y="360" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-14" value="Dinner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="330" y="360" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-15" value="Attendees" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="390" y="360" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-16" value="Violation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="330" y="280" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-22" value="Knows of all other types. &lt;br&gt;&lt;br&gt;Does not own the objects.&lt;br&gt;&lt;br&gt;Optional relationships." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="200" width="80" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-23" value="Member" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="580" y="300" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-24" value="" style="endArrow=none;html=1;rounded=0;dashed=1;dashPattern=1 4;" edge="1" parent="1" source="l_Q26ZJnkh8wglklpmC8-13" target="l_Q26ZJnkh8wglklpmC8-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="90" y="420" as="sourcePoint" />
+            <mxPoint x="140" y="370" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="120" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-25" value="1 to 1 relationship" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="100" y="350" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-28" value="Knows of the level type.&lt;br&gt;&lt;br&gt;Does not own level objects.&lt;br&gt;&lt;br&gt;Level object MUST exist." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="700" y="140" width="80" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="l_Q26ZJnkh8wglklpmC8-29" value="Level" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="750" y="400" width="120" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

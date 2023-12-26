@@ -212,7 +212,7 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
-        public bool IsNewKotC
+        public bool HaveKotC
         {
             get => _isNewKotC;
             set
@@ -220,7 +220,7 @@ namespace acm_mobile_app.ViewModels
                 if (_isNewKotC != value)
                 {
                     _isNewKotC = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsNewKotC)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HaveKotC)));
                 }
             }
         }

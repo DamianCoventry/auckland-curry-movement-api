@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:hi_fi_prototype.Views"
+             xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
+             x:Class="hi_fi_prototype.Views.ManageNotificationsPage"
+             x:DataType="views:ManageNotificationsPage"
+             Title="Manage Notifications">
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <HorizontalStackLayout FlowDirection="RightToLeft">
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
+            </HorizontalStackLayout>
+
+            <ListView x:Name="NotificationItems" ItemsSource="{Binding Notifications}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:NotificationViewModel">
+                        <ViewCell>
+                            <Grid ColumnDefinitions="Auto,*" Margin="8">
+                                <Image Source="notification.png" WidthRequest="32" HeightRequest="32" Margin="8"/>
+                                <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,Auto">
+                                    <Label Text="{Binding ShortDescription}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
+                                    <Label Grid.Row="1" Text="{Binding Date, StringFormat='{0:dd MMM yyyy, hh:mm:ss}'}"/>
+                                    <Label Grid.Row="2" Text="{Binding LongDescription}"/>
+                                    <FlexLayout Grid.Row="3">
+                                        <Image Source="attendee.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Attendee" IsVisible="{Binding HasAttendee}" Margin="2,8"/>
+                                        <Image Source="club.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Club" IsVisible="{Binding HasClub}" Margin="2,8"/>
+                                        <Image Source="dinner.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Dinner" IsVisible="{Binding HasDinner}" Margin="2,8"/>
+                                        <Image Source="exemption.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Exemption" IsVisible="{Binding HasExemption}" Margin="2,8"/>
+                                        <Image Source="kotc.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="KotC" IsVisible="{Binding HasKotC}" Margin="2,8"/>
+                                        <Image Source="level.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Level" IsVisible="{Binding HasLevel}" Margin="2,8"/>
+                                        <Image Source="member.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Member" IsVisible="{Binding HasMember}" Margin="2,8"/>
+                                        <Image Source="reservation.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Reservation" IsVisible="{Binding HasReservation}" Margin="2,8"/>
+                                        <Image Source="restaurant.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Restaurant" IsVisible="{Binding HasRestaurant}" Margin="2,8"/>
+                                        <Image Source="roty.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="RotY" IsVisible="{Binding HasRotY}" Margin="2,8"/>
+                                        <Image Source="violation.png" WidthRequest="32" HeightRequest="32"
+                                               ToolTipProperties.Text="Violation" IsVisible="{Binding HasViolation}" Margin="2,8"/>
+                                    </FlexLayout>
+                                </Grid>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Button x:Name="LoadMoreButton" Text="Load More" Margin="100,8" IsVisible="False" Clicked="LoadMoreButton_Clicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="hi_fi_prototype.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:hi_fi_prototype"
+    xmlns:views="clr-namespace:hi_fi_prototype.Views"
+    Title="hi_fi_prototype">
+
+    <FlyoutItem Title="Sign In" Icon="sign_in.png" FlyoutItemIsVisible="False">
+        <Tab>
+            <ShellContent Route="sign_in" ContentTemplate="{DataTemplate views:SignInPage}"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Home" Icon="home.png">
+        <Tab>
+            <ShellContent Route="membership_home" ContentTemplate="{DataTemplate views:MembershipHomePage}"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Clubs" Icon="club.png">
+        <Tab>
+            <ShellContent Route="manage_clubs" ContentTemplate="{DataTemplate views:ManageClubsPage}"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Levels" Icon="level.png">
+        <Tab>
+            <ShellContent Route="manage_levels" ContentTemplate="{DataTemplate views:ManageLevelsPage}"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Restaurants" Icon="restaurant.png">
+        <Tab>
+            <ShellContent Route="manage_restaurants" ContentTemplate="{DataTemplate views:ManageRestaurantsPage}"/>
+        </Tab>
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Sign Out" Icon="sign_out.png">
+        <Tab>
+            <ShellContent Route="sign_out" ContentTemplate="{DataTemplate views:SignOutPage}"/>
+        </Tab>
+    </FlyoutItem>
+
+</Shell>

@@ -26,6 +26,7 @@ namespace acm_mobile_app.Services
         Task<bool> DeleteClubAsync(int ID);
 
         Task<PageOfData<Dinner>> ListDinnersAsync(int first, int count);
+        Task<List<AttendeeStats>?> ListDinnerAttendeeStatsAsync(int clubID, int dinnerID);
         Task<Dinner> GetDinnerAsync(int ID);
         Task<Dinner> AddDinnerAsync(Dinner x);
         Task<bool> UpdateDinnerAsync(Dinner x);
@@ -69,6 +70,7 @@ namespace acm_mobile_app.Services
 
         Task<PageOfData<Restaurant>> ListRestaurantsAsync(int first, int count);
         Task<Restaurant> GetRestaurantAsync(int ID);
+        Task<RotYStats> GetRestaurantRotYStatsAsync(int ID);
         Task<Restaurant> AddRestaurantAsync(Restaurant x);
         Task<bool> UpdateRestaurantAsync(Restaurant x);
         Task<bool> DeleteRestaurantAsync(int ID);

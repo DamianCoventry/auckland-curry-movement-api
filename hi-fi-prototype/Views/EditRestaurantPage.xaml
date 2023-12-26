@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:views="clr-namespace:hi_fi_prototype.Views"
+             xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
+             x:Class="hi_fi_prototype.Views.EditRestaurantPage"
+             x:DataType="viewmodels:RestaurantViewModel"
+             Title="Edit Restaurant">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red"/>
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Black"/>
+        </Style>
+    </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
+
+                <Label Text="Name" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
+                <Entry x:Name="RestaurantName" Grid.Column="1" MaxLength="50"
+                       Placeholder="Please enter a name" Text="{Binding Name}" Margin="8"/>
+                
+                <Label Grid.Row="1" Text="Street Address" FontAttributes="Bold" TextColor="CornflowerBlue" Margin="8"/>
+                <Entry Grid.Row="1" x:Name="RestaurantStreetAddress" Grid.Column="1" MaxLength="50"
+                       Placeholder="Please enter a street address" Text="{Binding StreetAddress}" Margin="8"/>
+                
+                <Label Grid.Row="2" Text="Suburb" FontAttributes="Bold" TextColor="CornflowerBlue" Margin="8"/>
+                <Entry Grid.Row="2" x:Name="RestaurantSuburb" Grid.Column="1" MaxLength="50"
+                       Placeholder="Please enter a suburb" Text="{Binding Suburb}" Margin="8"/>
+                
+                <Label Grid.Row="3" Text="Phone Number" FontAttributes="Bold" TextColor="CornflowerBlue" Margin="8"/>
+                <Entry Grid.Row="3" x:Name="RestaurantPhoneNumber" Grid.Column="1" MaxLength="50"
+                       Placeholder="Please enter a phone number" Text="{Binding PhoneNumber}" Margin="8"/>
+
+            </Grid>
+
+            <HorizontalStackLayout FlowDirection="RightToLeft">
+                <ImageButton x:Name="DiscardChanges" Source="no.png" WidthRequest="32"
+                             Margin="8" ToolTipProperties.Text="Discard Changes" Clicked="DiscardChanges_Clicked"/>
+                <ImageButton x:Name="AcceptChanges" Source="yes.png" WidthRequest="32"
+                             Margin="8" ToolTipProperties.Text="Accept Changes" Clicked="AcceptChanges_Clicked"/>
+                <ActivityIndicator x:Name="SavingIndicator" WidthRequest="32" IsRunning="False"
+                                   IsVisible="False" ToolTipProperties.Text="Saving Changes"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

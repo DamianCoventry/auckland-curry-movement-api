@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:hi_fi_prototype.Views"
+             xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
+             x:Class="hi_fi_prototype.Views.ManageClubsPage"
+             x:DataType="views:ManageClubsPage"
+             Title="Manage Clubs">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
+    </ContentPage.ToolbarItems>
+    <ScrollView>
+        <VerticalStackLayout>
+            
+            <HorizontalStackLayout FlowDirection="RightToLeft">
+                <ImageButton x:Name="AddNewClub" Source="add.png" WidthRequest="32" Margin="8"
+                            ToolTipProperties.Text="Add New Club" Clicked="AddNewClub_Clicked"/>
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
+            </HorizontalStackLayout>
+            
+            <ListView x:Name="ClubItems" ItemsSource="{Binding Clubs}" ItemTapped="ClubItems_ItemTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:ClubViewModel">
+                        <ViewCell>
+                            <Grid ColumnDefinitions="Auto,*">
+                                <Image Grid.Column="0" Source="club.png" WidthRequest="32" Margin="8"/>
+                                <Grid Grid.Column="1" RowDefinitions="Auto,*">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
+                                    <Label Grid.Row="1" Text="Club currently has 23 members."/>
+                                </Grid>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Button x:Name="LoadMoreButton" Text="Load More" Margin="100,8" IsVisible="False" Clicked="LoadMoreButton_Clicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

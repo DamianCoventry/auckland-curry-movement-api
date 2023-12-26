@@ -13,12 +13,24 @@ namespace acm_rest_api
             {
                 var builder = WebApplication.CreateBuilder(args);
                 builder.Logging.ClearProviders();
-                builder.Logging
-                    .SetMinimumLevel(LogLevel.Warning)
-                    .AddApplicationInsights(tc => { tc.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]; }, lo => { })
-                    .AddAzureWebAppDiagnostics()
-                    .AddDebug()
-                    .AddConsole();
+
+                if (builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"] == null)
+                {
+                    builder.Logging
+                        .SetMinimumLevel(LogLevel.Warning)
+                        .AddAzureWebAppDiagnostics()
+                        .AddDebug()
+                        .AddConsole();
+                }
+                else
+                {
+                    builder.Logging
+                        .SetMinimumLevel(LogLevel.Warning)
+                        .AddApplicationInsights(tc => { tc.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]; }, lo => { })
+                        .AddAzureWebAppDiagnostics()
+                        .AddDebug()
+                        .AddConsole();
+                }
 
                 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));

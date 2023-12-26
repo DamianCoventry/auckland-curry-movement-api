@@ -64,6 +64,8 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
+        public bool HaveCostPerPerson { get => _costPerPerson != null; }
+
         public double? CostPerPerson
         {
             get => _costPerPerson;
@@ -77,6 +79,8 @@ namespace acm_mobile_app.ViewModels
             }
         }
 
+        public bool HaveNumBeersConsumed { get => _numBeersConsumed != null; }
+
         public int? NumBeersConsumed
         {
             get => _numBeersConsumed;
@@ -89,6 +93,8 @@ namespace acm_mobile_app.ViewModels
                 }
             }
         }
+
+        public bool HaveKotC { get => _kotC != null; }
 
         public KotC? KotC
         {

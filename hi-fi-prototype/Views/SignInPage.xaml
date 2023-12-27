@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="hi_fi_prototype.Views.SignInPage"
              Shell.FlyoutBehavior="Disabled"
-             Title="Sign In">
+             Title="Sign In"
+             BackgroundColor="#f2fbf8">
     <ScrollView>
         <VerticalStackLayout>
+            <Image Source="acm_logo_hi_res.png" HorizontalOptions="Center" Margin="16"/>
             <Image Source="sign_in.png" WidthRequest="64" HorizontalOptions="Center" Margin="16"/>
             <Grid ColumnDefinitions="Auto,Auto" HorizontalOptions="Center">
                 <CheckBox x:Name="IsAuditor" IsChecked="True" VerticalOptions="Center"/>

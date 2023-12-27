@@ -15,7 +15,7 @@
 
     <FlyoutItem Title="Home" Icon="home.png">
         <Tab>
-            <ShellContent Route="membership_home" ContentTemplate="{DataTemplate views:MembershipHomePage}"/>
+            <ShellContent Route="manage_dinners" ContentTemplate="{DataTemplate views:ManageDinnersPage}"/>
         </Tab>
     </FlyoutItem>
 

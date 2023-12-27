@@ -6,65 +6,39 @@ namespace hi_fi_prototype.ViewModels
 {
     public class NotificationViewModel : INotifyPropertyChanged
     {
-        static public NotificationViewModel FromModel(Notification model)
+        public static NotificationViewModel? FromModel(Notification? model)
         {
+            if (model == null) return null;
             return new NotificationViewModel()
             {
-                _id = model.ID,
-                _date = model.Date,
-                _shortDescription = model.ShortDescription,
-                _longDescription = model.LongDescription,
-                _attendeeID = model.AttendeeID,
-                // TODO: _attendee = Attendee.FromModel(model.Attendee),
-                _clubID = model.ClubID,
-                // TODO: _club = Club.FromModel(model.Club),
-                _dinnerID = model.DinnerID,
-                // TODO: _dinner = Dinner.FromModel(model.Dinner),
-                _exemptionID = model.ExemptionID,
-                // TODO: _exemption = Exemption.FromModel(model.Exemption),
-                _kotCID = model.KotCID,
-                // TODO: _kotC = KotC.FromModel(model.KotC),
-                _levelID = model.LevelID,
-                // TODO: _level = Level.FromModel(model.Level),
-                _memberID = model.MemberID,
-                // TODO: _member = Member.FromModel(model.Member),
-                _reservationID = model.ReservationID,
-                // TODO: _reservation = Reservation.FromModel(model.Reservation),
-                _restaurantID = model.RestaurantID,
-                // TODO: _restaurant = Restaurant.FromModel(model.Restaurant),
-                _rotYYear = model.RotYYear,
-                // TODO: _rotY = RotY.FromModel(model.RotY),
-                _violationID = model.ViolationID,
-                // TODO: _violation = Violation.FromModel(model.Violation),
+                ID = model.ID,
+                Date = model.Date,
+                ShortDescription = model.ShortDescription,
+                LongDescription = model.LongDescription,
+                AttendeeID = model.AttendeeID,
+                Attendee = AttendeeViewModel.FromModel(model.Attendee),
+                ClubID = model.ClubID,
+                Club = ClubViewModel.FromModel(model.Club),
+                DinnerID = model.DinnerID,
+                Dinner = DinnerViewModel.FromModel(model.Dinner),
+                ExemptionID = model.ExemptionID,
+                Exemption = ExemptionViewModel.FromModel(model.Exemption),
+                KotCID = model.KotCID,
+                KotC = KotCViewModel.FromModel(model.KotC),
+                LevelID = model.LevelID,
+                Level = LevelViewModel.FromModel(model.Level),
+                MemberID = model.MemberID,
+                Member = MemberViewModel.FromModel(model.Member),
+                ReservationID = model.ReservationID,
+                Reservation = ReservationViewModel.FromModel(model.Reservation),
+                RestaurantID = model.RestaurantID,
+                Restaurant = RestaurantViewModel.FromModel(model.Restaurant),
+                RotYYear = model.RotYYear,
+                RotY = RotYViewModel.FromModel(model.RotY),
+                ViolationID = model.ViolationID,
+                Violation = ViolationViewModel.FromModel(model.Violation),
             };
         }
-
-        private int? _id;
-        private DateTime _date;
-        private string _shortDescription = string.Empty;
-        private string _longDescription = string.Empty;
-        private int? _attendeeID;
-        private Attendee? _attendee;
-        private int? _clubID;
-        private Club? _club;
-        private int? _dinnerID;
-        private Dinner? _dinner;
-        private int? _exemptionID;
-        private Exemption? _exemption;
-        private int? _kotCID;
-        private KotC? _kotC;
-        private int? _levelID;
-        private Level? _level;
-        private int? _memberID;
-        private Member? _member;
-        private int? _reservationID;
-        private Reservation? _reservation;
-        private int? _restaurantID;
-        private Restaurant? _restaurant;
-        private int? _rotYYear;
-        private RotY? _rotY;
-        private int? _violationID;
-        private Violation? _violation;
 
         private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
@@ -82,6 +56,33 @@ namespace hi_fi_prototype.ViewModels
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private int? _id;
+        private DateTime _date;
+        private string _shortDescription = string.Empty;
+        private string _longDescription = string.Empty;
+        private int? _attendeeID;
+        private AttendeeViewModel? _attendee;
+        private int? _clubID;
+        private ClubViewModel? _club;
+        private int? _dinnerID;
+        private DinnerViewModel? _dinner;
+        private int? _exemptionID;
+        private ExemptionViewModel? _exemption;
+        private int? _kotCID;
+        private KotCViewModel? _kotC;
+        private int? _levelID;
+        private LevelViewModel? _level;
+        private int? _memberID;
+        private MemberViewModel? _member;
+        private int? _reservationID;
+        private ReservationViewModel? _reservation;
+        private int? _restaurantID;
+        private RestaurantViewModel? _restaurant;
+        private int? _rotYYear;
+        private RotYViewModel? _rotY;
+        private int? _violationID;
+        private ViolationViewModel? _violation;
 
         public int? ID
         {
@@ -107,25 +108,15 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _longDescription, value); }
         }
 
-        public bool HasAttendee { get { return _attendee != null; } }
-        public bool HasClub { get { return _club != null; } }
-        public bool HasDinner { get { return _dinner != null; } }
-        public bool HasExemption { get { return _exemption != null; } }
-        public bool HasKotC { get { return _kotC != null; } }
-        public bool HasLevel { get { return _level != null; } }
-        public bool HasMember { get { return _member != null; } }
-        public bool HasReservation { get { return _reservation != null; } }
-        public bool HasRestaurant { get { return _restaurant != null; } }
-        public bool HasRotY { get { return _rotY != null; } }
-        public bool HasViolation { get { return _violation != null; } }
-
         public int? AttendeeID
         {
             get { return _attendeeID; }
             set { SetProperty(ref _attendeeID, value); }
         }
 
-        public Attendee? Attendee
+        public bool HasAttendee { get => Attendee != null; }
+
+        public AttendeeViewModel? Attendee
         {
             get { return _attendee; }
             set { SetProperty(ref _attendee, value); }
@@ -137,7 +128,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _clubID, value); }
         }
 
-        public Club? Club
+        public bool HasClub { get => Club != null; }
+
+        public ClubViewModel? Club
         {
             get { return _club; }
             set { SetProperty(ref _club, value); }
@@ -149,7 +142,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _dinnerID, value); }
         }
 
-        public Dinner? Dinner
+        public bool HasDinner { get => Dinner != null; }
+
+        public DinnerViewModel? Dinner
         {
             get { return _dinner; }
             set { SetProperty(ref _dinner, value); }
@@ -161,7 +156,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _exemptionID, value); }
         }
 
-        public Exemption? Exemption
+        public bool HasExemption { get => Exemption != null; }
+
+        public ExemptionViewModel? Exemption
         {
             get { return _exemption; }
             set { SetProperty(ref _exemption, value); }
@@ -173,7 +170,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _kotCID, value); }
         }
 
-        public KotC? KotC
+        public bool HasKotC { get => KotC != null; }
+
+        public KotCViewModel? KotC
         {
             get { return _kotC; }
             set { SetProperty(ref _kotC, value); }
@@ -185,7 +184,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _levelID, value); }
         }
 
-        public Level? Level
+        public bool HasLevel { get => Level != null; }
+
+        public LevelViewModel? Level
         {
             get { return _level; }
             set { SetProperty(ref _level, value); }
@@ -197,7 +198,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _memberID, value); }
         }
 
-        public Member? Member
+        public bool HasMember { get => Member != null; }
+
+        public MemberViewModel? Member
         {
             get { return _member; }
             set { SetProperty(ref _member, value); }
@@ -209,7 +212,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _reservationID, value); }
         }
 
-        public Reservation? Reservation
+        public bool HasReservation { get => Reservation != null; }
+
+        public ReservationViewModel? Reservation
         {
             get { return _reservation; }
             set { SetProperty(ref _reservation, value); }
@@ -221,7 +226,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _restaurantID, value); }
         }
 
-        public Restaurant? Restaurant
+        public bool HasRestaurant { get => Restaurant != null; }
+
+        public RestaurantViewModel? Restaurant
         {
             get { return _restaurant; }
             set { SetProperty(ref _restaurant, value); }
@@ -233,7 +240,9 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _rotYYear, value); }
         }
 
-        public RotY? RotY
+        public bool HasRotY { get => RotY != null; }
+
+        public RotYViewModel? RotY
         {
             get { return _rotY; }
             set { SetProperty(ref _rotY, value); }
@@ -245,10 +254,13 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _violationID, value); }
         }
 
-        public Violation? Violation
+        public bool HasViolation { get => Violation != null; }
+
+        public ViolationViewModel? Violation
         {
             get { return _violation; }
             set { SetProperty(ref _violation, value); }
         }
+
     }
 }

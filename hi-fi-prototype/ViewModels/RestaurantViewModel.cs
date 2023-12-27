@@ -6,8 +6,9 @@ namespace hi_fi_prototype.ViewModels
 {
     public class RestaurantViewModel : INotifyPropertyChanged
     {
-        public static RestaurantViewModel FromModel(Restaurant model)
+        public static RestaurantViewModel? FromModel(Restaurant? model)
         {
+            if (model == null) return null;
             return new RestaurantViewModel()
             {
                 ID = model.ID,
@@ -19,14 +20,6 @@ namespace hi_fi_prototype.ViewModels
                 ArchiveReason = model.ArchiveReason,
             };
         }
-
-        private int? _id;
-        private string _name = string.Empty;
-        private string? _streetAddress;
-        private string _suburb = string.Empty;
-        private string? _phoneNumber;
-        private bool _isArchived;
-        private string? _archiveReason;
 
         private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
@@ -44,6 +37,14 @@ namespace hi_fi_prototype.ViewModels
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private int? _id;
+        private string _name = string.Empty;
+        private string? _streetAddress;
+        private string _suburb = string.Empty;
+        private string? _phoneNumber;
+        private bool _isArchived;
+        private string? _archiveReason;
 
         public int? ID
         {
@@ -86,5 +87,6 @@ namespace hi_fi_prototype.ViewModels
             get { return _archiveReason; }
             set { SetProperty(ref _archiveReason, value); }
         }
+
     }
 }

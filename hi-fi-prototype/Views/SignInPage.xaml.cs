@@ -12,6 +12,6 @@ public partial class SignInPage : ContentPage
         if (IsAuditor.IsChecked)
             await Shell.Current.GoToAsync("//manage_clubs");
         else
-            await Shell.Current.GoToAsync("//membership_home");
+            await Shell.Current.GoToAsync("//manage_dinners");
     }
 }

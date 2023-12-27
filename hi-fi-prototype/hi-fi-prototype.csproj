@@ -67,9 +67,6 @@
 	  <Compile Update="Views\ManageClubsPage.xaml.cs">
 	    <DependentUpon>ManageClubsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MembershipHomePage.xaml.cs">
-	    <DependentUpon>MembershipHomePage.xaml</DependentUpon>
-	  </Compile>
 	  <Compile Update="Views\SelectSingleMemberPage.xaml.cs">
 	    <DependentUpon>SelectSingleMemberPage.xaml</DependentUpon>
 	  </Compile>
@@ -103,6 +100,9 @@
 	  <MauiXaml Update="Views\ManageClubsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ManageDinnersPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ManageLevelsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -110,9 +110,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ManageRestaurantsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\MembershipHomePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SelectMultipleMembersPage.xaml">

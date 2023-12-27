@@ -5,7 +5,8 @@
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.AddClubPage"
              x:DataType="viewmodels:ClubViewModel"
-             Title="Add Club">
+             Title="Add Club"
+             BackgroundColor="#f2fbf8">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>

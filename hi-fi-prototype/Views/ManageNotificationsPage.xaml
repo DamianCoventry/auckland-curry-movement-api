@@ -5,7 +5,8 @@
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.ManageNotificationsPage"
              x:DataType="views:ManageNotificationsPage"
-             Title="Manage Notifications">
+             Title="Manage Notifications"
+             BackgroundColor="#f2fbf8">
     <ScrollView>
         <VerticalStackLayout>
 
@@ -19,33 +20,33 @@
                         <ViewCell>
                             <Grid ColumnDefinitions="Auto,*" Margin="8">
                                 <Image Source="notification.png" WidthRequest="32" HeightRequest="32" Margin="8"/>
-                                <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,Auto">
+                                <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,*">
                                     <Label Text="{Binding ShortDescription}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
                                     <Label Grid.Row="1" Text="{Binding Date, StringFormat='{0:dd MMM yyyy, hh:mm:ss}'}"/>
                                     <Label Grid.Row="2" Text="{Binding LongDescription}"/>
-                                    <FlexLayout Grid.Row="3">
+                                    <FlexLayout Grid.Row="3" Wrap="Wrap" Margin="0,8">
                                         <Image Source="attendee.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Attendee" IsVisible="{Binding HasAttendee}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Attendee" IsVisible="{Binding HasAttendee}" Margin="2"/>
                                         <Image Source="club.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Club" IsVisible="{Binding HasClub}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Club" IsVisible="{Binding HasClub}" Margin="2"/>
                                         <Image Source="dinner.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Dinner" IsVisible="{Binding HasDinner}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Dinner" IsVisible="{Binding HasDinner}" Margin="2"/>
                                         <Image Source="exemption.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Exemption" IsVisible="{Binding HasExemption}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Exemption" IsVisible="{Binding HasExemption}" Margin="2"/>
                                         <Image Source="kotc.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="KotC" IsVisible="{Binding HasKotC}" Margin="2,8"/>
+                                               ToolTipProperties.Text="KotC" IsVisible="{Binding HasKotC}" Margin="2"/>
                                         <Image Source="level.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Level" IsVisible="{Binding HasLevel}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Level" IsVisible="{Binding HasLevel}" Margin="2"/>
                                         <Image Source="member.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Member" IsVisible="{Binding HasMember}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Member" IsVisible="{Binding HasMember}" Margin="2"/>
                                         <Image Source="reservation.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Reservation" IsVisible="{Binding HasReservation}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Reservation" IsVisible="{Binding HasReservation}" Margin="2"/>
                                         <Image Source="restaurant.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Restaurant" IsVisible="{Binding HasRestaurant}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Restaurant" IsVisible="{Binding HasRestaurant}" Margin="2"/>
                                         <Image Source="roty.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="RotY" IsVisible="{Binding HasRotY}" Margin="2,8"/>
+                                               ToolTipProperties.Text="RotY" IsVisible="{Binding HasRotY}" Margin="2"/>
                                         <Image Source="violation.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Violation" IsVisible="{Binding HasViolation}" Margin="2,8"/>
+                                               ToolTipProperties.Text="Violation" IsVisible="{Binding HasViolation}" Margin="2"/>
                                     </FlexLayout>
                                 </Grid>
                             </Grid>

@@ -83,11 +83,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Totam rem aperiam",
                         LongDescription = "At vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti.",
                         AttendeeID = 1,
-                        Attendee = new acm_models.Attendee(),
+                        Attendee = new AttendeeViewModel(), // TODO
                         ExemptionID = 1,
-                        Exemption = new acm_models.Exemption(),
+                        Exemption = new ExemptionViewModel(), // TODO
                         LevelID = 1,
-                        Level = new acm_models.Level(),
+                        Level = new LevelViewModel(), // TODO
                     },
                     new()
                     {
@@ -96,9 +96,9 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Doloremque laudantium",
                         LongDescription = "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                         ClubID = 1,
-                        Club = new acm_models.Club(),
+                        Club = new ClubViewModel(), // TODO
                         LevelID = 1,
-                        Level = new acm_models.Level(),
+                        Level = new LevelViewModel(), // TODO
                     },
                     new()
                     {
@@ -107,11 +107,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Error sit voluptatem accusantium",
                         LongDescription = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
                         ReservationID = 1,
-                        Reservation = new acm_models.Reservation(),
+                        Reservation = new ReservationViewModel(), // TODO
                         DinnerID = 1,
-                        Dinner = new acm_models.Dinner(),
+                        Dinner = new DinnerViewModel(), // TODO
                         RestaurantID = 1,
-                        Restaurant = new acm_models.Restaurant(),
+                        Restaurant = new RestaurantViewModel(), // TODO
                     },
                     new()
                     {
@@ -120,11 +120,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Unde omnis iste natus",
                         LongDescription = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                         ExemptionID = 1,
-                        Exemption = new acm_models.Exemption(),
+                        Exemption = new ExemptionViewModel(), // TODO
                         RestaurantID = 1,
-                        Restaurant = new acm_models.Restaurant(),
+                        Restaurant = new RestaurantViewModel(), // TODO
                         LevelID = 1,
-                        Level = new acm_models.Level(),
+                        Level = new LevelViewModel(), // TODO
                     },
                     new()
                     {
@@ -132,12 +132,28 @@ namespace hi_fi_prototype.Views
                         Date = DateTime.Now,
                         ShortDescription = "Sed ut perspiciatis",
                         LongDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                        RotYYear = 1,
-                        RotY = new acm_models.RotY(),
-                        KotCID = 1,
-                        KotC = new acm_models.KotC(),
+                        AttendeeID = 1,
+                        Attendee = new AttendeeViewModel(), // TODO
                         ClubID = 1,
-                        Club = new acm_models.Club(),
+                        Club = new ClubViewModel(), // TODO
+                        DinnerID = 1,
+                        Dinner = new DinnerViewModel(), // TODO
+                        ExemptionID = 1,
+                        Exemption = new ExemptionViewModel(), // TODO
+                        KotCID = 1,
+                        KotC = new KotCViewModel(), // TODO
+                        LevelID = 1,
+                        Level = new LevelViewModel(), // TODO
+                        MemberID = 1,
+                        Member = new MemberViewModel(), // TODO
+                        ReservationID = 1,
+                        Reservation = new ReservationViewModel(), // TODO
+                        RestaurantID = 1,
+                        Restaurant = new RestaurantViewModel(), // TODO
+                        RotYYear = 1,
+                        RotY = new RotYViewModel(), // TODO
+                        ViolationID = 1,
+                        Violation = new ViolationViewModel(), // TODO
                     },
                     new()
                     {
@@ -146,11 +162,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Totam rem aperiam",
                         LongDescription = "At vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti.",
                         ReservationID = 1,
-                        Reservation = new acm_models.Reservation(),
+                        Reservation = new ReservationViewModel(), // TODO
                         ExemptionID = 1,
-                        Exemption = new acm_models.Exemption(),
+                        Exemption = new ExemptionViewModel(), // TODO
                         LevelID = 1,
-                        Level = new acm_models.Level(),
+                        Level = new LevelViewModel(), // TODO
                     },
                     new()
                     {
@@ -159,9 +175,9 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Doloremque laudantium",
                         LongDescription = "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                         KotCID = 1,
-                        KotC = new acm_models.KotC(),
+                        KotC = new KotCViewModel(), // TODO
                         MemberID = 1,
-                        Member = new acm_models.Member(),
+                        Member = new MemberViewModel(), // TODO
                     },
                     new()
                     {
@@ -170,9 +186,9 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Error sit voluptatem accusantium",
                         LongDescription = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
                         ExemptionID = 1,
-                        Exemption = new acm_models.Exemption(),
+                        Exemption = new ExemptionViewModel(), // TODO
                         ReservationID = 1,
-                        Reservation = new acm_models.Reservation(),
+                        Reservation = new ReservationViewModel(), // TODO
                     },
                     new()
                     {
@@ -181,11 +197,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Unde omnis iste natus",
                         LongDescription = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                         ReservationID = 1,
-                        Reservation = new acm_models.Reservation(),
+                        Reservation = new ReservationViewModel(), // TODO
                         RestaurantID = 1,
-                        Restaurant = new acm_models.Restaurant(),
+                        Restaurant = new RestaurantViewModel(), // TODO
                         ClubID = 1,
-                        Club = new acm_models.Club(),
+                        Club = new ClubViewModel(), // TODO
                     },
                     new()
                     {
@@ -194,11 +210,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Sed ut perspiciatis",
                         LongDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                         ReservationID = 1,
-                        Reservation = new acm_models.Reservation(),
+                        Reservation = new ReservationViewModel(), // TODO
                         RotYYear = 1,
-                        RotY = new acm_models.RotY(),
+                        RotY = new RotYViewModel(), // TODO
                         KotCID = 1,
-                        KotC = new acm_models.KotC(),
+                        KotC = new KotCViewModel(), // TODO
                     },
                     new()
                     {
@@ -207,9 +223,9 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Totam rem aperiam",
                         LongDescription = "At vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti.",
                         ViolationID = 1,
-                        Violation = new acm_models.Violation(),
+                        Violation = new ViolationViewModel(), // TODO
                         AttendeeID = 1,
-                        Attendee = new acm_models.Attendee(),
+                        Attendee = new AttendeeViewModel(), // TODO
                     },
                     new()
                     {
@@ -218,9 +234,9 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Doloremque laudantium",
                         LongDescription = "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                         AttendeeID = 1,
-                        Attendee = new acm_models.Attendee(),
+                        Attendee = new AttendeeViewModel(), // TODO
                         RotYYear = 1,
-                        RotY = new acm_models.RotY(),
+                        RotY = new RotYViewModel(), // TODO
                     },
                     new()
                     {
@@ -229,11 +245,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Error sit voluptatem accusantium",
                         LongDescription = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
                         ClubID = 1,
-                        Club = new acm_models.Club(),
+                        Club = new ClubViewModel(), // TODO
                         ReservationID = 1,
-                        Reservation = new acm_models.Reservation(),
+                        Reservation = new ReservationViewModel(), // TODO
                         KotCID = 1,
-                        KotC = new acm_models.KotC(),
+                        KotC = new KotCViewModel(), // TODO
                     },
                     new()
                     {
@@ -242,9 +258,9 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Unde omnis iste natus",
                         LongDescription = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                         DinnerID = 1,
-                        Dinner = new acm_models.Dinner(),
+                        Dinner = new DinnerViewModel(), // TODO
                         KotCID = 1,
-                        KotC = new acm_models.KotC(),
+                        KotC = new KotCViewModel(), // TODO
                     },
                     new()
                     {
@@ -253,11 +269,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Sed ut perspiciatis",
                         LongDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                         ExemptionID = 1,
-                        Exemption = new acm_models.Exemption(),
+                        Exemption = new ExemptionViewModel(), // TODO
                         RotYYear = 1,
-                        RotY = new acm_models.RotY(),
+                        RotY = new RotYViewModel(), // TODO
                         ReservationID = 1,
-                        Reservation = new acm_models.Reservation(),
+                        Reservation = new ReservationViewModel(), // TODO
                     },
                     new()
                     {
@@ -266,7 +282,7 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Totam rem aperiam",
                         LongDescription = "At vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti.",
                         LevelID = 1,
-                        Level = new acm_models.Level(),
+                        Level = new LevelViewModel(), // TODO
                     },
                     new()
                     {
@@ -275,11 +291,11 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Doloremque laudantium",
                         LongDescription = "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                         KotCID = 1,
-                        KotC = new acm_models.KotC(),
+                        KotC = new KotCViewModel(), // TODO
                         ReservationID = 1,
-                        Reservation = new acm_models.Reservation(),
+                        Reservation = new ReservationViewModel(), // TODO
                         RestaurantID = 1,
-                        Restaurant = new acm_models.Restaurant(),
+                        Restaurant = new RestaurantViewModel(), // TODO
                     },
                     new()
                     {
@@ -288,9 +304,9 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Error sit voluptatem accusantium",
                         LongDescription = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
                         RestaurantID = 1,
-                        Restaurant = new acm_models.Restaurant(),
+                        Restaurant = new RestaurantViewModel(), // TODO
                         ClubID = 1,
-                        Club = new acm_models.Club(),
+                        Club = new ClubViewModel(), // TODO
                     },
                     new()
                     {
@@ -299,9 +315,9 @@ namespace hi_fi_prototype.Views
                         ShortDescription = "Unde omnis iste natus",
                         LongDescription = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                         RotYYear = 1,
-                        RotY = new acm_models.RotY(),
+                        RotY = new RotYViewModel(), // TODO
                         AttendeeID = 1,
-                        Attendee = new acm_models.Attendee(),
+                        Attendee = new AttendeeViewModel(), // TODO
                     },
                 };
 

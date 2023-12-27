@@ -7,8 +7,9 @@ namespace hi_fi_prototype.ViewModels
 {
     public class ClubViewModel : INotifyPropertyChanged
     {
-        public static ClubViewModel FromModel(Club model)
+        public static ClubViewModel? FromModel(Club? model)
         {
+            if (model == null) return null;
             return new ClubViewModel()
             {
                 ID = model.ID,
@@ -17,12 +18,6 @@ namespace hi_fi_prototype.ViewModels
                 ArchiveReason = model.ArchiveReason,
             };
         }
-
-        private int? _id = null;
-        private string _name = string.Empty;
-        private bool _isArchived;
-        private string? _archiveReason = null;
-        private ObservableCollection<MemberViewModel> _foundingFathers = [];
 
         private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
@@ -40,6 +35,12 @@ namespace hi_fi_prototype.ViewModels
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private int? _id;
+        private string _name = string.Empty;
+        private bool _isArchived;
+        private string? _archiveReason;
+        private ObservableCollection<MemberViewModel> _foundingFathers = [];
 
         public int? ID
         {
@@ -70,5 +71,6 @@ namespace hi_fi_prototype.ViewModels
             get { return _foundingFathers; }
             set { SetProperty(ref _foundingFathers, value); }
         }
+
     }
 }

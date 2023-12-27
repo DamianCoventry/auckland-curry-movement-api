@@ -6,23 +6,19 @@ namespace hi_fi_prototype.ViewModels
 {
     public class LevelViewModel : INotifyPropertyChanged
     {
-        public static ClubViewModel FromModel(Club model)
+        public static LevelViewModel? FromModel(Level? model)
         {
-            return new ClubViewModel()
+            if (model == null) return null;
+            return new LevelViewModel()
             {
                 ID = model.ID,
+                RequiredAttendances = model.RequiredAttendances,
                 Name = model.Name,
+                Description = model.Description,
                 IsArchived = model.IsArchived,
                 ArchiveReason = model.ArchiveReason,
             };
         }
-
-        private int? _id;
-        private int _requiredAttendances;
-        private string _name = string.Empty;
-        private string _description = string.Empty;
-        private bool _isArchived;
-        private string? _archiveReason;
 
         private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
@@ -40,6 +36,13 @@ namespace hi_fi_prototype.ViewModels
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private int? _id;
+        private int _requiredAttendances;
+        private string _name = string.Empty;
+        private string _description = string.Empty;
+        private bool _isArchived;
+        private string? _archiveReason;
 
         public int? ID
         {
@@ -76,5 +79,6 @@ namespace hi_fi_prototype.ViewModels
             get { return _archiveReason; }
             set { SetProperty(ref _archiveReason, value); }
         }
+
     }
 }

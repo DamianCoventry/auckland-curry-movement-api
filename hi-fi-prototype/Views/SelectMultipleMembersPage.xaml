@@ -6,7 +6,7 @@
              x:Class="hi_fi_prototype.Views.SelectMultipleMembersPage"
              x:DataType="views:SelectMultipleMembersPage"
              Title="Select Multiple Members"
-             BackgroundColor="#f2fbf8">
+             >
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
@@ -17,7 +17,7 @@
                 <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
             </HorizontalStackLayout>
 
-            <ListView x:Name="MemberItems" ItemsSource="{Binding Members}">
+            <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:SelectedMemberViewModel">
                         <ViewCell>

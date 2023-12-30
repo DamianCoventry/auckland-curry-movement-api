@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Alerts;
+using hi_fi_prototype.Services;
 using hi_fi_prototype.ViewModels;
 using System.Collections.ObjectModel;
 
@@ -7,12 +8,11 @@ namespace hi_fi_prototype.Views
     [QueryProperty(nameof(Club), "Club")]
     public partial class EditClubPage : ContentPage
 	{
-		private readonly ClubViewModel _club = new();
-        private ObservableCollection<MemberViewModel> _pretendRdbms = [];
+        private const int MIN_REFRESH_TIME_MS = 500;
+        private readonly ClubViewModel _club = new();
         private int _totalPages = 0;
         private int _currentPage = 0;
-
-        private ObservableCollection<MemberViewModel>? _selectedPretendRdbms = null;
+        private ObservableCollection<MemberViewModel>? _userSelectedFFs = null;
 
         public EditClubPage()
 		{
@@ -27,51 +27,46 @@ namespace hi_fi_prototype.Views
 			get => _club;
 			set
 			{
-                LoadMoreButton.IsVisible = false;
-
                 _club.ID = value.ID;
 				_club.Name = value.Name;
+                _club.NumMembers = value.NumMembers;
 				_club.IsArchived = value.IsArchived;
 				_club.ArchiveReason = value.ArchiveReason;
-
-                if (_selectedPretendRdbms != null)
-                {
-                    _pretendRdbms = CloneMembers(_selectedPretendRdbms);
-                    _selectedPretendRdbms = null;
-                }
-                else
-                    _pretendRdbms = CloneMembers(value.FoundingFathers);
-
-                _club.FoundingFathers = CloneMembers(_pretendRdbms, PageSize);
-
-
-                RecalculateTotalPages();
-                ShowHideLoadMoreButton();
+                FoundingFatherItems.BatchBegin();
+                _club.FoundingFathers = value.FoundingFathers;
+                FoundingFatherItems.BatchCommit();
+                _currentPage = 0;
             }
 		}
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
+            if (_userSelectedFFs == null)
+                MainThread.BeginInvokeOnMainThread(async () => { await DownloadSinglePageOfFoundingFathers(); });
+            else
+                _club.FoundingFathers = CloneMembers(_userSelectedFFs);
         }
 
         private async void SelectFoundingFathers_Clicked(object sender, EventArgs e)
         {
-            _selectedPretendRdbms = null;
-
             SelectMultipleMembersPage page = new()
             {
                 SelectedMembers = [.. CloneMembers(_club.FoundingFathers)],
-                AcceptFunction = FoundingFathersSeletction_Accepted,
+                AcceptFunction = FoundingFathersSelection_Accepted,
             };
 
             await Navigation.PushAsync(page, true);
         }
 
-        private void FoundingFathersSeletction_Accepted(List<MemberViewModel> selectedMembers)
+        private void FoundingFathersSelection_Accepted(List<MemberViewModel> selectedMembers)
         {
-            _selectedPretendRdbms = CloneMembers(selectedMembers);
+            _userSelectedFFs = CloneMembers(selectedMembers);
+        }
+
+        private void RefreshFoundingFathers_Clicked(object sender, EventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(async () => { await DownloadSinglePageOfFoundingFathers(); });
         }
 
         private async void DiscardChanges_Clicked(object sender, EventArgs e)
@@ -105,37 +100,45 @@ namespace hi_fi_prototype.Views
             await Shell.Current.GoToAsync("..");
         }
 
-        private void RecalculateTotalPages()
-        {
-            _totalPages = _pretendRdbms.Count / PageSize;
-            if (_pretendRdbms.Count % PageSize > 0)
-                _totalPages++;
-
-            _currentPage = Math.Min(Math.Max(0, _currentPage), _totalPages - 1);
-        }
-
         private void ShowHideLoadMoreButton()
         { 
             LoadMoreButton.IsVisible = _currentPage < _totalPages - 1;
         }
 
-        private async Task LoadData()
+        private static IAcmService AcmService
+        {
+            get { return ((AppShell)Shell.Current).AcmService; }
+        }
+
+        private async Task DownloadSinglePageOfFoundingFathers()
         {
             try
             {
+                if (Club == null || Club.ID == null)
+                    return;
+
+                var startTime = DateTime.Now;
+
                 LoadMoreButton.IsVisible = false;
                 LoadingIndicator.IsRunning = true;
+                FoundingFatherItems.IsEnabled = false;
                 ClubName.IsEnabled = false;
                 SelectFoundingFathers.IsEnabled = false;
-                FoundingFatherItems.IsEnabled = false;
+                RefreshFoundingFathers.IsEnabled = false;
                 DiscardChanges.IsEnabled = false;
                 AcceptChanges.IsEnabled = false;
 
-                await Task.Delay(750);
-                MergePageIntoListView(_pretendRdbms.Skip(_currentPage * PageSize).Take(PageSize).ToList());
+                var ffsPageOfData = await AcmService.ListClubFoundingFathersAsync((int)Club.ID, _currentPage * PageSize, PageSize);
+                if (ffsPageOfData != null && ffsPageOfData.PageItems != null)
+                {
+                    _totalPages = ffsPageOfData.TotalPages;
+                    MergePageIntoListView(ffsPageOfData.PageItems);
+                    ShowHideLoadMoreButton();
+                }
 
-                await Task.Delay(750);
-                ShowHideLoadMoreButton();
+                var elapsed = DateTime.Now - startTime;
+                if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                    await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
             }
             catch (Exception ex)
             {
@@ -146,33 +149,27 @@ namespace hi_fi_prototype.Views
                 LoadingIndicator.IsRunning = false;
                 ClubName.IsEnabled = true;
                 SelectFoundingFathers.IsEnabled = true;
-                FoundingFatherItems.IsEnabled = true;
+                RefreshFoundingFathers.IsEnabled = true;
                 DiscardChanges.IsEnabled = true;
                 AcceptChanges.IsEnabled = true;
+                FoundingFatherItems.IsEnabled = true;
             }
         }
 
-        private void MergePageIntoListView(List<MemberViewModel> onePage)
+        private void MergePageIntoListView(List<acm_models.Member> onePage)
         {
-            bool changed = false;
+            FoundingFatherItems.BatchBegin();
             foreach (var member in onePage)
             {
-                var x = _club.FoundingFathers.FirstOrDefault(y => y.ID == member.ID);
-                if (x == null)
+                var exists = _club.FoundingFathers.FirstOrDefault(y => y.ID == member.ID);
+                if (exists == null)
                 {
-                    var copy = new MemberViewModel()
-                    {
-                        ID = member.ID,
-                        ArchiveReason = member.ArchiveReason,
-                        IsArchived = member.IsArchived,
-                        Name = member.Name,
-                    };
-                    _club.FoundingFathers.Add(copy);
-                    changed = true;
+                    var viewModel = MemberViewModel.FromModel(member);
+                    if (viewModel != null)
+                        _club.FoundingFathers.Add(viewModel);
                 }
             }
-            if (changed)
-                OnPropertyChanged(nameof(Club));
+            FoundingFatherItems.BatchCommit();
         }
 
         private void LoadMoreButton_Clicked(object sender, EventArgs e)
@@ -180,7 +177,7 @@ namespace hi_fi_prototype.Views
             if (_currentPage < _totalPages - 1)
             {
                 ++_currentPage;
-                MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
+                MainThread.BeginInvokeOnMainThread(async () => { await DownloadSinglePageOfFoundingFathers(); });
             }
         }
 
@@ -198,9 +195,9 @@ namespace hi_fi_prototype.Views
                 clone.Add(new MemberViewModel()
                 {
                     ID = members[i].ID,
+                    Name = members[i].Name,
                     ArchiveReason = members[i].ArchiveReason,
                     IsArchived = members[i].IsArchived,
-                    Name = members[i].Name,
                 });
             }
 
@@ -217,9 +214,9 @@ namespace hi_fi_prototype.Views
                 clone.Add(new MemberViewModel()
                 {
                     ID = members[i].ID,
+                    Name = members[i].Name,
                     ArchiveReason = members[i].ArchiveReason,
                     IsArchived = members[i].IsArchived,
-                    Name = members[i].Name,
                 });
             }
 

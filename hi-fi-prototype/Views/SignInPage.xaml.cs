@@ -1,17 +1,55 @@
-namespace hi_fi_prototype.Views;
+using hi_fi_prototype.Services;
 
-public partial class SignInPage : ContentPage
+namespace hi_fi_prototype.Views
 {
-	public SignInPage()
+	public partial class SignInPage : ContentPage
 	{
-		InitializeComponent();
-	}
+		public SignInPage()
+		{
+			InitializeComponent();
+		}
 
-    private async void SignInButton_Clicked(object sender, EventArgs e)
-    {
-        if (IsAuditor.IsChecked)
-            await Shell.Current.GoToAsync("//manage_clubs");
-        else
-            await Shell.Current.GoToAsync("//manage_dinners");
-    }
+		private static IAcmService AcmService
+		{
+			get { return ((AppShell)Shell.Current).AcmService; }
+		}
+
+		private async void SignInButton_Clicked(object sender, EventArgs e)
+		{
+            try
+            {
+			    if (SigningInProgress.IsVisible)
+				    return;
+                IsAuditor.IsEnabled = false;
+                SignInButton.IsEnabled = false;
+                SigningInProgress.IsVisible = true;
+                SigningInIndicator.IsRunning = true;
+                SigningInIndicator.IsVisible = true;
+                SignInResult.Text = "Signing in...";
+                await Task.Delay(250);
+
+                bool success = await AcmService.SignIn();
+
+                SignInResult.Text = success ? "Signed in" : "Failed to sign in";
+                SigningInIndicator.IsRunning = false;
+                SigningInIndicator.IsVisible = false;
+                await Task.Delay(1500);
+
+                if (IsAuditor.IsChecked) // Temporary
+                    await Shell.Current.GoToAsync("//manage_clubs");
+                else
+                    await Shell.Current.GoToAsync("//manage_dinners");
+            }
+            catch (Exception ex)
+		    {
+                await DisplayAlert("Error", ex.Message, "Close");
+            }
+            finally
+		    {
+                IsAuditor.IsEnabled = true;
+                SignInButton.IsEnabled = true;
+                SigningInProgress.IsVisible = false;
+            }
+        }
+	}
 }

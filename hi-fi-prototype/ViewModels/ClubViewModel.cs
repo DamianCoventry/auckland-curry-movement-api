@@ -14,6 +14,7 @@ namespace hi_fi_prototype.ViewModels
             {
                 ID = model.ID,
                 Name = model.Name,
+                NumMembers = model.Members != null ? model.Members.Count : 0,
                 IsArchived = model.IsArchived,
                 ArchiveReason = model.ArchiveReason,
             };
@@ -41,6 +42,7 @@ namespace hi_fi_prototype.ViewModels
         private bool _isArchived;
         private string? _archiveReason;
         private ObservableCollection<MemberViewModel> _foundingFathers = [];
+        private int _numMembers = 0;
 
         public int? ID
         {
@@ -72,5 +74,12 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _foundingFathers, value); }
         }
 
+        public int NumMembers
+        {
+            get { return _numMembers; }
+            set { SetProperty(ref _numMembers, value); }
+        }
+
+        public string NumMembersString { get => $"Club has {NumMembers} members."; }
     }
 }

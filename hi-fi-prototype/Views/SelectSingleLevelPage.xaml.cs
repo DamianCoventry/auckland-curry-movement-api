@@ -1,20 +1,26 @@
+using CommunityToolkit.Maui.Alerts;
 using hi_fi_prototype.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace hi_fi_prototype.Views
 {
-    public partial class ManageLevelsPage : ContentPage
+    public partial class SelectSingleLevelPage : ContentPage
     {
+        private const int MIN_REFRESH_TIME_MS = 500;
         private ObservableCollection<LevelViewModel> _levels = [];
         private int _totalPages = 0;
         private int _currentPage = 0;
 
-        public ManageLevelsPage()
+        public SelectSingleLevelPage()
         {
             InitializeComponent();
             BindingContext = this;
         }
 
+        public Action<LevelViewModel>? AcceptFunction { get; set; } = null;
+        public Action? CancelFunction { get; set; } = null;
+        public LevelViewModel? SelectedLevel { get; set; } = null;
+        private LevelViewModel? OriginalSelection { get; set; } = null;
         public int PageSize { get; set; } = 10;
 
         public ObservableCollection<LevelViewModel> Levels
@@ -25,16 +31,13 @@ namespace hi_fi_prototype.Views
                 _levels = [];
                 foreach (var level in value)
                 {
-                    var copy = new LevelViewModel
+                    _levels.Add(new LevelViewModel()
                     {
                         ID = level.ID,
                         Name = level.Name,
-                        Description = level.Description,
-                        RequiredAttendances = level.RequiredAttendances,
                         ArchiveReason = level.ArchiveReason,
                         IsArchived = level.IsArchived,
-                    };
-                    _levels.Add(copy);
+                    });
                 }
                 OnPropertyChanged(nameof(Levels));
             }
@@ -43,33 +46,32 @@ namespace hi_fi_prototype.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
-        }
 
-        private async void LevelItems_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            if (e.Item is LevelViewModel levelViewModel)
+            if (SelectedLevel != null)
             {
-                Dictionary<string, object> parameters = new() { { "Level", levelViewModel } };
-                await Shell.Current.GoToAsync("edit_level", true, parameters);
+                OriginalSelection = new LevelViewModel()
+                {
+                    ID = SelectedLevel.ID,
+                    Name = SelectedLevel.Name,
+                    ArchiveReason = SelectedLevel.ArchiveReason,
+                    IsArchived = SelectedLevel.IsArchived,
+                };
             }
-        }
 
-        private async void AddNewLevel_Clicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("add_level", true);
+            MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
         }
 
         private async Task LoadData()
         {
             try
             {
+                var startTime = DateTime.Now;
+
                 LoadingIndicator.IsRunning = true;
-                AddNewLevel.IsEnabled = false;
-                LevelItems.IsEnabled = false;
+                AcceptChanges.IsEnabled = false;
+                DiscardChanges.IsEnabled = false;
 
                 await Task.Delay(750);
-
                 var pretendRdbms = new ObservableCollection<LevelViewModel>() {
                     new()
                     {
@@ -118,6 +120,22 @@ namespace hi_fi_prototype.Views
                 MergePageIntoListView(pretendRdbms.Skip(_currentPage * PageSize).Take(PageSize).ToList());
 
                 await Task.Delay(750);
+
+                if (OriginalSelection != null)
+                {
+                    foreach (var level in Levels)
+                    {
+                        if (OriginalSelection != null && OriginalSelection.ID == level.ID && OriginalSelection.Name == level.Name)
+                        {
+                            OriginalSelection = null;
+                            LevelItems.SelectedItem = level;
+                        }
+                    }
+                }
+
+                var elapsed = DateTime.Now - startTime;
+                if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                    await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
             }
             catch (Exception ex)
             {
@@ -126,14 +144,37 @@ namespace hi_fi_prototype.Views
             finally
             {
                 LoadingIndicator.IsRunning = false;
-                AddNewLevel.IsEnabled = true;
-                LevelItems.IsEnabled = true;
+                AcceptChanges.IsEnabled = true;
+                DiscardChanges.IsEnabled = true;
+            }
+        }
+
+        private async void DiscardChanges_Clicked(object sender, EventArgs e)
+        {
+            CancelFunction?.Invoke();
+            await Navigation.PopAsync();
+        }
+
+        private async void AcceptChanges_Clicked(object sender, EventArgs e)
+        {
+            if (LevelItems.SelectedItem == null)
+            {
+                var toast = Toast.Make("Please select a level");
+                await toast.Show();
+                return;
+            }
+
+            if (LevelItems.SelectedItem is LevelViewModel x)
+            {
+                SelectedLevel = x;
+                AcceptFunction?.Invoke(SelectedLevel);
+                await Navigation.PopAsync();
             }
         }
 
         private void MergePageIntoListView(List<LevelViewModel> pageOfLevels)
         {
-            LevelItems.BatchCommit();
+            LevelItems.BatchBegin();
             foreach (var level in pageOfLevels)
             {
                 var x = _levels.FirstOrDefault(y => y.ID == level.ID);
@@ -143,8 +184,6 @@ namespace hi_fi_prototype.Views
                     {
                         ID = level.ID,
                         Name = level.Name,
-                        Description = level.Description,
-                        RequiredAttendances = level.RequiredAttendances,
                         ArchiveReason = level.ArchiveReason,
                         IsArchived = level.IsArchived,
                     });

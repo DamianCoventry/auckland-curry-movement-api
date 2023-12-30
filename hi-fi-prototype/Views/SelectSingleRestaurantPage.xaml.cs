@@ -1,20 +1,26 @@
+using CommunityToolkit.Maui.Alerts;
 using hi_fi_prototype.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace hi_fi_prototype.Views
 {
-    public partial class ManageRestaurantsPage : ContentPage
+    public partial class SelectSingleRestaurantPage : ContentPage
     {
+        private const int MIN_REFRESH_TIME_MS = 500;
         private ObservableCollection<RestaurantViewModel> _restaurants = [];
         private int _totalPages = 0;
         private int _currentPage = 0;
 
-        public ManageRestaurantsPage()
+        public SelectSingleRestaurantPage()
         {
             InitializeComponent();
             BindingContext = this;
         }
 
+        public Action<RestaurantViewModel>? AcceptFunction { get; set; } = null;
+        public Action? CancelFunction { get; set; } = null;
+        public RestaurantViewModel? SelectedRestaurant { get; set; } = null;
+        private RestaurantViewModel? OriginalSelection { get; set; } = null;
         public int PageSize { get; set; } = 10;
 
         public ObservableCollection<RestaurantViewModel> Restaurants
@@ -25,17 +31,16 @@ namespace hi_fi_prototype.Views
                 _restaurants = [];
                 foreach (var restaurant in value)
                 {
-                    var copy = new RestaurantViewModel
+                    _restaurants.Add(new RestaurantViewModel()
                     {
                         ID = restaurant.ID,
                         Name = restaurant.Name,
                         StreetAddress = restaurant.StreetAddress,
                         Suburb = restaurant.Suburb,
                         PhoneNumber = restaurant.PhoneNumber,
-                        ArchiveReason = restaurant.ArchiveReason,
                         IsArchived = restaurant.IsArchived,
-                    };
-                    _restaurants.Add(copy);
+                        ArchiveReason = restaurant.ArchiveReason,
+                    });
                 }
                 OnPropertyChanged(nameof(Restaurants));
             }
@@ -44,33 +49,35 @@ namespace hi_fi_prototype.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
-        }
 
-        private async void RestaurantItems_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            if (e.Item is RestaurantViewModel restaurantViewModel)
+            if (SelectedRestaurant != null)
             {
-                Dictionary<string, object> parameters = new() { { "Restaurant", restaurantViewModel } };
-                await Shell.Current.GoToAsync("edit_restaurant", true, parameters);
+                OriginalSelection = new RestaurantViewModel()
+                {
+                    ID = SelectedRestaurant.ID,
+                    Name = SelectedRestaurant.Name,
+                    StreetAddress = SelectedRestaurant.StreetAddress,
+                    Suburb = SelectedRestaurant.Suburb,
+                    PhoneNumber = SelectedRestaurant.PhoneNumber,
+                    IsArchived = SelectedRestaurant.IsArchived,
+                    ArchiveReason = SelectedRestaurant.ArchiveReason,
+                };
             }
-        }
 
-        private async void AddNewRestaurant_Clicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("add_restaurant", true);
+            MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
         }
 
         private async Task LoadData()
         {
             try
             {
+                var startTime = DateTime.Now;
+
                 LoadingIndicator.IsRunning = true;
-                AddNewRestaurant.IsEnabled = false;
-                RestaurantItems.IsEnabled = false;
+                AcceptChanges.IsEnabled = false;
+                DiscardChanges.IsEnabled = false;
 
                 await Task.Delay(750);
-
                 var pretendRdbms = new ObservableCollection<RestaurantViewModel>() {
                     new()
                     {
@@ -123,6 +130,22 @@ namespace hi_fi_prototype.Views
                 MergePageIntoListView(pretendRdbms.Skip(_currentPage * PageSize).Take(PageSize).ToList());
 
                 await Task.Delay(750);
+
+                if (OriginalSelection != null)
+                {
+                    foreach (var restaurant in Restaurants)
+                    {
+                        if (OriginalSelection != null && OriginalSelection.ID == restaurant.ID && OriginalSelection.Name == restaurant.Name)
+                        {
+                            OriginalSelection = null;
+                            RestaurantItems.SelectedItem = restaurant;
+                        }
+                    }
+                }
+
+                var elapsed = DateTime.Now - startTime;
+                if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                    await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
             }
             catch (Exception ex)
             {
@@ -131,8 +154,31 @@ namespace hi_fi_prototype.Views
             finally
             {
                 LoadingIndicator.IsRunning = false;
-                AddNewRestaurant.IsEnabled = true;
-                RestaurantItems.IsEnabled = true;
+                AcceptChanges.IsEnabled = true;
+                DiscardChanges.IsEnabled = true;
+            }
+        }
+
+        private async void DiscardChanges_Clicked(object sender, EventArgs e)
+        {
+            CancelFunction?.Invoke();
+            await Navigation.PopAsync();
+        }
+
+        private async void AcceptChanges_Clicked(object sender, EventArgs e)
+        {
+            if (RestaurantItems.SelectedItem == null)
+            {
+                var toast = Toast.Make("Please select a restaurant");
+                await toast.Show();
+                return;
+            }
+
+            if (RestaurantItems.SelectedItem is RestaurantViewModel x)
+            {
+                SelectedRestaurant = x;
+                AcceptFunction?.Invoke(SelectedRestaurant);
+                await Navigation.PopAsync();
             }
         }
 
@@ -151,8 +197,8 @@ namespace hi_fi_prototype.Views
                         StreetAddress = restaurant.StreetAddress,
                         Suburb = restaurant.Suburb,
                         PhoneNumber = restaurant.PhoneNumber,
-                        ArchiveReason = restaurant.ArchiveReason,
                         IsArchived = restaurant.IsArchived,
+                        ArchiveReason = restaurant.ArchiveReason,
                     });
                 }
             }

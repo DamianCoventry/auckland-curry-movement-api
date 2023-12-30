@@ -9,6 +9,8 @@
         public int CurrentLevelID { get; set; }
         public Level? CurrentLevel { get; set; }
         public int AttendanceCount { get; set; }
+        public bool IsArchived { get; set; }
+        public string? ArchiveReason { get; set; }
 
         public ICollection<Club>? Clubs { get; set; }
         public ICollection<Dinner>? Dinners { get; set; }
@@ -22,8 +24,5 @@
         public ICollection<Violation>? ViolationsReceived { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
         public ICollection<Member>? Inductees { get; set; }
-
-        public bool IsArchived { get; set; }
-        public string? ArchiveReason { get; set; }
     }
 }

@@ -1,9 +1,12 @@
-﻿using hi_fi_prototype.Views;
+﻿using hi_fi_prototype.Services;
+using hi_fi_prototype.Views;
 
 namespace hi_fi_prototype
 {
     public partial class AppShell : Shell
     {
+        private readonly IAcmService _acmService;
+
         public AppShell()
         {
             InitializeComponent();
@@ -18,6 +21,16 @@ namespace hi_fi_prototype
 
             Routing.RegisterRoute("add_restaurant", typeof(AddRestaurantPage));
             Routing.RegisterRoute("edit_restaurant", typeof(EditRestaurantPage));
+
+            Routing.RegisterRoute("add_reservation", typeof(AddReservationPage));
+            Routing.RegisterRoute("edit_reservation", typeof(EditReservationPage));
+
+            Routing.RegisterRoute("edit_dinner", typeof(EditDinnerPage));
+            Routing.RegisterRoute("edit_member", typeof(EditMemberPage));
+
+            _acmService = new AcmService();
         }
+
+        public IAcmService AcmService { get { return _acmService; } }
     }
 }

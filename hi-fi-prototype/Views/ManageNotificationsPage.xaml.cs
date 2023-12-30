@@ -345,7 +345,7 @@ namespace hi_fi_prototype.Views
 
         private void MergePageIntoListView(List<NotificationViewModel> pageOfNotifications)
         {
-            bool changed = false;
+            NotificationItems.BatchBegin();
             foreach (var notification in pageOfNotifications)
             {
                 var x = _notifications.FirstOrDefault(y => y.ID == notification.ID);
@@ -380,11 +380,9 @@ namespace hi_fi_prototype.Views
                         Violation = notification.Violation,
                         ViolationID = notification.ViolationID,
                     });
-                    changed = true;
                 }
             }
-            if (changed)
-                OnPropertyChanged(nameof(Notifications));
+            NotificationItems.BatchCommit();
         }
 
         private void LoadMoreButton_Clicked(object sender, EventArgs e)

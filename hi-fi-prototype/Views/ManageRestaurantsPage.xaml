@@ -6,7 +6,7 @@
              x:Class="hi_fi_prototype.Views.ManageRestaurantsPage"
              x:DataType="views:ManageRestaurantsPage"
              Title="Manage Restaurants"
-             BackgroundColor="#f2fbf8">
+             >
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
@@ -19,7 +19,7 @@
                 <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
             </HorizontalStackLayout>
 
-            <ListView x:Name="RestaurantItems" ItemsSource="{Binding Restaurants}" ItemTapped="RestaurantItems_ItemTapped">
+            <ListView x:Name="RestaurantItems" ItemsSource="{Binding Restaurants}" ItemTapped="RestaurantItems_ItemTapped" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:RestaurantViewModel">
                         <ViewCell>

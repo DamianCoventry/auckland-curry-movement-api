@@ -6,7 +6,7 @@
              x:Class="hi_fi_prototype.Views.ManageLevelsPage"
              x:DataType="views:ManageLevelsPage"
              Title="Manage Levels"
-             BackgroundColor="#f2fbf8">
+             >
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
@@ -18,8 +18,8 @@
                             ToolTipProperties.Text="Add New Level" Clicked="AddNewLevel_Clicked"/>
                 <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
             </HorizontalStackLayout>
-            
-            <ListView x:Name="LevelItems" ItemsSource="{Binding Levels}" ItemTapped="LevelItems_ItemTapped">
+
+            <ListView x:Name="LevelItems" ItemsSource="{Binding Levels}" ItemTapped="LevelItems_ItemTapped" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:LevelViewModel">
                         <ViewCell>

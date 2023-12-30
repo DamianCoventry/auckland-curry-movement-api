@@ -7,7 +7,7 @@
              x:Class="hi_fi_prototype.Views.EditRestaurantPage"
              x:DataType="viewmodels:RestaurantViewModel"
              Title="Edit Restaurant"
-             BackgroundColor="#f2fbf8">
+             >
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>

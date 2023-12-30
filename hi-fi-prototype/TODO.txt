@@ -1,0 +1,60 @@
+﻿                  L E A D
+club              ✓ ✓ ✓ ✓ 
+level             ✓ ✓ ✓ ✓ 
+member            ✓ ✓ ✓ ✓ 
+membership                
+restaurant        ✓ ✓ ✓ ✓ 
+exemption         ✓ ✓ ✓ ✓ 
+attendee                  
+dinner            ✓       
+kotc                      
+notification              
+reservation               
+roty                      
+violation                 
+
+custom picker           ✓ 
+better pagination GUI   ✓ 
+add a search ability      
+toast popups            ✓ 
+
+
+signin          ✓
+signin GUI      ✓
+signout         ✓
+signout GUI     ✓
+
+graphs
+
+check for internet connectivity before signing in
+
+Add an auditor flag to the member table?
+Make the dinner content page suck less.
+Make the sign in + out content pages scrollable.
+What happens when there's too many icons for the area inside the 'Past Dinner' card?
+Alternate sign in for non-auditor
+View associated/linked data for each item type
+How/where do members subscribe to a club?
+Where does the user choose the club they're working with?
+Archiving... when and how does it work?
+Logging in as a non-auditor
+Multi-tenanted: The membership ID column will either need to:
+        - replace the MemberID FK relationship in when joining to other tables, OR
+        - added alongside the MemberID FK relationship in when joining to other tables
+Beer and curry prices from 2019 onwards have not been located
+
+
+
+retrieve related items
+drag down to refresh
+link to graphs?
+adornment for bell icon
+add roty/kotc/etc icons to list items
+begin dining (convert reservation to dinner)
+have a "currently dining" state?
+conclude dining
+allow list items to be deleted
+    - via a button on the list item?
+    - press and hold the item?
+    - within the edit page?
+prevent a member choosing themselves as their sponsor

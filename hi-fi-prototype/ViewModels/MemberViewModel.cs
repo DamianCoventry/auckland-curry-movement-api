@@ -12,7 +12,7 @@ namespace hi_fi_prototype.ViewModels
             return new MemberViewModel()
             {
                 ID = model.ID,
-                Name = model.Name,
+                Name = new(model.Name),
                 SponsorID = model.SponsorID,
                 Sponsor = FromModel(model.Sponsor), // TODO: check for recursion
                 CurrentLevelID = model.CurrentLevelID,

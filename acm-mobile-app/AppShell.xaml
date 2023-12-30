@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="acm_mobile_app.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:acm_mobile_app"
     xmlns:views="clr-namespace:acm_mobile_app.Views"
-    BackgroundColor="#455A64"
-    TitleColor="White"
+    x:Class="acm_mobile_app.AppShell"
     x:DataType="local:AppShell"
-    Title="acm_mobile_app">
+    Title="acm_mobile_app"
+    BackgroundColor="#455A64"
+    TitleColor="White">
 
     <Shell.FlyoutHeader>
         <views:FlyoutHeader />

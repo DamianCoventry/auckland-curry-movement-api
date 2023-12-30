@@ -1,20 +1,31 @@
-namespace hi_fi_prototype.Views;
+using hi_fi_prototype.Services;
 
-public partial class SignOutPage : ContentPage
+namespace hi_fi_prototype.Views
 {
-	public SignOutPage()
-	{
-		InitializeComponent();
-	}
-
-    protected override void OnAppearing()
+    public partial class SignOutPage : ContentPage
     {
-        base.OnAppearing();
-
-        MainThread.BeginInvokeOnMainThread(async () =>
+        public SignOutPage()
         {
-            await Task.Delay(1500);
-            await Shell.Current.GoToAsync("//sign_in");
-        });
+            InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                AcmService.SignOut();
+
+                await Task.Delay(1500);
+
+                await Shell.Current.GoToAsync("//sign_in");
+            });
+        }
+
+        private static IAcmService AcmService
+        {
+            get { return ((AppShell)Shell.Current).AcmService; }
+        }
     }
 }

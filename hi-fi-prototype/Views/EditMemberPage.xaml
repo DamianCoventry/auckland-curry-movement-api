@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:views="clr-namespace:hi_fi_prototype.Views"
+             xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
+             x:Class="hi_fi_prototype.Views.EditMemberPage"
+             x:DataType="viewmodels:MemberViewModel"
+             Title="Edit Member">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
+    </ContentPage.ToolbarItems>
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
+
+                <Label Text="Name" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
+                <Entry x:Name="MemberName" Grid.Column="1" MaxLength="50" Placeholder="Please enter a name" Text="{Binding Name}" Margin="8"/>
+
+                <Label Text="Sponsor" Grid.Row="1" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
+                <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,Auto">
+                    <Entry x:Name="SponsorName" MaxLength="50" Placeholder="Please choose a sponsor" Text="{Binding Sponsor.Name}" Margin="8" IsReadOnly="True"/>
+                    <ImageButton x:Name="ChooseSponsor" Grid.Column="1" Source="member.png" WidthRequest="32" Clicked="ChooseSponsor_Clicked"/>
+                </Grid>
+
+                <Label Text="Level" Grid.Row="2" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
+                <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*,Auto">
+                    <Entry x:Name="MemberLevel" MaxLength="50" Placeholder="Please choose a level" Text="{Binding CurrentLevel.Name}" Margin="8" IsReadOnly="True"/>
+                    <ImageButton x:Name="ChooseLevel" Grid.Column="1" Source="level.png" WidthRequest="32" Clicked="ChooseLevel_Clicked"/>
+                </Grid>
+
+                <Label Text="Attendance Count" Grid.Row="3" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
+                <Label x:Name="AttendanceCountLabel" Grid.Row="3" Grid.Column="1" Text="{Binding AttendanceCount}" Margin="8"/>
+
+            </Grid>
+
+            <HorizontalStackLayout FlowDirection="RightToLeft">
+                <ImageButton x:Name="DiscardChanges" Source="no.png" WidthRequest="32"
+                             Margin="8" ToolTipProperties.Text="Discard Changes" Clicked="DiscardChanges_Clicked"/>
+                <ImageButton x:Name="AcceptChanges" Source="yes.png" WidthRequest="32"
+                             Margin="8" ToolTipProperties.Text="Accept Changes" Clicked="AcceptChanges_Clicked"/>
+                <ActivityIndicator x:Name="SavingIndicator" WidthRequest="32" IsRunning="False"
+                                   IsVisible="False" ToolTipProperties.Text="Saving Changes"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

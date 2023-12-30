@@ -5,8 +5,7 @@
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.ManageClubsPage"
              x:DataType="views:ManageClubsPage"
-             Title="Manage Clubs"
-             BackgroundColor="#f2fbf8">
+             Title="Manage Clubs">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
@@ -15,11 +14,13 @@
             
             <HorizontalStackLayout FlowDirection="RightToLeft">
                 <ImageButton x:Name="AddNewClub" Source="add.png" WidthRequest="32" Margin="8"
-                            ToolTipProperties.Text="Add New Club" Clicked="AddNewClub_Clicked"/>
-                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
+                            ToolTipProperties.Text="Add new club" Clicked="AddNewClub_Clicked"/>
+                <ImageButton x:Name="RefreshClubList" Source="refresh.png" WidthRequest="32" Margin="8"
+                            ToolTipProperties.Text="Refresh club list" Clicked="RefreshClubList_Clicked"/>
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
             </HorizontalStackLayout>
-            
-            <ListView x:Name="ClubItems" ItemsSource="{Binding Clubs}" ItemTapped="ClubItems_ItemTapped">
+
+            <ListView x:Name="ClubItems" ItemsSource="{Binding Clubs}" ItemTapped="ClubItems_ItemTapped" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:ClubViewModel">
                         <ViewCell>
@@ -27,7 +28,7 @@
                                 <Image Grid.Column="0" Source="club.png" WidthRequest="32" Margin="8"/>
                                 <Grid Grid.Column="1" RowDefinitions="Auto,*">
                                     <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
-                                    <Label Grid.Row="1" Text="Club currently has 23 members."/>
+                                    <Label Grid.Row="1" Text="{Binding NumMembersString}"/>
                                 </Grid>
                             </Grid>
                         </ViewCell>

@@ -6,6 +6,7 @@ namespace hi_fi_prototype.Views
 {
     public partial class SelectSingleMemberPage : ContentPage
     {
+        private const int MIN_REFRESH_TIME_MS = 500;
         private ObservableCollection<MemberViewModel> _members = [];
         private int _totalPages = 0;
         private int _currentPage = 0;
@@ -64,6 +65,8 @@ namespace hi_fi_prototype.Views
         {
             try
             {
+                var startTime = DateTime.Now;
+
                 LoadingIndicator.IsRunning = true;
                 AcceptChanges.IsEnabled = false;
                 DiscardChanges.IsEnabled = false;
@@ -128,6 +131,10 @@ namespace hi_fi_prototype.Views
                         }
                     }
                 }
+
+                var elapsed = DateTime.Now - startTime;
+                if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                    await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
             }
             catch (Exception ex)
             {
@@ -166,7 +173,7 @@ namespace hi_fi_prototype.Views
 
         private void MergePageIntoListView(List<MemberViewModel> pageOfMembers)
         {
-            bool changed = false;
+            MemberItems.BatchBegin();
             foreach (var member in pageOfMembers)
             {
                 var x = _members.FirstOrDefault(y => y.ID == member.ID);
@@ -179,11 +186,9 @@ namespace hi_fi_prototype.Views
                         ArchiveReason = member.ArchiveReason,
                         IsArchived = member.IsArchived,
                     });
-                    changed = true;
                 }
             }
-            if (changed)
-                OnPropertyChanged(nameof(Members));
+            MemberItems.BatchCommit();
         }
 
         private void LoadMoreButton_Clicked(object sender, EventArgs e)

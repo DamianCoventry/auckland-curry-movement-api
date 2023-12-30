@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="hi_fi_prototype.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:hi_fi_prototype"
     xmlns:views="clr-namespace:hi_fi_prototype.Views"
-    Title="hi_fi_prototype">
+    x:Class="hi_fi_prototype.AppShell"
+    x:DataType="local:AppShell"
+    Title="hi_fi_prototype"
+    BackgroundColor="{StaticResource Primary}"
+    TitleColor="WhiteSmoke">
 
+    <Shell.FlyoutHeader>
+        <Image Source="acm_logo_hi_res.png"/>
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutFooter>
+        <Label Text="ACM Mobile App 1.00.00" HorizontalTextAlignment="Center" Margin="8"/>
+    </Shell.FlyoutFooter>
+    
     <FlyoutItem Title="Sign In" Icon="sign_in.png" FlyoutItemIsVisible="False">
         <Tab>
             <ShellContent Route="sign_in" ContentTemplate="{DataTemplate views:SignInPage}"/>
@@ -14,8 +25,13 @@
     </FlyoutItem>
 
     <FlyoutItem Title="Home" Icon="home.png">
-        <Tab>
-            <ShellContent Route="manage_dinners" ContentTemplate="{DataTemplate views:ManageDinnersPage}"/>
+        <Tab Title="Dinners" Icon="dinner.png">
+            <ShellContent Route="manage_dinners"
+                          ContentTemplate="{DataTemplate views:ManageDinnersPage}"/>
+        </Tab>
+        <Tab Title="Members" Icon="member.png">
+            <ShellContent Route="manage_members"
+                          ContentTemplate="{DataTemplate views:ManageMembersPage}"/>
         </Tab>
     </FlyoutItem>
 
@@ -36,7 +52,7 @@
             <ShellContent Route="manage_restaurants" ContentTemplate="{DataTemplate views:ManageRestaurantsPage}"/>
         </Tab>
     </FlyoutItem>
-    
+
     <FlyoutItem Title="Sign Out" Icon="sign_out.png">
         <Tab>
             <ShellContent Route="sign_out" ContentTemplate="{DataTemplate views:SignOutPage}"/>

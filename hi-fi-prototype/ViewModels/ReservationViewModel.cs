@@ -102,6 +102,8 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _exactDateTime, value); }
         }
 
+        public bool IsBeerPriceNegotiated { get { return NegotiatedBeerPrice != null || NegotiatedBeerDiscount != null; }  }
+
         public double? NegotiatedBeerPrice
         {
             get { return _negotiatedBeerPrice; }

@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:hi_fi_prototype.Views"
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
-             x:Class="hi_fi_prototype.Views.SelectSingleMemberPage"
-             x:DataType="views:SelectSingleMemberPage"
-             Title="Select Single Member">
+             x:Class="hi_fi_prototype.Views.ManageMembersPage"
+             x:DataType="views:ManageMembersPage"
+             Title="Manage Members"
+             >
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
@@ -16,22 +17,20 @@
                 <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
             </HorizontalStackLayout>
 
-            <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" SelectionMode="Single">
+            <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" ItemTapped="MemberItems_ItemTapped" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:MemberViewModel">
-                        <TextCell Text="{Binding Name}"/>
+                        <ViewCell>
+                            <Grid ColumnDefinitions="Auto,*">
+                                <Image Grid.Column="0" Source="member.png" WidthRequest="32" Margin="8"/>
+                                <Label Grid.Column="1" Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center"/>
+                            </Grid>
+                        </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
             <Button x:Name="LoadMoreButton" Text="Load More" Margin="100,8" IsVisible="False" Clicked="LoadMoreButton_Clicked"/>
-
-            <HorizontalStackLayout FlowDirection="RightToLeft">
-                <ImageButton x:Name="DiscardChanges" Source="no.png" WidthRequest="32"
-                                     Margin="8" ToolTipProperties.Text="Discard Changes" Clicked="DiscardChanges_Clicked"/>
-                <ImageButton x:Name="AcceptChanges" Source="yes.png" WidthRequest="32"
-                                     Margin="8" ToolTipProperties.Text="Accept Changes" Clicked="AcceptChanges_Clicked"/>
-            </HorizontalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>

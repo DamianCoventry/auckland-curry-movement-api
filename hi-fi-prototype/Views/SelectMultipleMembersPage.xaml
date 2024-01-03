@@ -17,7 +17,7 @@
                 <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
             </HorizontalStackLayout>
 
-            <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" HasUnevenRows="True">
+            <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:SelectedMemberViewModel">
                         <ViewCell>

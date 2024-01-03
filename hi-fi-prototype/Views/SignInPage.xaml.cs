@@ -9,7 +9,17 @@ namespace hi_fi_prototype.Views
 			InitializeComponent();
 		}
 
-		private static IAcmService AcmService
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            IsAuditorCheckBox.IsEnabled = true;
+            SignInButton.IsEnabled = true;
+            SigningInProgress.IsVisible = false;
+            SigningInIndicator.IsRunning = false;
+            SigningInIndicator.IsVisible = true;
+        }
+
+        private static IAcmService AcmService
 		{
 			get { return ((AppShell)Shell.Current).AcmService; }
 		}
@@ -20,7 +30,7 @@ namespace hi_fi_prototype.Views
             {
 			    if (SigningInProgress.IsVisible)
 				    return;
-                IsAuditor.IsEnabled = false;
+                IsAuditorCheckBox.IsEnabled = false;
                 SignInButton.IsEnabled = false;
                 SigningInProgress.IsVisible = true;
                 SigningInIndicator.IsRunning = true;
@@ -35,7 +45,7 @@ namespace hi_fi_prototype.Views
                 SigningInIndicator.IsVisible = false;
                 await Task.Delay(1500);
 
-                if (IsAuditor.IsChecked) // Temporary
+                if (IsAuditorCheckBox.IsChecked) // Temporary
                     await Shell.Current.GoToAsync("//manage_clubs");
                 else
                     await Shell.Current.GoToAsync("//manage_dinners");
@@ -46,7 +56,7 @@ namespace hi_fi_prototype.Views
             }
             finally
 		    {
-                IsAuditor.IsEnabled = true;
+                IsAuditorCheckBox.IsEnabled = true;
                 SignInButton.IsEnabled = true;
                 SigningInProgress.IsVisible = false;
             }

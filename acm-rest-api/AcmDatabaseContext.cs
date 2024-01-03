@@ -26,6 +26,8 @@ namespace acm_rest_api
 
         public DbSet<Level>? Level { get; set; }
 
+        public DbSet<Meal>? Meal { get; set; }
+
         public DbSet<Member>? Member { get; set; }
 
         public DbSet<MemberStats>? MemberStats { get; set; }
@@ -44,6 +46,9 @@ namespace acm_rest_api
         {
             modelBuilder.Entity<RotY>()
                 .HasKey("Year");
+
+            modelBuilder.Entity<Meal>()
+                .HasKey("ReservationID");
 
             modelBuilder.Entity<Club>()
                 .HasMany(x => x.Members)

@@ -76,6 +76,7 @@ namespace hi_fi_prototype.Views
                 LoadingIndicator.IsRunning = true;
                 AcceptChanges.IsEnabled = false;
                 DiscardChanges.IsEnabled = false;
+                LoadMoreButton.IsEnabled = false;
 
                 await Task.Delay(750);
                 var pretendRdbms = new ObservableCollection<RestaurantViewModel>() {
@@ -156,6 +157,7 @@ namespace hi_fi_prototype.Views
                 LoadingIndicator.IsRunning = false;
                 AcceptChanges.IsEnabled = true;
                 DiscardChanges.IsEnabled = true;
+                LoadMoreButton.IsEnabled = true;
             }
         }
 

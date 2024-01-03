@@ -1,6 +1,7 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph;
 
 namespace acm_rest_api.Controllers
 {
@@ -108,6 +109,48 @@ namespace acm_rest_api.Controllers
                                         .Set<MemberStats>()
                                         .FromSqlRaw(sql)
                                         .OrderBy(x => x.ID).Skip(first).Take(pageSize)
+                                        .ToListAsync()
+            };
+        }
+
+        // GET: api/Club/5/Meals
+        [HttpGet("{id}/Meals")]
+        public async Task<ActionResult<PageOfData<Meal>>> GetClubMeals(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
+        {
+            if (_context.Club == null || _context.Dinner == null || id == null || pageSize <= 0)
+            {
+                return NotFound();
+            }
+
+            var club = await _context.Club.Where(x => x.ID == id).FirstOrDefaultAsync();
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            string sql =
+                "SELECT r.[id] ReservationID,r.[OrganiserID],m.[Name] OrganiserName,r.[RestaurantID]," +
+                "rst.[Name] RestaurantName,r.[Year],r.[Month],r.[ExactDateTime],r.[NegotiatedBeerPrice]," +
+                "r.[NegotiatedBeerDiscount],r.[IsAmnesty],d.[ID] DinnerID,d.[CostPerPerson],d.[NumBeersConsumed] " +
+                "FROM [dbo].[Reservation] r " +
+                "LEFT OUTER JOIN [dbo].[Dinner] d ON d.[ReservationID] = r.[ID] " +
+                "INNER JOIN [dbo].[Member] m ON m.ID = r.[OrganiserID] " +
+                "INNER JOIN [dbo].[Restaurant] rst ON rst.ID = r.[RestaurantID] " +
+                "INNER JOIN [dbo].[Membership] mc ON mc.MemberID = m.ID AND mc.ClubID = " + id.ToString();
+
+            int rowCount = await _context.Set<Meal>().FromSqlRaw(sql).CountAsync();
+            int totalPages = rowCount / pageSize;
+            if (rowCount % pageSize > 0)
+                ++totalPages;
+
+            return new PageOfData<Meal>()
+            {
+                CurrentPage = first,
+                TotalPages = totalPages,
+                PageItems = await _context
+                                        .Set<Meal>()
+                                        .FromSqlRaw(sql)
+                                        .OrderByDescending(x => x.ExactDateTime).Skip(first).Take(pageSize)
                                         .ToListAsync()
             };
         }

@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Alerts;
+using hi_fi_prototype.Services;
 using hi_fi_prototype.ViewModels;
 
 namespace hi_fi_prototype.Views
@@ -6,6 +7,7 @@ namespace hi_fi_prototype.Views
     [QueryProperty(nameof(Level), "Level")]
     public partial class EditLevelPage : ContentPage
     {
+        private const int MIN_REFRESH_TIME_MS = 500;
         private readonly LevelViewModel _level = new();
 
         public EditLevelPage()
@@ -63,15 +65,68 @@ namespace hi_fi_prototype.Views
                 return;
             }
 
-            LevelName.IsEnabled = false;
-            LevelDescription.IsEnabled = false;
-            LevelAttendances.IsEnabled = false;
-            AcceptChanges.IsEnabled = false;
-            DiscardChanges.IsEnabled = false;
-            SavingIndicator.IsRunning = true;
-            SavingIndicator.IsVisible = true;
-            await Task.Delay(1500); // Fake saving
-            await Shell.Current.GoToAsync("..");
+            MainThread.BeginInvokeOnMainThread(async () => { await SendSaveLevelMessage(); });
+        }
+
+        private void ShowMessageSendingGui(bool show = true)
+        {
+            LevelName.IsEnabled = !show;
+            LevelDescription.IsEnabled = !show;
+            LevelAttendances.IsEnabled = !show;
+            AcceptChanges.IsEnabled = !show;
+            DiscardChanges.IsEnabled = !show;
+            SavingIndicator.IsRunning = show;
+            SavingIndicator.IsVisible = show;
+        }
+
+        private static IAcmService AcmService
+        {
+            get { return ((AppShell)Shell.Current).AcmService; }
+        }
+
+        private async Task SendSaveLevelMessage()
+        {
+            bool saved = false;
+            try
+            {
+                if (SavingIndicator.IsRunning)
+                    return;
+
+                ShowMessageSendingGui();
+
+                var startTime = DateTime.Now;
+
+                saved = await AcmService.UpdateLevelAsync(new acm_models.Level()
+                {
+                    ID = Level.ID,
+                    RequiredAttendances = Level.RequiredAttendances,
+                    Name = Level.Name,
+                    Description = Level.Description,
+                    IsArchived = Level.IsArchived,
+                    ArchiveReason = Level.ArchiveReason,
+                });
+
+                var elapsed = DateTime.Now - startTime;
+                if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                    await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
+
+                if (!saved)
+                {
+                    var toast = Toast.Make("Unable to add these data as a new reservation");
+                    await toast.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Exception", ex.ToString(), "Close");
+            }
+            finally
+            {
+                ShowMessageSendingGui(false);
+            }
+
+            if (saved)
+                await Shell.Current.GoToAsync("..");
         }
 
         private async void ManageNotifications_Clicked(object sender, EventArgs e)

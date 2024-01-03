@@ -49,7 +49,7 @@ namespace hi_fi_prototype.ViewModels
         private RestaurantViewModel? _restaurant;
         private int _year;
         private int _month;
-        private DateTime _exactDateTime;
+        private DateTime _exactDateTime = DateTime.Now;
         private double? _negotiatedBeerPrice;
         private double? _negotiatedBeerDiscount;
         private bool _isAmnesty;
@@ -102,7 +102,10 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _exactDateTime, value); }
         }
 
-        public bool IsBeerPriceNegotiated { get { return NegotiatedBeerPrice != null || NegotiatedBeerDiscount != null; }  }
+        public bool IsBeerPriceNegotiated
+        {
+            get { return NegotiatedBeerPrice != null || NegotiatedBeerDiscount != null; }
+        }
 
         public double? NegotiatedBeerPrice
         {

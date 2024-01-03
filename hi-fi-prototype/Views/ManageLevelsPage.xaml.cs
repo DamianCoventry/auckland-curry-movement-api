@@ -1,10 +1,13 @@
+using hi_fi_prototype.Services;
 using hi_fi_prototype.ViewModels;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace hi_fi_prototype.Views
 {
     public partial class ManageLevelsPage : ContentPage
     {
+        private const int MIN_REFRESH_TIME_MS = 500;
         private ObservableCollection<LevelViewModel> _levels = [];
         private int _totalPages = 0;
         private int _currentPage = 0;
@@ -13,9 +16,24 @@ namespace hi_fi_prototype.Views
         {
             InitializeComponent();
             BindingContext = this;
+
+            DeleteLevelCommand = new Command<int>(
+                execute: async (int id) =>
+                {
+                    bool yes = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this level?", "Yes", "No");
+                    if (yes)
+                        await SendDeleteLevelMessage(id);
+                },
+                canExecute: (int id) =>
+                {
+                    var x = Levels.FirstOrDefault(x => x.ID == id);
+                    return x != null && !x.IsDeleting;
+                });
         }
 
         public int PageSize { get; set; } = 10;
+
+        public ICommand DeleteLevelCommand { private set; get; }
 
         public ObservableCollection<LevelViewModel> Levels
         {
@@ -25,7 +43,7 @@ namespace hi_fi_prototype.Views
                 _levels = [];
                 foreach (var level in value)
                 {
-                    var copy = new LevelViewModel
+                    var copy = new LevelViewModel()
                     {
                         ID = level.ID,
                         Name = level.Name,
@@ -36,14 +54,21 @@ namespace hi_fi_prototype.Views
                     };
                     _levels.Add(copy);
                 }
-                OnPropertyChanged(nameof(Levels));
+                //OnPropertyChanged(nameof(Levels));
+                (MainScrollView as IView).InvalidateMeasure();
             }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
+            MainThread.BeginInvokeOnMainThread(async () => { await DownloadSinglePageOfLevels(); });
+        }
+
+        private void RefreshLevelsList_Clicked(object sender, EventArgs e)
+        {
+            Levels = [];
+            MainThread.BeginInvokeOnMainThread(async () => { await DownloadSinglePageOfLevels(); });
         }
 
         private async void LevelItems_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -60,64 +85,38 @@ namespace hi_fi_prototype.Views
             await Shell.Current.GoToAsync("add_level", true);
         }
 
-        private async Task LoadData()
+        private static IAcmService AcmService
+        {
+            get { return ((AppShell)Shell.Current).AcmService; }
+        }
+
+
+        private async Task DownloadSinglePageOfLevels()
         {
             try
             {
+                if (LoadingIndicator.IsRunning)
+                    return;
+
+                var startTime = DateTime.Now;
+
                 LoadingIndicator.IsRunning = true;
                 AddNewLevel.IsEnabled = false;
                 LevelItems.IsEnabled = false;
+                LoadMoreButton.IsEnabled = false;
+                RefreshLevelsList.IsEnabled = false;
 
-                await Task.Delay(750);
+                var pageOfData = await AcmService.ListLevelsAsync(_currentPage * PageSize, PageSize);
+                if (pageOfData != null && pageOfData.PageItems != null)
+                {
+                    _totalPages = pageOfData.TotalPages;
+                    LoadMoreButton.IsVisible = _currentPage < _totalPages - 1;
+                    MergePageIntoListView(pageOfData.PageItems);
+                }
 
-                var pretendRdbms = new ObservableCollection<LevelViewModel>() {
-                    new()
-                    {
-                        ID = 1,
-                        Name = "Nausikhie",
-                        Description = "A level new to and inexperienced in the club.",
-                        RequiredAttendances = 0,
-                    },
-                    new()
-                    {
-                        ID = 2,
-                        Name = "Shuruaatee",
-                        Description = "A level just starting to learn curry and take part in the club.",
-                        RequiredAttendances = 10,
-                    },
-                    new()
-                    {
-                        ID = 3,
-                        Name = "Pratiyogee",
-                        Description = "A level who actively takes part in the club.",
-                        RequiredAttendances = 25,
-                    },
-                    new()
-                    {
-                        ID = 4,
-                        Name = "Peshevar",
-                        Description = "Engaged in the club as one's main vocation rather than as a pastime.",
-                        RequiredAttendances = 50,
-                    },
-                    new()
-                    {
-                        ID = 6,
-                        Name = "Visheshagy",
-                        Description = "A level who is very knowledgeable about curry and the club.",
-                        RequiredAttendances = 100,
-                    },
-                };
-
-                _totalPages = pretendRdbms.Count / PageSize;
-                if (pretendRdbms.Count % PageSize > 0)
-                    _totalPages++;
-                _currentPage = Math.Min(Math.Max(0, _currentPage), _totalPages - 1);
-
-                LoadMoreButton.IsVisible = _currentPage < _totalPages - 1;
-
-                MergePageIntoListView(pretendRdbms.Skip(_currentPage * PageSize).Take(PageSize).ToList());
-
-                await Task.Delay(750);
+                var elapsed = DateTime.Now - startTime;
+                if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                    await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
             }
             catch (Exception ex)
             {
@@ -127,30 +126,81 @@ namespace hi_fi_prototype.Views
             {
                 LoadingIndicator.IsRunning = false;
                 AddNewLevel.IsEnabled = true;
+                LoadMoreButton.IsEnabled = true;
                 LevelItems.IsEnabled = true;
+                RefreshLevelsList.IsEnabled = true;
             }
         }
 
-        private void MergePageIntoListView(List<LevelViewModel> pageOfLevels)
+        private async Task SendDeleteLevelMessage(int id)
         {
-            LevelItems.BatchCommit();
+            bool deleteSucceeded = false;
+            try
+            {
+                var startTime = DateTime.Now;
+
+                var deleting = Levels.FirstOrDefault(x => x.ID == id);
+                if (deleting != null)
+                    deleting.IsDeleting = true; // Shows an activity indicator
+
+                AddNewLevel.IsEnabled = false;
+                LevelItems.IsEnabled = false;
+                LoadMoreButton.IsEnabled = false;
+                RefreshLevelsList.IsEnabled = false;
+
+                deleteSucceeded = await AcmService.DeleteLevelAsync(id);
+                if (deleteSucceeded)
+                {
+                    var elapsed = DateTime.Now - startTime;
+                    if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS * 2)
+                        await Task.Delay(MIN_REFRESH_TIME_MS * 2 - elapsed.Milliseconds);
+
+                    if (deleting != null)
+                        Levels.Remove(deleting);
+                }
+                else
+                    await DisplayAlert("Delete Failed", $"Unable to delete the level with the {id}.", "Close");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Exception", ex.ToString(), "Close");
+            }
+            finally
+            {
+                AddNewLevel.IsEnabled = true;
+                LevelItems.IsEnabled = true;
+                LoadMoreButton.IsEnabled = true;
+                RefreshLevelsList.IsEnabled = true;
+            }
+
+            if (deleteSucceeded)
+                await DownloadSinglePageOfLevels();
+        }
+
+        private void MergePageIntoListView(List<acm_models.Level> pageOfLevels)
+        {
+            //LevelItems.BatchCommit();
             foreach (var level in pageOfLevels)
             {
-                var x = _levels.FirstOrDefault(y => y.ID == level.ID);
-                if (x == null)
+                var existing = _levels.FirstOrDefault(y => y.ID == level.ID);
+                if (existing == null)
                 {
-                    _levels.Add(new LevelViewModel()
-                    {
-                        ID = level.ID,
-                        Name = level.Name,
-                        Description = level.Description,
-                        RequiredAttendances = level.RequiredAttendances,
-                        ArchiveReason = level.ArchiveReason,
-                        IsArchived = level.IsArchived,
-                    });
+                    var vm = LevelViewModel.FromModel(level);
+                    if (vm != null)
+                        _levels.Add(vm);
+                }
+                else
+                {
+                    existing.ID = level.ID;
+                    existing.Name = level.Name;
+                    existing.Description = level.Description;
+                    existing.RequiredAttendances = level.RequiredAttendances;
+                    existing.ArchiveReason = level.ArchiveReason;
+                    existing.IsArchived = level.IsArchived;
                 }
             }
-            LevelItems.BatchCommit();
+            //LevelItems.BatchCommit();
+            (MainScrollView as IView).InvalidateArrange();
         }
 
         private void LoadMoreButton_Clicked(object sender, EventArgs e)
@@ -158,7 +208,7 @@ namespace hi_fi_prototype.Views
             if (_currentPage < _totalPages - 1)
             {
                 ++_currentPage;
-                MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
+                MainThread.BeginInvokeOnMainThread(async () => { await DownloadSinglePageOfLevels(); });
             }
         }
 

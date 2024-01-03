@@ -80,6 +80,7 @@ namespace hi_fi_prototype.Views
                 LoadingIndicator.IsRunning = true;
                 AcceptChanges.IsEnabled = false;
                 DiscardChanges.IsEnabled = false;
+                LoadMoreButton.IsEnabled = false;
 
                 // TODO: Get club id from somewhere
                 var pageOfData = await AcmService.ListClubMembersAsync(1, _currentPage * PageSize, PageSize);
@@ -103,6 +104,7 @@ namespace hi_fi_prototype.Views
                 LoadingIndicator.IsRunning = false;
                 AcceptChanges.IsEnabled = true;
                 DiscardChanges.IsEnabled = true;
+                LoadMoreButton.IsEnabled = true;
             }
         }
 

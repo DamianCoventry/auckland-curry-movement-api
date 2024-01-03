@@ -1,9 +1,11 @@
 using CommunityToolkit.Maui.Alerts;
+using hi_fi_prototype.Services;
 using hi_fi_prototype.ViewModels;
 namespace hi_fi_prototype.Views;
 
 public partial class AddRestaurantPage : ContentPage
 {
+    private const int MIN_REFRESH_TIME_MS = 500;
     private readonly RestaurantViewModel _restaurant = new();
 
     public AddRestaurantPage()
@@ -48,16 +50,71 @@ public partial class AddRestaurantPage : ContentPage
             return;
         }
 
-        RestaurantName.IsEnabled = false;
-        RestaurantStreetAddress.IsEnabled = false;
-        RestaurantSuburb.IsEnabled = false;
-        RestaurantPhoneNumber.IsEnabled = false;
-        AcceptChanges.IsEnabled = false;
-        DiscardChanges.IsEnabled = false;
-        SavingIndicator.IsRunning = true;
-        SavingIndicator.IsVisible = true;
-        await Task.Delay(1500); // Fake saving
-        await Shell.Current.GoToAsync("..");
+        MainThread.BeginInvokeOnMainThread(async () => { await SendAddRestaurantMessage(); });
+    }
+
+    private void ShowMessageSendingGui(bool show = true)
+    {
+        RestaurantName.IsEnabled = !show;
+        RestaurantStreetAddress.IsEnabled = !show;
+        RestaurantSuburb.IsEnabled = !show;
+        RestaurantPhoneNumber.IsEnabled = !show;
+        AcceptChanges.IsEnabled = !show;
+        DiscardChanges.IsEnabled = !show;
+        SavingIndicator.IsRunning = show;
+        SavingIndicator.IsVisible = show;
+    }
+
+    private static IAcmService AcmService
+    {
+        get { return ((AppShell)Shell.Current).AcmService; }
+    }
+
+    private async Task SendAddRestaurantMessage()
+    {
+        bool saved = false;
+        try
+        {
+            if (SavingIndicator.IsRunning)
+                return;
+
+            ShowMessageSendingGui();
+
+            var startTime = DateTime.Now;
+
+            var reservation = await AcmService.AddRestaurantAsync(new acm_models.Restaurant()
+            {
+                ID = Restaurant.ID,
+                Name = Restaurant.Name,
+                StreetAddress = Restaurant.StreetAddress,
+                Suburb = Restaurant.Suburb,
+                PhoneNumber = Restaurant.PhoneNumber,
+                IsArchived = Restaurant.IsArchived,
+                ArchiveReason = Restaurant.ArchiveReason,
+            });
+
+            var elapsed = DateTime.Now - startTime;
+            if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
+
+            saved = reservation.ID != null;
+            if (!saved)
+            {
+                var toast = Toast.Make("Unable to add these data as a new restaurant");
+                await toast.Show();
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Exception", ex.ToString(), "Close");
+        }
+        finally
+        {
+            ShowMessageSendingGui(false);
+        }
+
+        if (saved)
+            await Shell.Current.GoToAsync("..");
     }
 
     private async void ManageNotifications_Clicked(object sender, EventArgs e)

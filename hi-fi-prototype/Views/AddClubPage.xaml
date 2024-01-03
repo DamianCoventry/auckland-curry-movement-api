@@ -5,8 +5,7 @@
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.AddClubPage"
              x:DataType="viewmodels:ClubViewModel"
-             Title="Add Club"
-             >
+             Title="Add Club">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
@@ -14,15 +13,17 @@
         <VerticalStackLayout>
 
             <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+
                 <Label Text="Name" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
                 <Entry x:Name="ClubName" Grid.Column="1" MaxLength="100" Placeholder="Please enter a name" Text="{Binding Name}" Margin="8"/>
+
                 <Label Grid.Row="1" Text="Founding Fathers" FontAttributes="Bold" TextColor="CornflowerBlue" Margin="8"/>
                 <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="Auto,*">
                     <HorizontalStackLayout FlowDirection="RightToLeft">
                         <ImageButton x:Name="SelectFoundingFathers" Source="add.png" WidthRequest="32"
                                Margin="8" ToolTipProperties.Text="Select Founding Fathers" Clicked="SelectFoundingFathers_Clicked"/>
                     </HorizontalStackLayout>
-                    <ListView Grid.Row="1" ItemsSource="{Binding FoundingFathers}" Margin="8">
+                    <ListView x:Name="FoundingFathersListView" Grid.Row="1" ItemsSource="{Binding FoundingFathers}" Margin="8" SelectionMode="None">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="viewmodels:MemberViewModel">
                                 <TextCell Text="{Binding Name}"/>
@@ -30,6 +31,7 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </Grid>
+
             </Grid>
 
             <HorizontalStackLayout FlowDirection="RightToLeft">
@@ -38,7 +40,7 @@
                 <ImageButton x:Name="AcceptChanges" Source="yes.png" WidthRequest="32"
                              Margin="8" ToolTipProperties.Text="Accept Changes" Clicked="AcceptChanges_Clicked"/>
                 <ActivityIndicator x:Name="SavingIndicator" WidthRequest="32" IsRunning="False"
-                                   IsVisible="False" ToolTipProperties.Text="Saving Changes"/>
+                                   ToolTipProperties.Text="Saving Changes"/>
             </HorizontalStackLayout>
 
         </VerticalStackLayout>

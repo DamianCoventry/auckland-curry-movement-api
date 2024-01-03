@@ -5,42 +5,53 @@
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.ManageRestaurantsPage"
              x:DataType="views:ManageRestaurantsPage"
-             Title="Manage Restaurants"
-             >
+             x:Name="page"
+             Title="Manage Restaurants">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
-    <ScrollView>
-        <VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+        <HorizontalStackLayout FlowDirection="RightToLeft" Grid.Row="0">
+            <ImageButton x:Name="AddNewRestaurant" Source="add.png" WidthRequest="32" Margin="8"
+                        ToolTipProperties.Text="Add New Restaurant" Clicked="AddNewRestaurant_Clicked"/>
+            <ImageButton x:Name="RefreshRestaurantsList" Source="refresh.png" WidthRequest="32" Margin="8"
+                        ToolTipProperties.Text="Refresh club list" Clicked="RefreshRestaurantsList_Clicked"/>
+            <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
+        </HorizontalStackLayout>
 
-            <HorizontalStackLayout FlowDirection="RightToLeft">
-                <ImageButton x:Name="AddNewRestaurant" Source="add.png" WidthRequest="32" Margin="8"
-                            ToolTipProperties.Text="Add New Restaurant" Clicked="AddNewRestaurant_Clicked"/>
-                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
-            </HorizontalStackLayout>
+        <ListView x:Name="RestaurantItems" ItemsSource="{Binding Restaurants}"
+                    ItemTapped="RestaurantItems_ItemTapped" HasUnevenRows="True" SelectionMode="None" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:RestaurantViewModel">
+                    <ViewCell>
+                        <Grid ColumnDefinitions="Auto,*,Auto">
 
-            <ListView x:Name="RestaurantItems" ItemsSource="{Binding Restaurants}" ItemTapped="RestaurantItems_ItemTapped" HasUnevenRows="True">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:RestaurantViewModel">
-                        <ViewCell>
-                            <Grid ColumnDefinitions="Auto,*">
-                                <Image Source="restaurant.png" WidthRequest="32" Margin="8,0"/>
-                                <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="4,0">
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue" Margin="0,0,8,0"/>
-                                    <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
-                                        <Label Grid.Column="0" Grid.Row="0" Text="{Binding StreetAddress}"/>
-                                        <Label Grid.Column="0" Grid.Row="1" Text="{Binding Suburb}" Margin="0,0,0,8"/>
-                                        <Label Grid.Column="2" Grid.Row="0" Text="{Binding PhoneNumber}"/>
-                                    </Grid>
+                            <Image Source="restaurant.png" WidthRequest="32" Margin="8,0"/>
+
+                            <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="4,0">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue" Margin="0,0,8,0"/>
+                                <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                    <Label Grid.Column="0" Grid.Row="0" Text="{Binding StreetAddress}"/>
+                                    <Label Grid.Column="0" Grid.Row="1" Text="{Binding Suburb}" Margin="0,0,0,8"/>
+                                    <Label Grid.Column="2" Grid.Row="0" Text="{Binding PhoneNumber}"/>
                                 </Grid>
                             </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
 
-            <Button x:Name="LoadMoreButton" Text="Load More" Margin="100,8" IsVisible="False" Clicked="LoadMoreButton_Clicked"/>
+                            <Grid ColumnDefinitions="Auto,Auto" Grid.Column="2" InputTransparent="False">
+                                <ActivityIndicator x:Name="IsDeletingCheckBox" HeightRequest="24"
+                                                    IsRunning="True" IsVisible="{Binding IsDeleting}"/>
+                                <ImageButton Grid.Column="1" Source="delete.png" WidthRequest="24" Margin="4,0"
+                                        ToolTipProperties.Text="Delete restaurant"
+                                        Command="{Binding Source={x:Reference page}, Path=DeleteRestaurantCommand}"
+                                        CommandParameter="{Binding ID}" InputTransparent="False"/>
+                            </Grid>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button x:Name="LoadMoreButton" Text="Load More" Margin="100,8" IsVisible="False" Clicked="LoadMoreButton_Clicked" Grid.Row="2"/>
+    </Grid>
 </ContentPage>

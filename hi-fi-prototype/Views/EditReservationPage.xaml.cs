@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Alerts;
+using hi_fi_prototype.Services;
 using hi_fi_prototype.ViewModels;
 
 namespace hi_fi_prototype.Views
@@ -6,6 +7,7 @@ namespace hi_fi_prototype.Views
     [QueryProperty(nameof(Reservation), "Reservation")]
     public partial class EditReservationPage : ContentPage
     {
+        private const int MIN_REFRESH_TIME_MS = 500;
         private readonly ReservationViewModel _reservation = new();
         private MemberViewModel? _organiserSelection = null;
         private RestaurantViewModel? _restaurantSelection = null;
@@ -73,7 +75,7 @@ namespace hi_fi_prototype.Views
         {
             if (string.IsNullOrWhiteSpace(OrganiserEntry.Text))
             {
-                var toast = Toast.Make("An restaurant for the reservation is required");
+                var toast = Toast.Make("An organiser for the reservation is required");
                 await toast.Show();
                 return;
             }
@@ -98,20 +100,7 @@ namespace hi_fi_prototype.Views
                 }
             }
 
-            OrganiserEntry.IsEnabled = false;
-            RestaurantEntry.IsEnabled = false;
-            ChooseRestaurant.IsEnabled = false;
-            AmnestyCheckBox.IsEnabled = false;
-            ExactDateTimeDatePicker.IsEnabled = false;
-            IsBeerPriceNegotiatedCheckBox.IsEnabled = false;
-            NegotiatedBeerPriceEntry.IsEnabled = false;
-            NegotiatedBeerDiscountEntry.IsEnabled = false;
-            AcceptChanges.IsEnabled = false;
-            DiscardChanges.IsEnabled = false;
-            SavingIndicator.IsRunning = true;
-            SavingIndicator.IsVisible = true;
-            await Task.Delay(1500); // Fake saving
-            await Shell.Current.GoToAsync("..");
+            MainThread.BeginInvokeOnMainThread(async () => { await SendSaveReservationMessage(); });
         }
 
         private async void ManageNotifications_Clicked(object sender, EventArgs e)
@@ -191,6 +180,75 @@ namespace hi_fi_prototype.Views
                 Suburb = selectedRestaurant.Suburb,
                 PhoneNumber = selectedRestaurant.PhoneNumber,
             };
+        }
+
+        private void ShowMessageSendingGui(bool show = true)
+        {
+            OrganiserEntry.IsEnabled = !show;
+            RestaurantEntry.IsEnabled = !show;
+            ChooseRestaurant.IsEnabled = !show;
+            AmnestyCheckBox.IsEnabled = !show;
+            ExactDateTimeDatePicker.IsEnabled = !show;
+            IsBeerPriceNegotiatedCheckBox.IsEnabled = !show;
+            NegotiatedBeerPriceEntry.IsEnabled = !show;
+            NegotiatedBeerDiscountEntry.IsEnabled = !show;
+            AcceptChanges.IsEnabled = !show;
+            DiscardChanges.IsEnabled = !show;
+            SavingIndicator.IsRunning = show;
+            SavingIndicator.IsVisible = show;
+        }
+
+        private static IAcmService AcmService
+        {
+            get { return ((AppShell)Shell.Current).AcmService; }
+        }
+
+        private async Task SendSaveReservationMessage()
+        {
+            bool saved = false;
+            try
+            {
+                if (SavingIndicator.IsRunning)
+                    return;
+
+                ShowMessageSendingGui();
+
+                var startTime = DateTime.Now;
+
+                saved = await AcmService.UpdateReservationAsync(new acm_models.Reservation()
+                {
+                    ID = Reservation.ID,
+                    OrganiserID = Reservation.OrganiserID,
+                    RestaurantID = Reservation.RestaurantID,
+                    ExactDateTime = Reservation.ExactDateTime,
+                    Year = Reservation.ExactDateTime.Year,
+                    Month = Reservation.ExactDateTime.Month,
+                    NegotiatedBeerPrice = Reservation.NegotiatedBeerPrice,
+                    NegotiatedBeerDiscount = Reservation.NegotiatedBeerDiscount,
+                    IsAmnesty = Reservation.IsAmnesty,
+                });
+
+                var elapsed = DateTime.Now - startTime;
+                if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                    await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
+
+                if (!saved)
+                {
+                    var toast = Toast.Make("Unable to add these data as a new reservation");
+                    await toast.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Exception", ex.ToString(), "Close");
+            }
+            finally
+            {
+                ShowMessageSendingGui(false);
+            }
+
+            if (saved)
+                await Shell.Current.GoToAsync("..");
         }
     }
 }

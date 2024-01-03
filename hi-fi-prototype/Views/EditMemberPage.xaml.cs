@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Alerts;
+using hi_fi_prototype.Services;
 using hi_fi_prototype.ViewModels;
 
 namespace hi_fi_prototype.Views
@@ -6,6 +7,7 @@ namespace hi_fi_prototype.Views
     [QueryProperty(nameof(Member), "Member")]
     public partial class EditMemberPage : ContentPage
     {
+        private const int MIN_REFRESH_TIME_MS = 500;
         private readonly MemberViewModel _member = new();
         private MemberViewModel? _sponsorSelection = null;
         private LevelViewModel? _levelSelection = null;
@@ -72,8 +74,8 @@ namespace hi_fi_prototype.Views
             DiscardChanges.IsEnabled = false;
             SavingIndicator.IsRunning = true;
             SavingIndicator.IsVisible = true;
-            await Task.Delay(1500); // Fake saving
-            await Shell.Current.GoToAsync("..");
+
+            MainThread.BeginInvokeOnMainThread(async () => { await SendSaveMemberMessage(); });
         }
 
         private async void ManageNotifications_Clicked(object sender, EventArgs e)
@@ -163,6 +165,75 @@ namespace hi_fi_prototype.Views
                 IsArchived = model.IsArchived,
                 ArchiveReason = model.ArchiveReason,
             };
+        }
+
+        private void ShowMessageSendingGui(bool show = true)
+        {
+            MemberName.IsEnabled = !show;
+            ChooseSponsor.IsEnabled = !show;
+            ChooseLevel.IsEnabled = !show;
+            AcceptChanges.IsEnabled = !show;
+            DiscardChanges.IsEnabled = !show;
+            SavingIndicator.IsRunning = show;
+            SavingIndicator.IsVisible = show;
+        }
+
+        private static IAcmService AcmService
+        {
+            get { return ((AppShell)Shell.Current).AcmService; }
+        }
+
+        private async Task SendSaveMemberMessage()
+        {
+            bool saved = false;
+            try
+            {
+                if (SavingIndicator.IsRunning)
+                    return;
+
+                ShowMessageSendingGui();
+
+                var startTime = DateTime.Now;
+
+                var model = new acm_models.Member()
+                {
+                    ID = Member.ID,
+                    Name = Member.Name,
+                    SponsorID = Member.SponsorID,
+                    CurrentLevelID = Member.CurrentLevelID,
+                    AttendanceCount = Member.AttendanceCount,
+                    IsArchived = Member.IsArchived,
+                    ArchiveReason = Member.ArchiveReason,
+                };
+
+                if (Member.Sponsor != null)
+                    model.Sponsor = new acm_models.Member() { ID = Member.SponsorID, Name = Member.Sponsor.Name };
+                if (Member.CurrentLevel != null)
+                    model.CurrentLevel = new acm_models.Level() { ID = Member.CurrentLevelID, Name = Member.CurrentLevel.Name };
+
+                saved = await AcmService.UpdateMemberAsync(model);
+
+                var elapsed = DateTime.Now - startTime;
+                if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)
+                    await Task.Delay(MIN_REFRESH_TIME_MS - elapsed.Milliseconds);
+
+                if (!saved)
+                {
+                    var toast = Toast.Make("Unable to add these data as a new reservation");
+                    await toast.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Exception", ex.ToString(), "Close");
+            }
+            finally
+            {
+                ShowMessageSendingGui(false);
+            }
+
+            if (saved)
+                await Shell.Current.GoToAsync("..");
         }
     }
 }

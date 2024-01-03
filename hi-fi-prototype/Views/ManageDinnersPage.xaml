@@ -16,45 +16,47 @@
             <HorizontalStackLayout FlowDirection="RightToLeft">
                 <ImageButton x:Name="AddNewDinner" Source="add.png" WidthRequest="32" Margin="8"
                             ToolTipProperties.Text="Add New Reservation" Clicked="AddNewReservation_Clicked"/>
-                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
+                <ImageButton x:Name="RefreshDinnersList" Source="refresh.png" WidthRequest="32" Margin="8"
+                            ToolTipProperties.Text="Refresh club list" Clicked="RefreshDinnersList_Clicked"/>
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
             </HorizontalStackLayout>
 
-            <ListView x:Name="DinnerItems" ItemsSource="{Binding Meals}" ItemTapped="DinnerItems_ItemTapped" HasUnevenRows="True">
+            <ListView x:Name="DinnerItems" ItemsSource="{Binding Meals}" ItemTapped="DinnerItems_ItemTapped" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:MealViewModel">
                         <ViewCell>
                             <Grid ColumnDefinitions="Auto,*,Auto" Margin="4,8">
 
-                                <Image Source="reservation.png" WidthRequest="32" Margin="8,0" IsVisible="{Binding HasReservation}"/>
+                                <Image Source="reservation.png" WidthRequest="32" Margin="8,0" IsVisible="{Binding HasNoDinner}"/>
                                 <Image Source="dinner.png" WidthRequest="32" Margin="8,0" IsVisible="{Binding HasDinner}"/>
 
-                                <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*" Margin="4,0" IsVisible="{Binding HasReservation}">
+                                <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*" Margin="4,0" IsVisible="{Binding HasNoDinner}">
                                     <Label Text="Reservation" FontAttributes="Bold" TextColor="CornflowerBlue" Margin="0,0,8,0"/>
-                                    <Label Grid.Row="1" FontAttributes="Bold" Text="{Binding Reservation.Restaurant.Name}"/>
+                                    <Label Grid.Row="1" FontAttributes="Bold" Text="{Binding RestaurantName}"/>
                                     <HorizontalStackLayout Grid.Row="2">
                                         <Label Text="Organised by" Margin="0,0,4,0"/>
-                                        <Label Text="{Binding Reservation.Organiser.Name}"/>
+                                        <Label Text="{Binding OrganiserName}"/>
                                     </HorizontalStackLayout>
                                 </Grid>
                                 <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*" Margin="4,0" IsVisible="{Binding HasDinner}">
                                     <Label Text="Dinner"  FontAttributes="Bold" TextColor="CornflowerBlue" Margin="0,0,8,0"/>
-                                    <Label Grid.Row="1" FontAttributes="Bold" Text="{Binding Dinner.Reservation.Restaurant.Name}"/>
+                                    <Label Grid.Row="1" FontAttributes="Bold" Text="{Binding RestaurantName}"/>
                                     <HorizontalStackLayout Grid.Row="2">
                                         <Label Text="Organised by" Margin="0,0,4,0"/>
-                                        <Label Text="{Binding Dinner.Reservation.Organiser.Name}"/>
+                                        <Label Text="{Binding OrganiserName}"/>
                                     </HorizontalStackLayout>
                                 </Grid>
 
-                                <Grid Grid.Column="2" RowDefinitions="Auto,*" Margin="4,0" IsVisible="{Binding HasReservation}">
-                                    <Label Grid.Row="0" Text="{Binding Reservation.ExactDateTime,
+                                <Grid Grid.Column="2" RowDefinitions="Auto,*" Margin="4,0" IsVisible="{Binding HasNoDinner}">
+                                    <Label Grid.Row="0" Text="{Binding ExactDateTime,
                                             StringFormat='{0:dd MMM yyyy, hh:mm}'}"/>
                                 </Grid>
                                 <Grid Grid.Column="2" RowDefinitions="Auto,*" Margin="4,0" IsVisible="{Binding HasDinner}">
                                     <Grid Grid.Row="1" RowDefinitions="Auto,Auto">
-                                        <Label Grid.Row="0" Text="{Binding Dinner.Reservation.ExactDateTime,
+                                        <Label Grid.Row="0" Text="{Binding ExactDateTime,
                                             StringFormat='{0:dd MMM yyyy, hh:mm}'}"/>
                                         <HorizontalStackLayout Grid.Row="1" FlowDirection="RightToLeft">
-                                            <Label Text="{Binding Dinner.CostPerPerson, StringFormat='{0:C}'}"/>
+                                            <Label Text="{Binding CostPerPerson, StringFormat='{0:C}'}"/>
                                             <Image Source="cost.png" WidthRequest="16" Margin="4,0"/>
                                             <Label Text="Cost"/>
                                         </HorizontalStackLayout>

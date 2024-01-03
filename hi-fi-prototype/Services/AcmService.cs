@@ -694,7 +694,31 @@ namespace hi_fi_prototype.Services
             _accessToken = string.Empty;
             await AcquireTokenInteractively();
 
-            itemList = await ListItemsInternal<MemberStats>($"Club/{ID}/Members", first, count);
+            itemList = await ListItemsInternal<MemberStats>($"Club/{ID}/MemberStats", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
+
+            if (itemList._statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+        }
+
+        public async Task<PageOfData<Meal>> ListClubMealsAsync(int ID, int first, int count)
+        {
+            await AcquireTokenIfRequired();
+
+            var itemList = await ListItemsInternal<Meal>($"Club/{ID}/Meals", first, count);
+            if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
+                return itemList._pageOfData;
+
+            if (itemList._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            itemList = await ListItemsInternal<Meal>($"Club/{ID}/Meals", first, count);
             if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
                 return itemList._pageOfData;
 

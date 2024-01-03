@@ -70,6 +70,7 @@ namespace hi_fi_prototype.Views
                 LoadingIndicator.IsRunning = true;
                 AcceptChanges.IsEnabled = false;
                 DiscardChanges.IsEnabled = false;
+                LoadMoreButton.IsEnabled = false;
 
                 await Task.Delay(750);
                 var pretendRdbms = new ObservableCollection<LevelViewModel>() {
@@ -145,6 +146,7 @@ namespace hi_fi_prototype.Views
             {
                 LoadingIndicator.IsRunning = false;
                 AcceptChanges.IsEnabled = true;
+                LoadMoreButton.IsEnabled = true;
                 DiscardChanges.IsEnabled = true;
             }
         }

@@ -15,7 +15,7 @@
             <Image Source="acm_logo_hi_res.png" HorizontalOptions="Center" Margin="16"/>
 
             <Grid ColumnDefinitions="Auto,Auto" HorizontalOptions="Center">
-                <CheckBox x:Name="IsAuditor" IsChecked="True" VerticalOptions="Center"/>
+                <CheckBox x:Name="IsAuditorCheckBox" IsChecked="True" VerticalOptions="Center"/>
                 <Label Grid.Column="1" Text="Sign in as Auditor" VerticalOptions="Center"/>
             </Grid>
             

@@ -43,6 +43,7 @@ namespace hi_fi_prototype.ViewModels
         private string _description = string.Empty;
         private bool _isArchived;
         private string? _archiveReason;
+        private bool _isDeleting = false;
 
         public int? ID
         {
@@ -80,5 +81,10 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _archiveReason, value); }
         }
 
+        public bool IsDeleting
+        {
+            get { return _isDeleting; }
+            set { SetProperty(ref _isDeleting, value); }
+        }
     }
 }

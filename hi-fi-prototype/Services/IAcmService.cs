@@ -20,6 +20,7 @@ namespace hi_fi_prototype.Services
         Task<PageOfData<Member>> ListClubFoundingFathersAsync(int ID, int first, int count);
         Task<PageOfData<Member>> ListClubMembersAsync(int ID, int first, int count);
         Task<PageOfData<MemberStats>> ListClubMemberStatsAsync(int ID, int first, int count);
+        Task<PageOfData<Meal>> ListClubMealsAsync(int ID, int first, int count);
         Task<Club> GetClubAsync(int ID);
         Task<Club> AddClubAsync(Club x);
         Task<bool> UpdateClubAsync(Club x);

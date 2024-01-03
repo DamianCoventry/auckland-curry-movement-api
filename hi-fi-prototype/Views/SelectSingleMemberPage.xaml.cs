@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Alerts;
+using hi_fi_prototype.Services;
 using hi_fi_prototype.ViewModels;
 using System.Collections.ObjectModel;
 
@@ -58,10 +59,15 @@ namespace hi_fi_prototype.Views
                 };
             }
 
-            MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
+            MainThread.BeginInvokeOnMainThread(async () => { await DownloadSinglePageOfMembers(); });
         }
 
-        private async Task LoadData()
+        private static IAcmService AcmService
+        {
+            get { return ((AppShell)Shell.Current).AcmService; }
+        }
+
+        private async Task DownloadSinglePageOfMembers()
         {
             try
             {
@@ -70,55 +76,16 @@ namespace hi_fi_prototype.Views
                 LoadingIndicator.IsRunning = true;
                 AcceptChanges.IsEnabled = false;
                 DiscardChanges.IsEnabled = false;
+                LoadMoreButton.IsEnabled = false;
 
-                await Task.Delay(750);
-                var pretendRdbms = new List<MemberViewModel>() {
-                    new() { ID = 1, Name = "Alfred Sanchez" },
-                    new() { ID = 2, Name = "Kyle Scott" },
-                    new() { ID = 3, Name = "Kaiser Farley" },
-                    new() { ID = 4, Name = "Reginald Weber" },
-                    new() { ID = 5, Name = "Cullen Schmitt" },
-                    new() { ID = 6, Name = "Kenneth Allen" },
-                    new() { ID = 7, Name = "Jaxtyn Erickson" },
-                    new() { ID = 8, Name = "Barrett Herrera" },
-                    new() { ID = 9, Name = "Lee Dickerson" },
-                    new() { ID = 10, Name = "Edwin Spears" },
-                    new() { ID = 11, Name = "Luke Wood" },
-                    new() { ID = 12, Name = "Ben Vega" },
-                    new() { ID = 13, Name = "Marlowe Ho" },
-                    new() { ID = 14, Name = "Jaxton Hopkins" },
-                    new() { ID = 15, Name = "Allen Rangel" },
-                    new() { ID = 16, Name = "Fisher Willis" },
-                    new() { ID = 17, Name = "Terrance Cain" },
-                    new() { ID = 18, Name = "Alonso Pratt" },
-                    new() { ID = 19, Name = "Sonny Brandt" },
-                    new() { ID = 20, Name = "Asher Gates" },
-                    new() { ID = 21, Name = "Bruno Holmes" },
-                    new() { ID = 22, Name = "Hunter Gonzalez" },
-                    new() { ID = 23, Name = "Kendrick Shields" },
-                    new() { ID = 24, Name = "Braydon Brooks" },
-                    new() { ID = 25, Name = "Thomas Norris" },
-                    new() { ID = 26, Name = "Gage Suarez" },
-                    new() { ID = 27, Name = "Kolby Stone" },
-                    new() { ID = 28, Name = "Eden Berger" },
-                    new() { ID = 29, Name = "Memphis Blake" },
-                    new() { ID = 30, Name = "Eugene Callahan" },
-                    new() { ID = 31, Name = "Landin Mayer" },
-                    new() { ID = 32, Name = "Reginald Cervantes" },
-                    new() { ID = 33, Name = "Trevon Bird" },
-                    new() { ID = 34, Name = "Mauricio Patterson" },
-                };
-
-                _totalPages = pretendRdbms.Count / PageSize;
-                if (pretendRdbms.Count % PageSize > 0)
-                    _totalPages++;
-                _currentPage = Math.Min(Math.Max(0, _currentPage), _totalPages - 1);
-
-                LoadMoreButton.IsVisible = _currentPage < _totalPages - 1;
-
-                MergePageIntoListView(pretendRdbms.Skip(_currentPage * PageSize).Take(PageSize).ToList());
-
-                await Task.Delay(750);
+                // TODO: Get the club ID from somewhere
+                var pageOfData = await AcmService.ListClubMembersAsync(1, _currentPage * PageSize, PageSize);
+                if (pageOfData != null && pageOfData.PageItems != null)
+                {
+                    _totalPages = pageOfData.TotalPages;
+                    LoadMoreButton.IsVisible = _currentPage < _totalPages - 1;
+                    MergePageIntoListView(pageOfData.PageItems);
+                }
 
                 if (OriginalSelection != null)
                 {
@@ -145,6 +112,7 @@ namespace hi_fi_prototype.Views
                 LoadingIndicator.IsRunning = false;
                 AcceptChanges.IsEnabled = true;
                 DiscardChanges.IsEnabled = true;
+                LoadMoreButton.IsEnabled = true;
             }
         }
 
@@ -171,21 +139,17 @@ namespace hi_fi_prototype.Views
             }
         }
 
-        private void MergePageIntoListView(List<MemberViewModel> pageOfMembers)
+        private void MergePageIntoListView(List<acm_models.Member> pageOfMembers)
         {
             MemberItems.BatchBegin();
             foreach (var member in pageOfMembers)
             {
-                var x = _members.FirstOrDefault(y => y.ID == member.ID);
-                if (x == null)
+                var exists = _members.FirstOrDefault(y => y.ID == member.ID);
+                if (exists == null)
                 {
-                    _members.Add(new MemberViewModel()
-                    {
-                        ID = member.ID,
-                        Name = member.Name,
-                        ArchiveReason = member.ArchiveReason,
-                        IsArchived = member.IsArchived,
-                    });
+                    var vm = MemberViewModel.FromModel(member);
+                    if (vm != null)
+                        _members.Add(vm);
                 }
             }
             MemberItems.BatchCommit();
@@ -196,7 +160,7 @@ namespace hi_fi_prototype.Views
             if (_currentPage < _totalPages - 1)
             {
                 ++_currentPage;
-                MainThread.BeginInvokeOnMainThread(async () => { await LoadData(); });
+                MainThread.BeginInvokeOnMainThread(async () => { await DownloadSinglePageOfMembers(); });
             }
         }
 

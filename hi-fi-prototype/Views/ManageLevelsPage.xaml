@@ -5,36 +5,66 @@
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.ManageLevelsPage"
              x:DataType="views:ManageLevelsPage"
-             Title="Manage Levels"
-             >
+             x:Name="page"
+             Title="Manage Levels">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
-    <ScrollView>
+    <ScrollView x:Name="MainScrollView">
         <VerticalStackLayout>
-            
+
             <HorizontalStackLayout FlowDirection="RightToLeft">
                 <ImageButton x:Name="AddNewLevel" Source="add.png" WidthRequest="32" Margin="8"
                             ToolTipProperties.Text="Add New Level" Clicked="AddNewLevel_Clicked"/>
-                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
+                <ImageButton x:Name="RefreshLevelsList" Source="refresh.png" WidthRequest="32" Margin="8"
+                            ToolTipProperties.Text="Refresh club list" Clicked="RefreshLevelsList_Clicked"/>
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
             </HorizontalStackLayout>
 
-            <ListView x:Name="LevelItems" ItemsSource="{Binding Levels}" ItemTapped="LevelItems_ItemTapped" HasUnevenRows="True">
+            <!-- ItemTapped="LevelItems_ItemTapped" -->
+            <ListView x:Name="LevelItems" ItemsSource="{Binding Levels}" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:LevelViewModel">
                         <ViewCell>
-                            <Grid ColumnDefinitions="Auto,*,Auto">
+
+                            <Grid ColumnDefinitions="Auto,*">
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                <Button Grid.Column="1" Text="Delete"
+                                        Command="{Binding Source={x:Reference page}, Path=DeleteLevelCommand}"
+                                        CommandParameter="{Binding ID}"
+                                        HorizontalOptions="End"/>
+                                <!--<Button Grid.Column="1" Text="Delete"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type views:ManageLevelsPage}}, Path=DeleteLevelCommand}"
+                                        CommandParameter="{Binding ID}"
+                                        HorizontalOptions="End"/>-->
+                            </Grid>
+
+                            <!--<Grid ColumnDefinitions="Auto,*,Auto,Auto">
+
                                 <Image Grid.Column="0" Source="level.png" WidthRequest="32" Margin="8"/>
+
                                 <Grid Grid.Column="1" RowDefinitions="Auto,*">
                                     <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
                                     <Label Grid.Row="1" Text="{Binding Description}"/>
                                 </Grid>
+
                                 <Grid Grid.Column="2" RowDefinitions="Auto,*">
                                     <Label Text="Attendances" Margin="8,8,8,0"/>
                                     <Label Grid.Row="1" Text="{Binding RequiredAttendances}" FontAttributes="Bold"
                                            FontSize="Medium" HorizontalTextAlignment="Center"/>
                                 </Grid>
-                            </Grid>
+
+                                <Grid Grid.Column="3" ColumnDefinitions="Auto,Auto">
+                                    <ActivityIndicator x:Name="IsDeletingCheckBox" HeightRequest="24"
+                                                    IsRunning="True" IsVisible="{Binding IsDeleting}"/>
+                                    <ImageButton Grid.Column="1" Source="delete.png" WidthRequest="24" Margin="4,0"
+                                        ToolTipProperties.Text="Delete Level"
+                                        Command="{Binding Source={x:Reference page}, Path=DeleteLevelCommand}"
+                                        CommandParameter="{Binding ID}"/>
+                                </Grid>
+
+                            </Grid>-->
+
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

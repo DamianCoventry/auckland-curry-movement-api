@@ -11,10 +11,12 @@
         <VerticalStackLayout>
 
             <HorizontalStackLayout FlowDirection="RightToLeft">
-                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
+                <ImageButton x:Name="RefreshNotificationsList" Source="refresh.png" WidthRequest="32" Margin="8"
+                            ToolTipProperties.Text="Refresh club list" Clicked="RefreshNotificationsList_Clicked"/>
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
             </HorizontalStackLayout>
 
-            <ListView x:Name="NotificationItems" ItemsSource="{Binding Notifications}" HasUnevenRows="True">
+            <ListView x:Name="NotificationItems" ItemsSource="{Binding Notifications}" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:NotificationViewModel">
                         <ViewCell>
@@ -30,7 +32,7 @@
                                         <Image Source="club.png" WidthRequest="32" HeightRequest="32"
                                                ToolTipProperties.Text="Club" IsVisible="{Binding HasClub}" Margin="2"/>
                                         <Image Source="dinner.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Dinner" IsVisible="{Binding HasDinner}" Margin="2"/>
+                                               ToolTipProperties.Text="Notification" IsVisible="{Binding HasDinner}" Margin="2"/>
                                         <Image Source="exemption.png" WidthRequest="32" HeightRequest="32"
                                                ToolTipProperties.Text="Exemption" IsVisible="{Binding HasExemption}" Margin="2"/>
                                         <Image Source="kotc.png" WidthRequest="32" HeightRequest="32"

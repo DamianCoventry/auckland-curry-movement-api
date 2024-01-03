@@ -1,43 +1,50 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:hi_fi_prototype"
              xmlns:views="clr-namespace:hi_fi_prototype.Views"
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.ManageClubsPage"
              x:DataType="views:ManageClubsPage"
+             x:Name="page"
              Title="Manage Clubs">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>
-    <ScrollView>
-        <VerticalStackLayout>
-            
-            <HorizontalStackLayout FlowDirection="RightToLeft">
-                <ImageButton x:Name="AddNewClub" Source="add.png" WidthRequest="32" Margin="8"
-                            ToolTipProperties.Text="Add new club" Clicked="AddNewClub_Clicked"/>
-                <ImageButton x:Name="RefreshClubList" Source="refresh.png" WidthRequest="32" Margin="8"
-                            ToolTipProperties.Text="Refresh club list" Clicked="RefreshClubList_Clicked"/>
-                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
-            </HorizontalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
 
-            <ListView x:Name="ClubItems" ItemsSource="{Binding Clubs}" ItemTapped="ClubItems_ItemTapped" HasUnevenRows="True" SelectionMode="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:ClubViewModel">
-                        <ViewCell>
-                            <Grid ColumnDefinitions="Auto,*">
-                                <Image Grid.Column="0" Source="club.png" WidthRequest="32" Margin="8"/>
-                                <Grid Grid.Column="1" RowDefinitions="Auto,*">
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
-                                    <Label Grid.Row="1" Text="{Binding NumMembersString}"/>
-                                </Grid>
+        <HorizontalStackLayout FlowDirection="RightToLeft" Grid.Row="0">
+            <ImageButton x:Name="AddNewClub" Source="add.png" WidthRequest="32" Margin="8"
+                        ToolTipProperties.Text="Add new club" Clicked="AddNewClub_Clicked"/>
+            <ImageButton x:Name="RefreshClubList" Source="refresh.png" WidthRequest="32" Margin="8"
+                        ToolTipProperties.Text="Refresh club list" Clicked="RefreshClubList_Clicked"/>
+            <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
+        </HorizontalStackLayout>
+
+        <ListView x:Name="ClubItems" ItemsSource="{Binding Clubs}"
+                    ItemTapped="ClubItems_ItemTapped" HasUnevenRows="True" SelectionMode="None" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:ClubViewModel">
+                    <ViewCell>
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" InputTransparent="False">
+                            <Image Grid.Column="0" Source="club.png" WidthRequest="32" Margin="8,0"/>
+                            <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="0,8">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue"/>
+                                <Label Grid.Row="1" Text="{Binding NumMembersString}"/>
                             </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                            <ActivityIndicator x:Name="IsDeletingCheckBox" Grid.Column="2" HeightRequest="24"
+                                                IsRunning="True" IsVisible="{Binding IsDeleting}"/>
+                            <ImageButton Grid.Column="3" Source="delete.png" WidthRequest="24" Margin="4,0"
+                                            ToolTipProperties.Text="Delete club"
+                                            Command="{Binding Source={x:Reference page}, Path=DeleteClubCommand}"
+                                            CommandParameter="{Binding ID}" InputTransparent="False"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
-            <Button x:Name="LoadMoreButton" Text="Load More" Margin="100,8" IsVisible="False" Clicked="LoadMoreButton_Clicked"/>
+        <Button x:Name="LoadMoreButton" Text="Load More" Margin="100,8" IsVisible="False" Clicked="LoadMoreButton_Clicked" Grid.Row="2"/>
 
-        </VerticalStackLayout>
-    </ScrollView>
+    </Grid>
 </ContentPage>

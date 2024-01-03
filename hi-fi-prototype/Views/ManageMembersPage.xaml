@@ -14,10 +14,12 @@
         <VerticalStackLayout>
 
             <HorizontalStackLayout FlowDirection="RightToLeft">
-                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True"/>
+                <ImageButton x:Name="RefreshMembersList" Source="refresh.png" WidthRequest="32" Margin="8"
+                            ToolTipProperties.Text="Refresh club list" Clicked="RefreshMembersList_Clicked"/>
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False"/>
             </HorizontalStackLayout>
 
-            <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" ItemTapped="MemberItems_ItemTapped" HasUnevenRows="True">
+            <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" ItemTapped="MemberItems_ItemTapped" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:MemberViewModel">
                         <ViewCell>

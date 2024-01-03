@@ -6,42 +6,26 @@ namespace hi_fi_prototype.ViewModels
 {
     public class MealViewModel : INotifyPropertyChanged
     {
-        public static MealViewModel? FromModel(Reservation? reservation = null, Dinner? dinner = null)
+        static public MealViewModel? FromModel(Meal? model)
         {
-            if (reservation == null && dinner == null) return null;
-            var mealViewModel = new MealViewModel();
-
-            if (reservation != null)
+            if (model == null) return null;
+            return new MealViewModel()
             {
-                mealViewModel.Reservation = new ReservationViewModel()
-                {
-                    ID = reservation.ID,
-                    OrganiserID = reservation.OrganiserID,
-                    Organiser = MemberViewModel.FromModel(reservation.Organiser),
-                    RestaurantID = reservation.RestaurantID,
-                    Restaurant = RestaurantViewModel.FromModel(reservation.Restaurant),
-                    Year = reservation.Year,
-                    Month = reservation.Month,
-                    ExactDateTime = reservation.ExactDateTime,
-                    NegotiatedBeerPrice = reservation.NegotiatedBeerPrice,
-                    NegotiatedBeerDiscount = reservation.NegotiatedBeerDiscount,
-                    IsAmnesty = reservation.IsAmnesty,
-                };
-            }
-
-            if (dinner != null)
-            {
-                mealViewModel.Dinner = new DinnerViewModel()
-                {
-                    ID = dinner.ID,
-                    ReservationID = dinner.ReservationID,
-                    Reservation = ReservationViewModel.FromModel(dinner.Reservation),
-                    CostPerPerson = dinner.CostPerPerson,
-                    NumBeersConsumed = dinner.NumBeersConsumed,
-                };
-            }
-
-            return mealViewModel;
+                ReservationID = model.ReservationID,
+                OrganiserID = model.OrganiserID,
+                OrganiserName = model.OrganiserName,
+                RestaurantID = model.RestaurantID,
+                RestaurantName = model.RestaurantName,
+                Year = model.Year,
+                Month = model.Month,
+                ExactDateTime = model.ExactDateTime,
+                NegotiatedBeerPrice = model.NegotiatedBeerPrice,
+                NegotiatedBeerDiscount = model.NegotiatedBeerDiscount,
+                IsAmnesty = model.IsAmnesty,
+                DinnerID = model.DinnerID,
+                CostPerPerson = model.CostPerPerson,
+                NumBeersConsumed = model.NumBeersConsumed,
+            };
         }
 
         private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
@@ -61,23 +45,106 @@ namespace hi_fi_prototype.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private ReservationViewModel? _reservation;
-        private DinnerViewModel? _dinner;
+        private int _reservationID;
+        private int _organiserID;
+        private string _organiserName = string.Empty;
+        private int _restaurantID;
+        private string _restaurantName = string.Empty;
+        private int _year;
+        private int _month;
+        private DateTime _exactDateTime;
+        private double? _negotiatedBeerPrice;
+        private double? _negotiatedBeerDiscount;
+        private bool _isAmnesty;
+        private int? _dinnerID;
+        private double? _costPerPerson;
+        private int? _numBeersConsumed;
 
-        public bool HasReservation { get { return _reservation != null; } }
-
-        public ReservationViewModel? Reservation
+        public int ReservationID
         {
-            get { return _reservation; }
-            set { SetProperty(ref _reservation, value); }
+            get { return _reservationID; }
+            set { SetProperty(ref _reservationID, value); }
         }
 
-        public bool HasDinner { get { return _dinner != null; } }
-
-        public DinnerViewModel? Dinner
+        public int OrganiserID
         {
-            get { return _dinner; }
-            set { SetProperty(ref _dinner, value); }
+            get { return _organiserID; }
+            set { SetProperty(ref _organiserID, value); }
         }
+
+        public string OrganiserName
+        {
+            get { return _organiserName; }
+            set { SetProperty(ref _organiserName, value); }
+        }
+
+        public int RestaurantID
+        {
+            get { return _restaurantID; }
+            set { SetProperty(ref _restaurantID, value); }
+        }
+
+        public string RestaurantName
+        {
+            get { return _restaurantName; }
+            set { SetProperty(ref _restaurantName, value); }
+        }
+
+        public int Year
+        {
+            get { return _year; }
+            set { SetProperty(ref _year, value); }
+        }
+
+        public int Month
+        {
+            get { return _month; }
+            set { SetProperty(ref _month, value); }
+        }
+
+        public DateTime ExactDateTime
+        {
+            get { return _exactDateTime; }
+            set { SetProperty(ref _exactDateTime, value); }
+        }
+
+        public double? NegotiatedBeerPrice
+        {
+            get { return _negotiatedBeerPrice; }
+            set { SetProperty(ref _negotiatedBeerPrice, value); }
+        }
+
+        public double? NegotiatedBeerDiscount
+        {
+            get { return _negotiatedBeerDiscount; }
+            set { SetProperty(ref _negotiatedBeerDiscount, value); }
+        }
+
+        public bool IsAmnesty
+        {
+            get { return _isAmnesty; }
+            set { SetProperty(ref _isAmnesty, value); }
+        }
+
+        public int? DinnerID
+        {
+            get { return _dinnerID; }
+            set { SetProperty(ref _dinnerID, value); }
+        }
+
+        public double? CostPerPerson
+        {
+            get { return _costPerPerson; }
+            set { SetProperty(ref _costPerPerson, value); }
+        }
+
+        public int? NumBeersConsumed
+        {
+            get { return _numBeersConsumed; }
+            set { SetProperty(ref _numBeersConsumed, value); }
+        }
+
+        public bool HasDinner { get => _dinnerID != null; }
+        public bool HasNoDinner { get => _dinnerID == null; }
     }
 }

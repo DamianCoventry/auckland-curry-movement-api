@@ -6,9 +6,7 @@ namespace acm_rest_api
     public class AcmDatabaseContext : DbContext
     {
         public AcmDatabaseContext(DbContextOptions<AcmDatabaseContext> options)
-            : base(options)
-        {
-        }
+            : base(options) {}
 
         public DbSet<Restaurant>? Restaurant { get; set; }
 
@@ -47,26 +45,29 @@ namespace acm_rest_api
             modelBuilder.Entity<RotY>()
                 .HasKey("Year");
 
+            modelBuilder.Entity<Membership>()
+                .HasOne(x => x.Member);
+
             modelBuilder.Entity<Meal>()
                 .HasKey("ReservationID");
 
             modelBuilder.Entity<Club>()
-                .HasMany(x => x.Members)
+                .HasMany(x => x.Memberships)
                 .WithMany(x => x.Clubs)
                 .UsingEntity<Membership>();
 
-            modelBuilder.Entity<Member>()
+            modelBuilder.Entity<Membership>()
                 .HasMany(x => x.Dinners)
-                .WithMany(x => x.Members)
+                .WithMany(x => x.Memberships)
                 .UsingEntity<Attendee>();
 
-            modelBuilder.Entity<Member>()
-                .HasOne(x => x.CurrentLevel)
-                .WithMany(x => x.Members)
-                .HasForeignKey(x => x.CurrentLevelID)
+            modelBuilder.Entity<Membership>()
+                .HasOne(x => x.Level)
+                .WithMany(x => x.Memberships)
+                .HasForeignKey(x => x.LevelID)
                 .IsRequired();
 
-            modelBuilder.Entity<Member>()
+            modelBuilder.Entity<Membership>()
                 .HasMany(x => x.Inductees)
                 .WithOne(x => x.Sponsor)
                 .HasForeignKey(x => x.SponsorID)
@@ -89,7 +90,7 @@ namespace acm_rest_api
                 .HasForeignKey(x => x.FoundingFatherID);
 
             modelBuilder.Entity<Exemption>()
-                .HasOne(x => x.Member)
+                .HasOne(x => x.Membership)
                 .WithMany(x => x.ExemptionsReceived)
                 .HasForeignKey(x => x.MemberID);
 
@@ -99,7 +100,7 @@ namespace acm_rest_api
                 .HasForeignKey(x => x.FoundingFatherID);
 
             modelBuilder.Entity<Violation>()
-                .HasOne(x => x.Member)
+                .HasOne(x => x.Membership)
                 .WithMany(x => x.ViolationsReceived)
                 .HasForeignKey(x => x.MemberID);
         }

@@ -7,16 +7,20 @@ namespace hi_fi_prototype.Views
 		public SignInPage()
 		{
 			InitializeComponent();
-		}
+
+            SignIn.Activity = async (parameter) =>
+            {
+                return await AcmService.SignIn();
+            };
+        }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
             IsAuditorCheckBox.IsEnabled = true;
-            SignInButton.IsEnabled = true;
-            SigningInProgress.IsVisible = false;
-            SigningInIndicator.IsRunning = false;
-            SigningInIndicator.IsVisible = true;
+
+            Task.Run(StartAnimation);
         }
 
         private static IAcmService AcmService
@@ -24,42 +28,49 @@ namespace hi_fi_prototype.Views
 			get { return ((AppShell)Shell.Current).AcmService; }
 		}
 
-		private async void SignInButton_Clicked(object sender, EventArgs e)
-		{
-            try
-            {
-			    if (SigningInProgress.IsVisible)
-				    return;
-                IsAuditorCheckBox.IsEnabled = false;
-                SignInButton.IsEnabled = false;
-                SigningInProgress.IsVisible = true;
-                SigningInIndicator.IsRunning = true;
-                SigningInIndicator.IsVisible = true;
-                SignInResult.Text = "Signing in...";
-                await Task.Delay(250);
-
-                bool success = await AcmService.SignIn();
-
-                SignInResult.Text = success ? "Signed in" : "Failed to sign in";
-                SigningInIndicator.IsRunning = false;
-                SigningInIndicator.IsVisible = false;
-                await Task.Delay(1500);
-
-                if (IsAuditorCheckBox.IsChecked) // Temporary
-                    await Shell.Current.GoToAsync("//manage_clubs");
-                else
-                    await Shell.Current.GoToAsync("//manage_dinners");
-            }
-            catch (Exception ex)
-		    {
-                await DisplayAlert("Error", ex.Message, "Close");
-            }
-            finally
-		    {
-                IsAuditorCheckBox.IsEnabled = true;
-                SignInButton.IsEnabled = true;
-                SigningInProgress.IsVisible = false;
-            }
+        private async void SignIn_ActivitySucceeded(object sender, EventArgs e)
+        {
+            if (IsAuditorCheckBox.IsChecked) // Temporary
+                await Shell.Current.GoToAsync("//manage_clubs");
+            else
+                await Shell.Current.GoToAsync("//manage_dinners");
         }
-	}
+
+        private async void SignIn_ActivityFailed(object sender, EventArgs e)
+        {
+            await DisplayAlert("Error", SignIn.FailureExceptionText, "Close");
+        }
+
+        private async Task StartAnimation()
+        {
+            Logo.Opacity = 0;
+            Auditor.Opacity = 0;
+            SignIn.Opacity = 0;
+            double logoY = Logo.TranslationX;
+            double auditorX = Auditor.TranslationX;
+            double signInX = SignIn.TranslationX;
+            Logo.TranslationY -= 500;
+            Auditor.TranslationX -= 75;
+            SignIn.TranslationX += 75;
+
+            Easing easing = Easing.CubicOut;
+            const uint translateTimeMs = 500;
+            const uint fadeTimeMs = 1000;
+
+            await Task.WhenAny([
+                Logo.FadeTo(1, fadeTimeMs*2, easing),
+                Logo.TranslateTo(Logo.TranslationX, logoY, translateTimeMs, easing),
+            ]);
+
+            await Task.WhenAny([
+                Auditor.FadeTo(1, fadeTimeMs, easing),
+                Auditor.TranslateTo(auditorX, Auditor.TranslationY, translateTimeMs/2, easing),
+            ]);
+
+            await Task.WhenAny([
+                SignIn.FadeTo(1, fadeTimeMs, easing),
+                SignIn.TranslateTo(signInX, SignIn.TranslationY, translateTimeMs/2, easing),
+            ]);
+        }
+    }
 }

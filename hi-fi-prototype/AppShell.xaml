@@ -7,8 +7,17 @@
     x:Class="hi_fi_prototype.AppShell"
     x:DataType="local:AppShell"
     Title="hi_fi_prototype"
-    BackgroundColor="{StaticResource Primary}"
-    TitleColor="WhiteSmoke">
+    BackgroundColor="#eaefd3">
+    <Shell.FlyoutBackground>
+        <!-- StartPoint defaults to (0,0)      
+             Endpoint defaults to (1,1) -->
+        <LinearGradientBrush>
+            <GradientStop Color="#b3c0a4"
+                          Offset="0.8" />
+            <GradientStop Color="#505168"
+                          Offset="0.2" />
+        </LinearGradientBrush>
+    </Shell.FlyoutBackground>
 
     <Shell.FlyoutHeader>
         <Image Source="acm_logo_hi_res.png"/>

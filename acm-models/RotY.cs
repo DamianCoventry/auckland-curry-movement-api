@@ -9,7 +9,7 @@
         public int TotalVotes { get; set; }
         public double WinningScore { get; set; }
         public int? PresenterID { get; set; }
-        public Member? Presenter { get; set; }
+        public Membership? Presenter { get; set; }
 
         public ICollection<Notification>? Notifications { get; set; }
     }

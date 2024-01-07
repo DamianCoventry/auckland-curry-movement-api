@@ -1,7 +1,6 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -57,7 +56,7 @@ namespace acm_rest_api.Controllers
                 .Include(x => x.Exemption)
                 .Include(x => x.KotC)
                 .Include(x => x.Level)
-                .Include(x => x.Member)
+                .Include(x => x.Membership)
                 .Include(x => x.Reservation)
                 .Include(x => x.Restaurant)
                 .Include(x => x.RotY)

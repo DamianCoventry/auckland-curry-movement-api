@@ -1,7 +1,6 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -45,25 +44,12 @@ namespace acm_rest_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Member>> GetMember(int? id)
         {
-            if (_context.Member == null)
+            if (_context.Member == null || id == null)
             {
                 return NotFound();
             }
 
             var member = await _context.Member
-                .Include(x => x.Sponsor)
-                .Include(x => x.Clubs)
-                .Include(x => x.Dinners)
-                .Include(x => x.Attendees)
-                .Include(x => x.CurrentLevel)
-                .Include(x => x.ExemptionsGiven)
-                .Include(x => x.ExemptionsReceived)
-                .Include(x => x.KotCs)
-                .Include(x => x.Reservations)
-                .Include(x => x.RotYs)
-                .Include(x => x.ViolationsGiven)
-                .Include(x => x.ViolationsReceived)
-                .Include(x => x.Notifications)
                 .Where(x => x.ID == id)
                 .FirstOrDefaultAsync();
             if (member == null)
@@ -71,15 +57,19 @@ namespace acm_rest_api.Controllers
                 return NotFound();
             }
 
-            if (_context.Attendee != null)
+            // Update the cached attendance count if it's changed.
+            if (_context.Attendee != null && _context.Membership != null)
             {
-                // Update the cached attendance count if it's changed.
-                int count = await _context.Attendee.CountAsync(x => x.MemberID == id);
-                if (count != member.AttendanceCount)
+                var membership = await _context.Membership.Where(x => x.MemberID == id).FirstOrDefaultAsync();
+                if (membership != null)
                 {
-                    member.AttendanceCount = count;
-                    _context.Entry(member).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
+                    int count = await _context.Attendee.CountAsync(x => x.MemberID == id);
+                    if (count != membership.AttendanceCount)
+                    {
+                        membership.AttendanceCount = count;
+                        _context.Entry(membership).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
 

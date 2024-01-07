@@ -1,7 +1,6 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -52,7 +51,7 @@ namespace acm_rest_api.Controllers
 
             var level = await _context.Level
                 .Include(x => x.Attendees)
-                .Include(x => x.Members)
+                .Include(x => x.Memberships)
                 .Include(x => x.Notifications)
                 .Where(x => x.ID == id)
                 .FirstOrDefaultAsync();

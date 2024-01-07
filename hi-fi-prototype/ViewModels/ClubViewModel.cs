@@ -14,7 +14,7 @@ namespace hi_fi_prototype.ViewModels
             {
                 ID = model.ID,
                 Name = model.Name,
-                NumMembers = model.Members != null ? model.Members.Count : 0,
+                NumMembers = model.Memberships != null ? model.Memberships.Count : 0,
                 IsDeleting = false,
                 IsArchived = model.IsArchived,
                 ArchiveReason = model.ArchiveReason,
@@ -42,7 +42,7 @@ namespace hi_fi_prototype.ViewModels
         private string _name = string.Empty;
         private bool _isArchived;
         private string? _archiveReason;
-        private ObservableCollection<MemberViewModel> _foundingFathers = [];
+        private ObservableCollection<MembershipViewModel> _foundingFathers = [];
         private int _numMembers = 0;
         private bool _isDeleting = false;
 
@@ -70,7 +70,7 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _archiveReason, value); }
         }
 
-        public ObservableCollection<MemberViewModel> FoundingFathers
+        public ObservableCollection<MembershipViewModel> FoundingFathers
         {
             get { return _foundingFathers; }
             set { SetProperty(ref _foundingFathers, value); }

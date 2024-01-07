@@ -4,7 +4,7 @@
     {
         public int? ID { get; set; }
         public int OrganiserID { get; set; }
-        public Member? Organiser { get; set; }
+        public Membership? Organiser { get; set; }
         public int RestaurantID { get; set; }
         public Restaurant? Restaurant { get; set; }
         public int Year { get; set; }

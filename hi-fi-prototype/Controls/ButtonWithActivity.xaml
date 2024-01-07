@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:hi_fi_prototype.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="hi_fi_prototype.Controls.ButtonWithActivity"
+             x:DataType="controls:ButtonWithActivity"
+             BackgroundColor="Transparent">
+    
+    <Grid IsClippedToBounds="True">
+        <Button x:Name="StartActivityButton" Text="{Binding InitialText, FallbackValue='Button'}"
+                TextColor="{Binding ForegroundColor, FallbackValue='White'}" Clicked="StartActivityButton_Clicked"/>
+        <Image x:Name="ActivityImage" WidthRequest="{Binding ActivityImageSize, FallbackValue=24}"
+               Source="{Binding ActivityImageSource, FallbackValue='settings.png'}" IsVisible="False">
+            <Image.Behaviors>
+                <toolkit:IconTintColorBehavior TintColor="{Binding ForegroundColor, FallbackValue='White'}"/>
+            </Image.Behaviors>
+        </Image>
+    </Grid>
+    
+</ContentView>

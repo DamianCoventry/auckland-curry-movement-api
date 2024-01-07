@@ -13,7 +13,7 @@ namespace hi_fi_prototype.ViewModels
             {
                 ID = model.ID,
                 OrganiserID = model.OrganiserID,
-                Organiser = MemberViewModel.FromModel(model.Organiser),
+                Organiser = MembershipViewModel.FromModel(model.Organiser),
                 RestaurantID = model.RestaurantID,
                 Restaurant = RestaurantViewModel.FromModel(model.Restaurant),
                 Year = model.Year,
@@ -44,7 +44,7 @@ namespace hi_fi_prototype.ViewModels
 
         private int? _id;
         private int _organiserID;
-        private MemberViewModel? _organiser;
+        private MembershipViewModel? _organiser;
         private int _restaurantID;
         private RestaurantViewModel? _restaurant;
         private int _year;
@@ -66,7 +66,7 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _organiserID, value); }
         }
 
-        public MemberViewModel? Organiser
+        public MembershipViewModel? Organiser
         {
             get { return _organiser; }
             set { SetProperty(ref _organiser, value); }

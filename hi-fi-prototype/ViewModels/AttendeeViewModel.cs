@@ -15,7 +15,7 @@ namespace hi_fi_prototype.ViewModels
                 DinnerID = model.DinnerID,
                 Dinner = DinnerViewModel.FromModel(model.Dinner),
                 MemberID = model.MemberID,
-                Member = MemberViewModel.FromModel(model.Member),
+                Membership = MembershipViewModel.FromModel(model.Membership),
                 LevelID = model.LevelID,
                 Level = LevelViewModel.FromModel(model.Level),
                 IsSponsor = model.IsSponsor,
@@ -44,7 +44,7 @@ namespace hi_fi_prototype.ViewModels
         private int _dinnerID;
         private DinnerViewModel? _dinner;
         private int _memberID;
-        private MemberViewModel? _member;
+        private MembershipViewModel? _membership;
         private int _levelID;
         private LevelViewModel? _level;
         private bool _isSponsor;
@@ -74,10 +74,10 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _memberID, value); }
         }
 
-        public MemberViewModel? Member
+        public MembershipViewModel? Membership
         {
-            get { return _member; }
-            set { SetProperty(ref _member, value); }
+            get { return _membership; }
+            set { SetProperty(ref _membership, value); }
         }
 
         public int LevelID

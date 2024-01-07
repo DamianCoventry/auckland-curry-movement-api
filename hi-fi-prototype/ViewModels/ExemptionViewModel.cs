@@ -13,9 +13,9 @@ namespace hi_fi_prototype.ViewModels
             {
                 ID = model.ID,
                 FoundingFatherID = model.FoundingFatherID,
-                FoundingFather = MemberViewModel.FromModel(model.FoundingFather),
+                FoundingFather = MembershipViewModel.FromModel(model.FoundingFather),
                 MemberID = model.MemberID,
-                Member = MemberViewModel.FromModel(model.Member),
+                Membership = MembershipViewModel.FromModel(model.Membership),
                 Date = model.Date,
                 ShortReason = model.ShortReason,
                 LongReason = model.LongReason,
@@ -43,9 +43,9 @@ namespace hi_fi_prototype.ViewModels
 
         private int? _id;
         private int _foundingFatherID;
-        private MemberViewModel? _foundingFather;
+        private MembershipViewModel? _foundingFather;
         private int _memberID;
-        private MemberViewModel? _member;
+        private MembershipViewModel? _membership;
         private DateTime _date;
         private string _shortReason = string.Empty;
         private string _longReason = string.Empty;
@@ -64,7 +64,7 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _foundingFatherID, value); }
         }
 
-        public MemberViewModel? FoundingFather
+        public MembershipViewModel? FoundingFather
         {
             get { return _foundingFather; }
             set { SetProperty(ref _foundingFather, value); }
@@ -76,10 +76,10 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _memberID, value); }
         }
 
-        public MemberViewModel? Member
+        public MembershipViewModel? Membership
         {
-            get { return _member; }
-            set { SetProperty(ref _member, value); }
+            get { return _membership; }
+            set { SetProperty(ref _membership, value); }
         }
 
         public DateTime Date

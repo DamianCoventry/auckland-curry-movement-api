@@ -39,7 +39,7 @@ namespace hi_fi_prototype.ViewModels
 
         private int? _id;
         private int _memberID;
-        private MemberViewModel? _member;
+        private MemberViewModel? _membership;
         private int _dinnerID;
         private DinnerViewModel? _dinner;
         private int _numChillisConsumed;
@@ -58,8 +58,8 @@ namespace hi_fi_prototype.ViewModels
 
         public MemberViewModel? Member
         {
-            get { return _member; }
-            set { SetProperty(ref _member, value); }
+            get { return _membership; }
+            set { SetProperty(ref _membership, value); }
         }
 
         public int DinnerID

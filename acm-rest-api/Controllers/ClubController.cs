@@ -35,7 +35,7 @@ namespace acm_rest_api.Controllers
                 CurrentPage = first,
                 TotalPages = totalPages,
                 PageItems = await _context.Club
-                    .Include(x => x.Members)
+                    .Include(x => x.Memberships)
                     .OrderBy(x => x.ID)
                     .Skip(first).Take(pageSize)
                     .ToListAsync()
@@ -52,7 +52,7 @@ namespace acm_rest_api.Controllers
             }
 
             var club = await _context.Club
-                .Include(x => x.Members)
+                .Include(x => x.Memberships)
                 .Include(x => x.Notifications)
                 .Where(x => x.ID == id)
                 .FirstOrDefaultAsync();
@@ -82,7 +82,7 @@ namespace acm_rest_api.Controllers
             string sql =
                 @"SELECT m.[ID]
                          ,m.[Name]
-                         ,m.[CurrentLevelID]
+                         ,ms3.[LevelID]
                          ,(SELECT COUNT(*) FROM [dbo].[Membership] ms1 WHERE ms1.[MemberID] = m.ID) AS MembershipCount
                          ,(SELECT COUNT(*) FROM [dbo].[Membership] ms2 WHERE ms2.[MemberID] = m.ID AND ms2.ClubID = " + id.ToString() + @" AND ms2.IsFoundingFather <> 0) AS IsFoundingFather
                          ,(SELECT COUNT(*) FROM [dbo].[Attendee] a WHERE a.[MemberID] = m.ID) AS DinnersAttendedCount
@@ -171,7 +171,7 @@ namespace acm_rest_api.Controllers
             }
 
             string sql =
-                @"SELECT d.ID, m.ID AS OrganiserID, m.Name AS OrganiserName, m.CurrentLevelID AS OrganiserLevelID, mc.IsFoundingFather AS IsOrganiserFoundingFather,
+                @"SELECT d.ID, m.ID AS OrganiserID, m.Name AS OrganiserName, mc.LevelID AS OrganiserLevelID, mc.IsFoundingFather AS IsOrganiserFoundingFather,
                         rs.ID AS RestaurantID, rs.Name AS RestaurantName,
                         rv.ExactDateTime, rv.NegotiatedBeerPrice, rv.NegotiatedBeerDiscount, rv.IsAmnesty,
                         d.CostPerPerson, d.NumBeersConsumed,
@@ -229,7 +229,7 @@ namespace acm_rest_api.Controllers
                 PageItems = await _context
                                     .Set<Member>()
                                     .FromSqlRaw(
-                                        "SELECT [m].[ID], [m].[Name], [m].[SponsorID], [m].[CurrentLevelID], [m].[AttendanceCount], [m].[IsArchived], [m].[ArchiveReason] " +
+                                        "SELECT [m].[ID], [m].[Name], [mc].[SponsorID], [mc].[LevelID], [mc].[AttendanceCount], [m].[IsArchived], [m].[ArchiveReason] " +
                                         "FROM [dbo].[Member] m " +
                                         "INNER JOIN Membership mc ON [mc].[MemberID] = [m].[ID] AND [mc].[IsFoundingFather] <> 0 " +
                                        $"AND [mc].[ClubID] = {id}")
@@ -238,9 +238,9 @@ namespace acm_rest_api.Controllers
             };
         }
 
-        // GET: api/Club/65/Members
-        [HttpGet("{id}/Members")]
-        public async Task<ActionResult<PageOfData<Member>>> GetClubMembers(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
+        // GET: api/Club/65/Memberships
+        [HttpGet("{id}/Memberships")]
+        public async Task<ActionResult<PageOfData<Membership>>> GetClubMemberships(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
             if (_context.Club == null || _context.Member == null || _context.Membership == null || pageSize <= 0)
             {
@@ -258,20 +258,40 @@ namespace acm_rest_api.Controllers
             if (rowCount % pageSize > 0)
                 ++totalPages;
 
-            return new PageOfData<Member>()
+            return new PageOfData<Membership>()
             {
                 CurrentPage = first,
                 TotalPages = totalPages,
-                PageItems = await _context
-                                    .Set<Member>()
-                                    .FromSqlRaw(
-                                        "SELECT [m].[ID], [m].[Name], [m].[SponsorID], [m].[CurrentLevelID], [m].[AttendanceCount], [m].[IsArchived], [m].[ArchiveReason] " +
-                                        "FROM [dbo].[Member] m " +
-                                        "INNER JOIN Membership mc ON [mc].[MemberID] = [m].[ID] " +
-                                       $"AND [mc].[ClubID] = {id}")
-                                    .OrderBy(x => x.ID).Skip(first).Take(pageSize)
+                PageItems = await _context.Membership
+                                    .Where(x => x.ClubID == id)
+                                    .OrderBy(x => x.MemberID).Skip(first).Take(pageSize)
                                     .ToListAsync()
             };
+        }
+
+        // GET: api/Club/43/Membership/18
+        [HttpGet("{clubId}/Membership/{membershipId}")]
+        public async Task<ActionResult<Membership>> GetClubMembership(int? clubId, int? memberId)
+        {
+            if (_context.Club == null || _context.Membership == null)
+            {
+                return NotFound();
+            }
+
+            var club = await _context.Club.Where(x => x.ID == clubId).FirstOrDefaultAsync();
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            var membership = await _context.Membership
+                .Where(x => x.ClubID == clubId && x.MemberID == memberId)
+                .FirstOrDefaultAsync();
+            if (membership == null)
+            {
+                return NotFound();
+            }
+            return membership;
         }
 
         // PUT: api/Club/5
@@ -284,8 +304,8 @@ namespace acm_rest_api.Controllers
                 return BadRequest();
             }
 
-            var foundingFathers = club.Members;
-            club.Members = null;
+            var foundingFathers = club.Memberships;
+            club.Memberships = null;
             club.Notifications = null;
 
             _context.Entry(club).State = EntityState.Modified;
@@ -311,7 +331,7 @@ namespace acm_rest_api.Controllers
                 var memberships = await _context.Membership.Where(x => x.ClubID == id).ToListAsync();
                 foreach (var membership in memberships)
                 {
-                    membership.IsFoundingFather = foundingFathers.Where(x => x.ID == membership.MemberID).Any();
+                    membership.IsFoundingFather = foundingFathers.Where(x => x.MemberID == membership.MemberID).Any();
                     _context.Entry(membership).State = EntityState.Modified;
                 }
 
@@ -332,12 +352,12 @@ namespace acm_rest_api.Controllers
                 return Problem("Entity set 'AcmDatabaseContext.Membership' is null.");
             if (_context.Member == null)
                 return Problem("Entity set 'AcmDatabaseContext.Member' is null.");
-            if (club.Members == null || club.Members.Count == 0)
+            if (club.Memberships == null || club.Memberships.Count == 0)
                 return Problem("No founding father names were supplied");
 
-            var memberNamesOnly = club.Members;
+            var requestedFFs = club.Memberships;
             club.ID = null;
-            club.Members = null;
+            club.Memberships = null;
             club.Notifications = null;
             _context.Club.Add(club);
 
@@ -345,26 +365,29 @@ namespace acm_rest_api.Controllers
             if (club.ID == null)
                 return Problem("The RDBMS was unable to save the new club.");
 
-            foreach (var memberName in memberNamesOnly)
+            foreach (var ff in requestedFFs)
             {
-                var member = new Member()
-                {
-                    Name = memberName.Name,
-                    CurrentLevelID = 1,
-                    AttendanceCount = 0
-                };
+                if (ff.Member == null)
+                    continue;
 
-                _context.Member.Add(member);
-                await _context.SaveChangesAsync(); // if this succeeds then member.ID becomes valid to use.
+                Member newMember = new() { Name = ff.Member.Name };
+                _context.Member.Add(newMember);
+                await _context.SaveChangesAsync(); // if this succeeds then newMember.ID becomes valid to use.
 
-                if (member.ID != null)
+                if (newMember.ID != null)
                 {
-                    _context.Membership.Add(new Membership()
+                    Membership newMembership = new()
                     {
+                        MemberID = (int)newMember.ID,
                         ClubID = (int)club.ID,
-                        MemberID = (int)member.ID,
-                        IsFoundingFather = true
-                    });
+                        LevelID = 1,
+                        AttendanceCount = 0,
+                        IsAdmin = false,
+                        IsFoundingFather = true,
+                        IsAuditor = ff.IsAuditor,
+                    };
+
+                    _context.Membership.Add(newMembership);
                     await _context.SaveChangesAsync();
                 }
             }

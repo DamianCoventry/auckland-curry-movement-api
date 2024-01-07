@@ -13,6 +13,12 @@ namespace hi_fi_prototype.Views
         {
             base.OnAppearing();
 
+            Logo.Opacity = 0;
+            Logo.FadeTo(1, 1000, Easing.CubicIn);
+
+            Activity.Opacity = 0;
+            Activity.FadeTo(1, 1000, Easing.CubicIn);
+
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 AcmService.SignOut();

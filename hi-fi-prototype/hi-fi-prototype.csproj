@@ -61,15 +61,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <AndroidResource Remove="NewFolder\**" />
-	  <Compile Remove="NewFolder\**" />
-	  <EmbeddedResource Remove="NewFolder\**" />
-	  <MauiCss Remove="NewFolder\**" />
-	  <MauiXaml Remove="NewFolder\**" />
-	  <None Remove="NewFolder\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="Microsoft.Identity.Client" Version="4.58.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
@@ -93,6 +84,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Controls\ButtonWithActivity.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AddClubPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

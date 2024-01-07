@@ -1,7 +1,6 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {

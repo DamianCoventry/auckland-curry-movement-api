@@ -5,8 +5,17 @@
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.ManageNotificationsPage"
              x:DataType="views:ManageNotificationsPage"
-             Title="Manage Notifications"
-             >
+             Title="Manage Notifications">
+    <ContentPage.Background>
+        <!-- StartPoint defaults to (0,0)      
+             Endpoint defaults to (1,1) -->
+        <LinearGradientBrush>
+            <GradientStop Color="#b3c0a4"
+                          Offset="0.1" />
+            <GradientStop Color="#505168"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
     <ScrollView>
         <VerticalStackLayout>
 

@@ -1,7 +1,6 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -52,7 +51,7 @@ namespace acm_rest_api.Controllers
 
             var exemption = await _context.Exemption
                 .Include(x => x.FoundingFather)
-                .Include(x => x.Member)
+                .Include(x => x.Membership)
                 .Include(x => x.Notifications)
                 .Where(x => x.ID == id)
                 .FirstOrDefaultAsync();

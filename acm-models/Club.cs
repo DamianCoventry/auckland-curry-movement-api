@@ -7,7 +7,7 @@
         public bool IsArchived { get; set; }
         public string? ArchiveReason { get; set; }
 
-        public ICollection<Member>? Members { get; set; }
+        public ICollection<Membership>? Memberships { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
     }
 }

@@ -7,6 +7,16 @@
              x:Class="hi_fi_prototype.Views.EditMemberPage"
              x:DataType="viewmodels:MemberViewModel"
              Title="Edit Member">
+    <ContentPage.Background>
+        <!-- StartPoint defaults to (0,0)      
+             Endpoint defaults to (1,1) -->
+        <LinearGradientBrush>
+            <GradientStop Color="#b3c0a4"
+                          Offset="0.1" />
+            <GradientStop Color="#505168"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ManageNotifications" Text="Notifications" IconImageSource="notification.png" Clicked="ManageNotifications_Clicked"/>
     </ContentPage.ToolbarItems>

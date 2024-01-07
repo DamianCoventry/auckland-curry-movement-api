@@ -28,7 +28,7 @@ namespace hi_fi_prototype.ViewModels
                 LevelID = model.LevelID,
                 Level = LevelViewModel.FromModel(model.Level),
                 MemberID = model.MemberID,
-                Member = MemberViewModel.FromModel(model.Member),
+                Membership = MembershipViewModel.FromModel(model.Membership),
                 ReservationID = model.ReservationID,
                 Reservation = ReservationViewModel.FromModel(model.Reservation),
                 RestaurantID = model.RestaurantID,
@@ -74,7 +74,7 @@ namespace hi_fi_prototype.ViewModels
         private int? _levelID;
         private LevelViewModel? _level;
         private int? _memberID;
-        private MemberViewModel? _member;
+        private MembershipViewModel? _membership;
         private int? _reservationID;
         private ReservationViewModel? _reservation;
         private int? _restaurantID;
@@ -198,12 +198,12 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _memberID, value); }
         }
 
-        public bool HasMember { get => Member != null; }
+        public bool HasMember { get => Membership != null; }
 
-        public MemberViewModel? Member
+        public MembershipViewModel? Membership
         {
-            get { return _member; }
-            set { SetProperty(ref _member, value); }
+            get { return _membership; }
+            set { SetProperty(ref _membership, value); }
         }
 
         public int? ReservationID

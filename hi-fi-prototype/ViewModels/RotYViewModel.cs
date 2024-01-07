@@ -17,7 +17,7 @@ namespace hi_fi_prototype.ViewModels
                 NumVotes = model.NumVotes,
                 WinningScore = model.WinningScore,
                 PresenterID = model.PresenterID,
-                Presenter = MemberViewModel.FromModel(model.Presenter),
+                Presenter = MembershipViewModel.FromModel(model.Presenter),
             };
         }
 
@@ -45,7 +45,7 @@ namespace hi_fi_prototype.ViewModels
         private int _totalVotes;
         private double _winningScore;
         private int? _presenterID;
-        private MemberViewModel? _presenter;
+        private MembershipViewModel? _presenter;
 
         public int? Year
         {
@@ -89,7 +89,7 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _presenterID, value); }
         }
 
-        public MemberViewModel? Presenter
+        public MembershipViewModel? Presenter
         {
             get { return _presenter; }
             set { SetProperty(ref _presenter, value); }

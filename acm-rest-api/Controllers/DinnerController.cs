@@ -1,8 +1,6 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Drawing.Printing;
 
 namespace acm_rest_api.Controllers
 {
@@ -54,7 +52,7 @@ namespace acm_rest_api.Controllers
             var dinner = await _context.Dinner
                 .Include(x => x.Reservation)
                 .Include(x => x.Attendees)
-                .Include(x => x.Members)
+                .Include(x => x.Memberships)
                 .Include(x => x.KotC)
                 .Include(x => x.Violations)
                 .Include(x => x.Notifications)
@@ -79,7 +77,7 @@ namespace acm_rest_api.Controllers
 
             List<Attendee> attendees = await _context.Attendee
                 .Include(x => x.Dinner)
-                .Include(x => x.Member)
+                .Include(x => x.Membership)
                 .Include(x => x.Level)
                 .Where(x => x.DinnerID == id)
                 .ToListAsync();

@@ -20,7 +20,7 @@
         public int? LevelID { get; set; }
         public Level? Level { get; set; }
         public int? MemberID { get; set; }
-        public Member? Member { get; set; }
+        public Membership? Membership { get; set; }
         public int? ReservationID { get; set; }
         public Reservation? Reservation { get; set; }
         public int? RestaurantID { get; set; }

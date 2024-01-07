@@ -3,28 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:hi_fi_prototype.Views"
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
+             xmlns:controls="clr-namespace:hi_fi_prototype.Controls"
              x:Class="hi_fi_prototype.Views.SignInPage"
              x:DataType="views:SignInPage"
              Title="Sign In"
-             BackgroundColor="#f2fbf8"
              Shell.FlyoutBehavior="Disabled"
              Shell.NavBarIsVisible="False">
+    <ContentPage.Background>
+        <!-- StartPoint defaults to (0,0)      
+             Endpoint defaults to (1,1) -->
+        <LinearGradientBrush>
+            <GradientStop Color="#b3c0a4"
+                          Offset="0.1" />
+            <GradientStop Color="#505168"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
     <ScrollView>
         <VerticalStackLayout>
             
-            <Image Source="acm_logo_hi_res.png" HorizontalOptions="Center" Margin="16"/>
+            <Image x:Name="Logo" Source="acm_logo_hi_res.png" HorizontalOptions="Center" Margin="16"/>
 
-            <Grid ColumnDefinitions="Auto,Auto" HorizontalOptions="Center">
+            <Grid x:Name="Auditor" ColumnDefinitions="Auto,Auto" HorizontalOptions="Center">
                 <CheckBox x:Name="IsAuditorCheckBox" IsChecked="True" VerticalOptions="Center"/>
                 <Label Grid.Column="1" Text="Sign in as Auditor" VerticalOptions="Center"/>
             </Grid>
-            
-            <Button x:Name="SignInButton" Text="Sign In" Margin="128,4" Clicked="SignInButton_Clicked"/>
 
-            <HorizontalStackLayout x:Name="SigningInProgress" HorizontalOptions="Center" IsVisible="False">
-                <ActivityIndicator x:Name="SigningInIndicator" WidthRequest="24" IsRunning="True"/>
-                <Label x:Name="SignInResult" Text="Signing in..." VerticalTextAlignment="Center" Margin="8,0,0,0"/>
-            </HorizontalStackLayout>
+            <controls:ButtonWithActivity x:Name="SignIn" Margin="128,4" InitialText="Sign In"
+                                         ActivitySucceeded="SignIn_ActivitySucceeded"
+                                         ActivityFailed="SignIn_ActivityFailed"
+                                         SuccessResultText="Success" FailureResultText="Failure"/>
 
         </VerticalStackLayout>
     </ScrollView>

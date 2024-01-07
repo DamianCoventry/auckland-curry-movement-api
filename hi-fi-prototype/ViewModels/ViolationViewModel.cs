@@ -15,9 +15,9 @@ namespace hi_fi_prototype.ViewModels
                 DinnerID = model.DinnerID,
                 Dinner = DinnerViewModel.FromModel(model.Dinner),
                 FoundingFatherID = model.FoundingFatherID,
-                FoundingFather = MemberViewModel.FromModel(model.FoundingFather),
+                FoundingFather = MembershipViewModel.FromModel(model.FoundingFather),
                 MemberID = model.MemberID,
-                Member = MemberViewModel.FromModel(model.Member),
+                Membership = MembershipViewModel.FromModel(model.Membership),
                 Description = model.Description,
                 IsIndianHotCurry = model.IsIndianHotCurry,
                 IsReinduction = model.IsReinduction,
@@ -46,9 +46,9 @@ namespace hi_fi_prototype.ViewModels
         private int _dinnerID;
         private DinnerViewModel? _dinner;
         private int _foundingFatherID;
-        private MemberViewModel? _foundingFather;
+        private MembershipViewModel? _foundingFather;
         private int _memberID;
-        private MemberViewModel? _member;
+        private MembershipViewModel? _membership;
         private string _description = string.Empty;
         private bool _isIndianHotCurry;
         private bool _isReinduction;
@@ -78,7 +78,7 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _foundingFatherID, value); }
         }
 
-        public MemberViewModel? FoundingFather
+        public MembershipViewModel? FoundingFather
         {
             get { return _foundingFather; }
             set { SetProperty(ref _foundingFather, value); }
@@ -90,10 +90,10 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _memberID, value); }
         }
 
-        public MemberViewModel? Member
+        public MembershipViewModel? Membership
         {
-            get { return _member; }
-            set { SetProperty(ref _member, value); }
+            get { return _membership; }
+            set { SetProperty(ref _membership, value); }
         }
 
         public string Description

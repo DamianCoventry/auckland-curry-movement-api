@@ -13,7 +13,7 @@ namespace hi_fi_prototype.ViewModels
             {
                 ID = model.ID,
                 MemberID = model.MemberID,
-                Member = MemberViewModel.FromModel(model.Member),
+                Membership = MembershipViewModel.FromModel(model.Membership),
                 DinnerID = model.DinnerID,
                 Dinner = DinnerViewModel.FromModel(model.Dinner),
                 NumChillisConsumed = model.NumChillisConsumed,
@@ -39,7 +39,7 @@ namespace hi_fi_prototype.ViewModels
 
         private int? _id;
         private int _memberID;
-        private MemberViewModel? _membership;
+        private MembershipViewModel? _membership;
         private int _dinnerID;
         private DinnerViewModel? _dinner;
         private int _numChillisConsumed;
@@ -56,7 +56,7 @@ namespace hi_fi_prototype.ViewModels
             set { SetProperty(ref _memberID, value); }
         }
 
-        public MemberViewModel? Member
+        public MembershipViewModel? Membership
         {
             get { return _membership; }
             set { SetProperty(ref _membership, value); }

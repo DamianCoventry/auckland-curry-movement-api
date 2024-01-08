@@ -2,6 +2,7 @@
 {
     public class Membership
     {
+        public int? ID { get; set; }
         public int MemberID { get; set; }
         public Member? Member { get; set; }
         public int ClubID { get; set; }
@@ -13,6 +14,8 @@
         public bool IsAdmin { get; set; }
         public bool IsFoundingFather { get; set; }
         public bool IsAuditor { get; set; }
+        public bool IsArchived { get; set; }
+        public string? ArchiveReason { get; set; }
 
         public ICollection<Club>? Clubs { get; set; }
         public ICollection<Dinner>? Dinners { get; set; }

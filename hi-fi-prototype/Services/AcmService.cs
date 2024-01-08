@@ -597,6 +597,32 @@ namespace hi_fi_prototype.Services
             return GetItem<Violation>("Violation", ID);
         }
 
+        public async Task<Membership> GetClubMembershipAsync(int ID, int memberID)
+        {
+            await AcquireTokenIfRequired();
+
+            string path = $"Club/${ID}/Membership/${memberID}";
+
+            var item = await GetInternal<Membership>(path);
+            if (IsSuccessfulStatusCode(item._statusCode) && item._item != null)
+                return item._item;
+
+            if (item._statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to retrieve an item ({item._statusCode})");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            item = await GetInternal<Membership>(path);
+            if (IsSuccessfulStatusCode(item._statusCode) && item._item != null)
+                return item._item;
+
+            if (item._statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception($"Unable to retrieve an item ({item._statusCode})");
+        }
+
         public Task<PageOfData<Attendee>> ListAttendeesAsync(int first, int count)
         {
             return ListItems<Attendee>("Attendee", first, count);
@@ -631,11 +657,11 @@ namespace hi_fi_prototype.Services
             throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
         }
 
-        public async Task<PageOfData<Member>> ListClubFoundingFathersAsync(int ID, int first, int count)
+        public async Task<PageOfData<Membership>> ListClubFoundingFathersAsync(int ID, int first, int count)
         {
             await AcquireTokenIfRequired();
 
-            var itemList = await ListItemsInternal<Member>($"Club/{ID}/FoundingFathers", first, count);
+            var itemList = await ListItemsInternal<Membership>($"Club/{ID}/FoundingFathers", first, count);
             if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
                 return itemList._pageOfData;
 
@@ -646,7 +672,7 @@ namespace hi_fi_prototype.Services
             _accessToken = string.Empty;
             await AcquireTokenInteractively();
 
-            itemList = await ListItemsInternal<Member>($"Club/{ID}/FoundingFathers", first, count);
+            itemList = await ListItemsInternal<Membership>($"Club/{ID}/FoundingFathers", first, count);
             if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
                 return itemList._pageOfData;
 
@@ -679,11 +705,11 @@ namespace hi_fi_prototype.Services
             throw new Exception($"Unable to retrieve a list of items ({itemList._statusCode})");
         }
 
-        public async Task<PageOfData<MemberStats>> ListClubMemberStatsAsync(int ID, int first, int count)
+        public async Task<PageOfData<Membership>> ListClubMembershipsAsync(int ID, int first, int count)
         {
             await AcquireTokenIfRequired();
 
-            var itemList = await ListItemsInternal<MemberStats>($"Club/{ID}/MemberStats", first, count);
+            var itemList = await ListItemsInternal<Membership>($"Club/{ID}/Memberships", first, count);
             if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
                 return itemList._pageOfData;
 
@@ -694,7 +720,7 @@ namespace hi_fi_prototype.Services
             _accessToken = string.Empty;
             await AcquireTokenInteractively();
 
-            itemList = await ListItemsInternal<MemberStats>($"Club/{ID}/MemberStats", first, count);
+            itemList = await ListItemsInternal<Membership>($"Club/{ID}/Memberships", first, count);
             if (IsSuccessfulStatusCode(itemList._statusCode) && itemList._pageOfData != null)
                 return itemList._pageOfData;
 
@@ -859,6 +885,32 @@ namespace hi_fi_prototype.Services
         public Task<bool> UpdateViolationAsync(Violation x)
         {
             return UpdateItem("Violation", x.ID == null ? 0 : (int)x.ID, x);
+        }
+
+        public async Task<bool> UpdateClubMembershipAsync(int ID, int memberID, Membership x)
+        {
+            await AcquireTokenIfRequired();
+
+            string path = $"Club/{ID}/Membership";
+
+            var statusCode = await UpdateItemInternal(path, memberID, x);
+            if (IsSuccessfulStatusCode(statusCode))
+                return true;
+
+            if (statusCode != HttpStatusCode.Unauthorized)
+                throw new Exception($"Unable to update an item ({statusCode})");
+
+            // Get a new one.
+            _accessToken = string.Empty;
+            await AcquireTokenInteractively();
+
+            statusCode = await UpdateItemInternal(path, memberID, x);
+            if (IsSuccessfulStatusCode(statusCode))
+                return true;
+
+            if (statusCode == HttpStatusCode.Unauthorized)
+                throw new UnauthorizedAccessException();
+            throw new Exception($"Unable to update an item ({statusCode})");
         }
     }
 }

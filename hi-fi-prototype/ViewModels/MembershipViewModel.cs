@@ -22,6 +22,8 @@ namespace hi_fi_prototype.ViewModels
                 IsAdmin = model.IsAdmin,
                 IsFoundingFather = model.IsFoundingFather,
                 IsAuditor = model.IsAuditor,
+                IsArchived = model.IsArchived,
+                ArchiveReason = model.ArchiveReason,
             };
         }
 
@@ -43,7 +45,7 @@ namespace hi_fi_prototype.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private int _memberID;
-        private MemberViewModel? _membership;
+        private MemberViewModel? _member;
         private int _clubID;
         private int? _sponsorID;
         private MembershipViewModel? _sponsor;
@@ -53,6 +55,8 @@ namespace hi_fi_prototype.ViewModels
         private bool _isAdmin;
         private bool _isFoundingFather;
         private bool _isAuditor;
+        private bool _isArchived;
+        private string? _archiveReason;
 
         public int MemberID
         {
@@ -62,8 +66,8 @@ namespace hi_fi_prototype.ViewModels
 
         public MemberViewModel? Member
         {
-            get { return _membership; }
-            set { SetProperty(ref _membership, value); }
+            get { return _member; }
+            set { SetProperty(ref _member, value); }
         }
 
         public int ClubID
@@ -118,6 +122,18 @@ namespace hi_fi_prototype.ViewModels
         {
             get { return _isAuditor; }
             set { SetProperty(ref _isAuditor, value); }
+        }
+
+        public bool IsArchived
+        {
+            get { return _isArchived; }
+            set { SetProperty(ref _isArchived, value); }
+        }
+
+        public string? ArchiveReason
+        {
+            get { return _archiveReason; }
+            set { SetProperty(ref _archiveReason, value); }
         }
 
     }

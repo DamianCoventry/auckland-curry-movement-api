@@ -37,7 +37,7 @@
                         VerticalTextAlignment="Center" Margin="8"/>
                 <Grid Grid.Column="1" ColumnDefinitions="*,Auto">
                     <Entry x:Name="OrganiserEntry" MaxLength="50" Placeholder="Please choose an organiser"
-                           Text="{Binding Organiser.Name}" Margin="8" IsReadOnly="True"/>
+                           Text="{Binding Organiser.Member.Name}" Margin="8" IsReadOnly="True"/>
                     <ImageButton x:Name="ChooseMember" Grid.Column="1" Source="member.png" WidthRequest="32" Clicked="ChooseMember_Clicked"/>
                 </Grid>
 

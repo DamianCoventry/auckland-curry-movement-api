@@ -5,7 +5,7 @@
         public int? ID { get; set; }
         public int FoundingFatherID { get; set; }
         public Membership? FoundingFather { get; set; }
-        public int MemberID { get; set; }
+        public int MembershipID { get; set; }
         public Membership? Membership { get; set; }
         public DateTime Date { get; set; }
         public string ShortReason { get; set; } = string.Empty;

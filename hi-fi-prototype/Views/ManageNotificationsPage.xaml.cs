@@ -45,7 +45,7 @@ namespace hi_fi_prototype.Views
                         KotCID = notification.KotCID,
                         Level = notification.Level,
                         LevelID = notification.LevelID,
-                        Member = notification.Member,
+                        Membership = notification.Membership,
                         MemberID = notification.MemberID,
                         Reservation = notification.Reservation,
                         ReservationID = notification.ReservationID,
@@ -146,7 +146,7 @@ namespace hi_fi_prototype.Views
                     existing.KotCID = notification.KotCID;
                     existing.Level = LevelViewModel.FromModel(notification.Level);
                     existing.LevelID = notification.LevelID;
-                    existing.Member = MemberViewModel.FromModel(notification.Member);
+                    existing.Membership = MembershipViewModel.FromModel(notification.Membership);
                     existing.MemberID = notification.MemberID;
                     existing.Reservation = ReservationViewModel.FromModel(notification.Reservation);
                     existing.ReservationID = notification.ReservationID;

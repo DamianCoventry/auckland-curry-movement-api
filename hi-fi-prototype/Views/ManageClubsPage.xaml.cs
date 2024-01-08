@@ -191,7 +191,7 @@ namespace hi_fi_prototype.Views
                 {
                     existing.ID = club.ID;
                     existing.Name = club.Name;
-                    existing.NumMembers = club.Members != null ? club.Members.Count : 0;
+                    existing.NumMembers = club.Memberships != null ? club.Memberships.Count : 0;
                     existing.IsDeleting = false;
                     existing.IsArchived = club.IsArchived;
                     existing.ArchiveReason = club.ArchiveReason;

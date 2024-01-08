@@ -5,8 +5,8 @@
              xmlns:views="clr-namespace:hi_fi_prototype.Views"
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.EditMemberPage"
-             x:DataType="viewmodels:MemberViewModel"
-             Title="Edit Member">
+             x:DataType="viewmodels:MembershipViewModel"
+             Title="Edit Membership">
     <ContentPage.Background>
         <!-- StartPoint defaults to (0,0)      
              Endpoint defaults to (1,1) -->
@@ -26,17 +26,17 @@
             <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
 
                 <Label Text="Name" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
-                <Entry x:Name="MemberName" Grid.Column="1" MaxLength="50" Placeholder="Please enter a name" Text="{Binding Name}" Margin="8"/>
+                <Entry x:Name="MemberName" Grid.Column="1" MaxLength="50" Placeholder="Please enter a name" Text="{Binding Member.Name}" Margin="8"/>
 
                 <Label Text="Sponsor" Grid.Row="1" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
                 <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,Auto">
-                    <Entry x:Name="SponsorName" MaxLength="50" Placeholder="Please choose a sponsor" Text="{Binding Sponsor.Name}" Margin="8" IsReadOnly="True"/>
+                    <Entry x:Name="SponsorName" MaxLength="50" Placeholder="Please choose a sponsor" Text="{Binding Sponsor.Member.Name}" Margin="8" IsReadOnly="True"/>
                     <ImageButton x:Name="ChooseSponsor" Grid.Column="1" Source="member.png" WidthRequest="32" Clicked="ChooseSponsor_Clicked"/>
                 </Grid>
 
                 <Label Text="Level" Grid.Row="2" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center" Margin="8"/>
                 <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*,Auto">
-                    <Entry x:Name="MemberLevel" MaxLength="50" Placeholder="Please choose a level" Text="{Binding CurrentLevel.Name}" Margin="8" IsReadOnly="True"/>
+                    <Entry x:Name="MemberLevel" MaxLength="50" Placeholder="Please choose a level" Text="{Binding Level.Name}" Margin="8" IsReadOnly="True"/>
                     <ImageButton x:Name="ChooseLevel" Grid.Column="1" Source="level.png" WidthRequest="32" Clicked="ChooseLevel_Clicked"/>
                 </Grid>
 

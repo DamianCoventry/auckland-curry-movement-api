@@ -45,11 +45,11 @@ namespace acm_rest_api
             modelBuilder.Entity<RotY>()
                 .HasKey("Year");
 
-            modelBuilder.Entity<Membership>()
-                .HasOne(x => x.Member);
-
             modelBuilder.Entity<Meal>()
                 .HasKey("ReservationID");
+
+            modelBuilder.Entity<Membership>()
+                .HasOne(x => x.Member);
 
             modelBuilder.Entity<Club>()
                 .HasMany(x => x.Memberships)
@@ -70,7 +70,7 @@ namespace acm_rest_api
             modelBuilder.Entity<Membership>()
                 .HasMany(x => x.Inductees)
                 .WithOne(x => x.Sponsor)
-                .HasForeignKey(x => x.SponsorID)
+                .HasForeignKey(x => new { x.ClubID, x.SponsorID })
                 .IsRequired(false);
 
             modelBuilder.Entity<Reservation>()
@@ -92,7 +92,7 @@ namespace acm_rest_api
             modelBuilder.Entity<Exemption>()
                 .HasOne(x => x.Membership)
                 .WithMany(x => x.ExemptionsReceived)
-                .HasForeignKey(x => x.MemberID);
+                .HasForeignKey(x => x.MembershipID);
 
             modelBuilder.Entity<Violation>()
                 .HasOne(x => x.FoundingFather)
@@ -102,7 +102,7 @@ namespace acm_rest_api
             modelBuilder.Entity<Violation>()
                 .HasOne(x => x.Membership)
                 .WithMany(x => x.ViolationsReceived)
-                .HasForeignKey(x => x.MemberID);
+                .HasForeignKey(x => x.MembershipID);
         }
     }
 }

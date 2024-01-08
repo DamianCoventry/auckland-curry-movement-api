@@ -27,9 +27,16 @@ namespace hi_fi_prototype.Views
                 _club.IsArchived = value.IsArchived;
                 _club.ArchiveReason = value.ArchiveReason;
 
-                ObservableCollection<MemberViewModel> copy = [];
+                ObservableCollection<MembershipViewModel> copy = [];
                 foreach (var i in value.FoundingFathers)
-                    copy.Add(new MemberViewModel() { ID = i.ID, Name = i.Name });
+                {
+                    if (i.Member == null) continue;
+                    copy.Add(new MembershipViewModel()
+                    {
+                        ClubID = _club.ID != null ? (int)_club.ID : 0,
+                        Member = new MemberViewModel(){ ID = i.Member.ID, Name = i.Member.Name }
+                    });
+                }
                 _club.FoundingFathers = copy;
             }
         }
@@ -41,9 +48,10 @@ namespace hi_fi_prototype.Views
                 "Cancel", "Enter a name", 100);
             if (!string.IsNullOrEmpty(name) && !string.IsNullOrWhiteSpace(name))
             {
-                Club.FoundingFathers.Add(new MemberViewModel()
+                Club.FoundingFathers.Add(new MembershipViewModel()
                 {
-                    Name = name,
+                    ClubID = _club.ID != null ? (int)_club.ID : 0,
+                    Member = new MemberViewModel() { Name = name }
                 });
             }
         }
@@ -94,9 +102,16 @@ namespace hi_fi_prototype.Views
                 DiscardChanges.IsEnabled = false;
                 SavingIndicator.IsRunning = true;
 
-                var ffs = new List<acm_models.Member>();
+                var ffs = new List<acm_models.Membership>();
                 foreach (var ff in Club.FoundingFathers)
-                    ffs.Add(new acm_models.Member() { ID = ff.ID, Name = ff.Name, });
+                {
+                    if (ff.Member == null) continue;
+                    ffs.Add(new acm_models.Membership()
+                    {
+                        ClubID = _club.ID != null ? (int)_club.ID : 0,
+                        Member = new acm_models.Member() { ID = ff.Member.ID, Name = ff.Member.Name, },
+                    });
+                }
 
                 var club = await AcmService.AddClubAsync(new acm_models.Club()
                 {
@@ -104,7 +119,7 @@ namespace hi_fi_prototype.Views
                     Name = Club.Name,
                     ArchiveReason = Club.ArchiveReason,
                     IsArchived = Club.IsArchived,
-                    Members = ffs,
+                    Memberships = ffs,
                 });
 
                 var elapsed = DateTime.Now - startTime;

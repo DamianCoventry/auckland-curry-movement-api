@@ -49,7 +49,7 @@
                                         <Image Source="level.png" WidthRequest="32" HeightRequest="32"
                                                ToolTipProperties.Text="Level" IsVisible="{Binding HasLevel}" Margin="2"/>
                                         <Image Source="member.png" WidthRequest="32" HeightRequest="32"
-                                               ToolTipProperties.Text="Member" IsVisible="{Binding HasMember}" Margin="2"/>
+                                               ToolTipProperties.Text="Membership" IsVisible="{Binding HasMember}" Margin="2"/>
                                         <Image Source="reservation.png" WidthRequest="32" HeightRequest="32"
                                                ToolTipProperties.Text="Reservation" IsVisible="{Binding HasReservation}" Margin="2"/>
                                         <Image Source="restaurant.png" WidthRequest="32" HeightRequest="32"

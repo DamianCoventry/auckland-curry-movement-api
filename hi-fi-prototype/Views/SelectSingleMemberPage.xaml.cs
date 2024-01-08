@@ -8,7 +8,7 @@ namespace hi_fi_prototype.Views
     public partial class SelectSingleMemberPage : ContentPage
     {
         private const int MIN_REFRESH_TIME_MS = 500;
-        private ObservableCollection<MemberViewModel> _members = [];
+        private ObservableCollection<MembershipViewModel> _members = [];
         private int _totalPages = 0;
         private int _currentPage = 0;
 
@@ -18,26 +18,26 @@ namespace hi_fi_prototype.Views
             BindingContext = this;
         }
 
-        public Action<MemberViewModel>? AcceptFunction { get; set; } = null;
+        public Action<MembershipViewModel>? AcceptFunction { get; set; } = null;
         public Action? CancelFunction { get; set; } = null;
-        public MemberViewModel? SelectedMember { get; set; } = null;
-        private MemberViewModel? OriginalSelection { get; set; } = null;
+        public MembershipViewModel? SelectedMember { get; set; } = null;
+        private MembershipViewModel? OriginalSelection { get; set; } = null;
         public int PageSize { get; set; } = 10;
 
-        public ObservableCollection<MemberViewModel> Members
+        public ObservableCollection<MembershipViewModel> Members
         {
             get => _members;
             set
             {
                 _members = [];
-                foreach (var member in value)
+                foreach (var ms in value)
                 {
-                    _members.Add(new MemberViewModel()
+                    var m = ms.Member;
+                    if (m == null) continue;
+
+                    _members.Add(new MembershipViewModel()
                     {
-                        ID = member.ID,
-                        Name = member.Name,
-                        ArchiveReason = member.ArchiveReason,
-                        IsArchived = member.IsArchived,
+                        Member = new MemberViewModel() { ID = m.ID, Name = m.Name, ArchiveReason = m.ArchiveReason, IsArchived = m.IsArchived, },
                     });
                 }
                 OnPropertyChanged(nameof(Members));
@@ -48,14 +48,12 @@ namespace hi_fi_prototype.Views
         {
             base.OnAppearing();
 
-            if (SelectedMember != null)
+            if (SelectedMember != null && SelectedMember.Member != null)
             {
-                OriginalSelection = new MemberViewModel()
+                var m = SelectedMember.Member;
+                OriginalSelection = new MembershipViewModel()
                 {
-                    ID = SelectedMember.ID,
-                    Name = SelectedMember.Name,
-                    ArchiveReason = SelectedMember.ArchiveReason,
-                    IsArchived = SelectedMember.IsArchived,
+                    Member = new MemberViewModel() { ID = m.ID, Name = m.Name, ArchiveReason = m.ArchiveReason, IsArchived = m.IsArchived, },
                 };
             }
 
@@ -79,22 +77,25 @@ namespace hi_fi_prototype.Views
                 LoadMoreButton.IsEnabled = false;
 
                 // TODO: Get the club ID from somewhere
-                var pageOfData = await AcmService.ListClubMembersAsync(1, _currentPage * PageSize, PageSize);
-                if (pageOfData != null && pageOfData.PageItems != null)
+                var memberships = await AcmService.ListClubMembershipsAsync(1, _currentPage * PageSize, PageSize);
+                if (memberships != null && memberships.PageItems != null)
                 {
-                    _totalPages = pageOfData.TotalPages;
+                    _totalPages = memberships.TotalPages;
                     LoadMoreButton.IsVisible = _currentPage < _totalPages - 1;
-                    MergePageIntoListView(pageOfData.PageItems);
+                    MergePageIntoListView(memberships.PageItems);
                 }
 
                 if (OriginalSelection != null)
                 {
-                    foreach (var member in Members)
+                    foreach (var ms in Members)
                     {
-                        if (OriginalSelection != null && OriginalSelection.ID == member.ID && OriginalSelection.Name == member.Name)
+                        var m = OriginalSelection?.Member;
+                        if (m == null) continue;
+
+                        if (m.ID == ms.MemberID && m.Name == ms.Member?.Name)
                         {
                             OriginalSelection = null;
-                            MemberItems.SelectedItem = member;
+                            MemberItems.SelectedItem = ms;
                         }
                     }
                 }
@@ -131,7 +132,7 @@ namespace hi_fi_prototype.Views
                 return;
             }
 
-            if (MemberItems.SelectedItem is MemberViewModel x)
+            if (MemberItems.SelectedItem is MembershipViewModel x)
             {
                 SelectedMember = x;
                 AcceptFunction?.Invoke(SelectedMember);
@@ -139,15 +140,15 @@ namespace hi_fi_prototype.Views
             }
         }
 
-        private void MergePageIntoListView(List<acm_models.Member> pageOfMembers)
+        private void MergePageIntoListView(List<acm_models.Membership> memberships)
         {
             MemberItems.BatchBegin();
-            foreach (var member in pageOfMembers)
+            foreach (var ms in memberships)
             {
-                var exists = _members.FirstOrDefault(y => y.ID == member.ID);
+                var exists = _members.FirstOrDefault(x => x.MemberID == ms.MemberID);
                 if (exists == null)
                 {
-                    var vm = MemberViewModel.FromModel(member);
+                    var vm = MembershipViewModel.FromModel(ms);
                     if (vm != null)
                         _members.Add(vm);
                 }

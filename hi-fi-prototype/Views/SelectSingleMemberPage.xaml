@@ -5,7 +5,7 @@
              xmlns:viewmodels="clr-namespace:hi_fi_prototype.ViewModels"
              x:Class="hi_fi_prototype.Views.SelectSingleMemberPage"
              x:DataType="views:SelectSingleMemberPage"
-             Title="Select Single Member">
+             Title="Select Single Membership">
     <ContentPage.Background>
         <!-- StartPoint defaults to (0,0)      
              Endpoint defaults to (1,1) -->
@@ -28,8 +28,8 @@
 
             <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" SelectionMode="Single">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:MemberViewModel">
-                        <TextCell Text="{Binding Name}"/>
+                    <DataTemplate x:DataType="viewmodels:MembershipViewModel">
+                        <TextCell Text="{Binding Member.Name}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

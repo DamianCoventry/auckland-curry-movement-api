@@ -83,12 +83,12 @@ namespace acm_rest_api.Controllers
                 .ToListAsync();
 
             List<AttendeeStats> attendeeStats = new();
-            foreach (var a in attendees)
+            foreach (var attendee in attendees)
             {
-                AttendeeStats att = new() { Attendee = a };
+                AttendeeStats stats = new() { Attendee = attendee };
 
-                int count = await _context.Attendee.Where(x => x.MemberID == a.MemberID && x.DinnerID <= id).CountAsync();
-                att.NthAttendance = (count % 10) switch
+                int count = await _context.Attendee.Where(x => x.MembershipID == attendee.MembershipID && x.DinnerID <= id).CountAsync();
+                stats.NthAttendance = (count % 10) switch
                 {
                     1 => count.ToString() + "st",
                     2 => count.ToString() + "nd",
@@ -96,13 +96,13 @@ namespace acm_rest_api.Controllers
                     _ => count.ToString() + "th",
                 };
 
-                att.IsFoundingFather = await _context.Membership.Where(x => x.ClubID == clubID && x.MemberID == a.MemberID && x.IsFoundingFather).AnyAsync();
+                stats.IsFoundingFather = await _context.Membership.Where(x => x.ClubID == clubID && x.ID == attendee.MembershipID && x.IsFoundingFather).AnyAsync();
 
-                att.IsExemptionUsed = await _context.Exemption.Where(x => x.MemberID == a.MemberID).AnyAsync();
+                stats.IsExemptionUsed = await _context.Exemption.Where(x => x.MembershipID == attendee.MembershipID).AnyAsync();
 
-                att.IsReceivedViolation = await _context.Violation.Where(x => x.MemberID == a.MemberID && x.DinnerID == id).AnyAsync();
+                stats.IsReceivedViolation = await _context.Violation.Where(x => x.MembershipID == attendee.MembershipID && x.DinnerID == id).AnyAsync();
 
-                attendeeStats.Add(att);
+                attendeeStats.Add(stats);
             }
 
             return attendeeStats;

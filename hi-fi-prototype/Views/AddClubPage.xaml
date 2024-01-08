@@ -35,8 +35,8 @@
                     </HorizontalStackLayout>
                     <ListView x:Name="FoundingFathersListView" Grid.Row="1" ItemsSource="{Binding FoundingFathers}" Margin="8" SelectionMode="None">
                         <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="viewmodels:MemberViewModel">
-                                <TextCell Text="{Binding Name}"/>
+                            <DataTemplate x:DataType="viewmodels:MembershipViewModel">
+                                <TextCell Text="{Binding Member.Name}"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>

@@ -68,7 +68,7 @@ namespace hi_fi_prototype.Views
                 {
                     ID = vm.ReservationID,
                     OrganiserID = vm.OrganiserID,
-                    Organiser = new MemberViewModel() { ID = vm.OrganiserID, Name = vm.OrganiserName },
+                    Organiser = new MembershipViewModel() { Member = new MemberViewModel() { ID = vm.OrganiserID, Name = vm.OrganiserName } },
                     RestaurantID = vm.RestaurantID,
                     Restaurant = new RestaurantViewModel() { ID = vm.RestaurantID, Name = vm.RestaurantName },
                     Year = vm.Year,

@@ -9,7 +9,7 @@ namespace hi_fi_prototype.Views
     {
         private const int MIN_REFRESH_TIME_MS = 500;
         private readonly ReservationViewModel _reservation = new();
-        private MemberViewModel? _organiserSelection = null;
+        private MembershipViewModel? _organiserSelection = null;
         private RestaurantViewModel? _restaurantSelection = null;
 
         public EditReservationPage()
@@ -49,13 +49,16 @@ namespace hi_fi_prototype.Views
                     _reservation.Restaurant = value.Restaurant;
                 }
 
-                if (_organiserSelection != null && _organiserSelection.ID != null)
+                if (_organiserSelection != null && _organiserSelection.Member != null)
                 {
-                    _reservation.OrganiserID = (int)_organiserSelection.ID;
+                    _reservation.OrganiserID = _organiserSelection.MemberID;
                     _reservation.Organiser = new()
                     {
-                        ID = _organiserSelection.ID,
-                        Name = _organiserSelection.Name,
+                        Member = new MemberViewModel()
+                        {
+                            ID = _organiserSelection.Member.ID,
+                            Name = _organiserSelection.Member.Name,
+                        }
                     };
                 }
                 else
@@ -110,18 +113,22 @@ namespace hi_fi_prototype.Views
 
         private async void ChooseMember_Clicked(object sender, EventArgs e)
         {
-            MemberViewModel? copy = null;
+            MembershipViewModel? copy = null;
             _organiserSelection = null;
 
             if (_reservation.Organiser != null)
             {
-                copy = new()
+                var m = _reservation.Organiser.Member;
+                if (m != null)
                 {
-                    ID = _reservation.Organiser.ID,
-                    Name = _reservation.Organiser.Name,
-                    IsArchived = _reservation.Organiser.IsArchived,
-                    ArchiveReason = _reservation.Organiser.ArchiveReason,
-                };
+                    copy = new()
+                    {
+                        Member = new MemberViewModel()
+                        {
+                            ID = m.ID, Name = m.Name, IsArchived = m.IsArchived, ArchiveReason = m.ArchiveReason,
+                        },
+                    };
+                }
             }
 
             SelectSingleMemberPage page = new()
@@ -133,14 +140,19 @@ namespace hi_fi_prototype.Views
             await Navigation.PushAsync(page, true);
         }
 
-        private void OrganiserSelection_Accepted(MemberViewModel selectedMember)
+        private void OrganiserSelection_Accepted(MembershipViewModel selectedMember)
         {
+            var m = selectedMember.Member;
+            if (m == null)
+                return;
+
             _organiserSelection = new()
             {
-                ID = selectedMember.ID,
-                Name = selectedMember.Name,
-                IsArchived = selectedMember.IsArchived,
-                ArchiveReason = selectedMember.ArchiveReason,
+                ClubID = selectedMember.ClubID,
+                Member = new MemberViewModel()
+                {
+                    ID = m.ID, Name = m.Name, IsArchived = m.IsArchived, ArchiveReason = m.ArchiveReason,
+                }
             };
         }
 

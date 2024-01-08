@@ -63,7 +63,7 @@ namespace acm_rest_api.Controllers
                 var membership = await _context.Membership.Where(x => x.MemberID == id).FirstOrDefaultAsync();
                 if (membership != null)
                 {
-                    int count = await _context.Attendee.CountAsync(x => x.MemberID == id);
+                    int count = await _context.Attendee.CountAsync(x => x.MembershipID == membership.ID);
                     if (count != membership.AttendanceCount)
                     {
                         membership.AttendanceCount = count;

@@ -36,7 +36,7 @@
                 <Label Text="Organiser" FontAttributes="Bold" TextColor="CornflowerBlue"
                         VerticalTextAlignment="Center" Margin="8"/>
                 <Entry x:Name="OrganiserEntry" Grid.Column="1" MaxLength="50" Placeholder="Please choose an organiser"
-                        Text="{Binding Reservation.Organiser.Name}" Margin="8" IsEnabled="False"/>
+                        Text="{Binding Reservation.Organiser.Member.Name}" Margin="8" IsEnabled="False"/>
 
                 <Label Text="Restaurant" Grid.Row="1" FontAttributes="Bold" TextColor="CornflowerBlue"
                        VerticalTextAlignment="Center" Margin="8"/>

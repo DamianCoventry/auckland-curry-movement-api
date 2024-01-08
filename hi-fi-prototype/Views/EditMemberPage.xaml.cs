@@ -4,51 +4,56 @@ using hi_fi_prototype.ViewModels;
 
 namespace hi_fi_prototype.Views
 {
-    [QueryProperty(nameof(Member), "Member")]
+    [QueryProperty(nameof(Membership), "Membership")]
     public partial class EditMemberPage : ContentPage
     {
         private const int MIN_REFRESH_TIME_MS = 500;
-        private readonly MemberViewModel _member = new();
-        private MemberViewModel? _sponsorSelection = null;
+        private readonly MembershipViewModel _membership = new() { Member = new MemberViewModel() };
+        private MembershipViewModel? _sponsorSelection = null;
         private LevelViewModel? _levelSelection = null;
 
         public EditMemberPage()
         {
             InitializeComponent();
-            BindingContext = Member;
+            BindingContext = Membership;
         }
 
-        public MemberViewModel Member
+        public MembershipViewModel Membership
         {
-            get => _member;
+            get => _membership;
             set
             {
-                _member.ID = value.ID;
-                _member.Name = value.Name;
-                _member.AttendanceCount = value.AttendanceCount;
-                _member.IsArchived = value.IsArchived;
-                _member.ArchiveReason = value.ArchiveReason;
+                if (value.Member != null)
+                    _membership.Member = new MemberViewModel() { ID = value.Member.ID, Name = value.Member.Name, };
+
+                _membership.MemberID = value.MemberID;
+                _membership.AttendanceCount = value.AttendanceCount;
+                _membership.IsAdmin = value.IsAdmin;
+                _membership.IsFoundingFather = value.IsFoundingFather;
+                _membership.IsAuditor = value.IsAuditor;
+                _membership.IsArchived = value.IsArchived;
+                _membership.ArchiveReason = value.ArchiveReason;
 
                 if (_sponsorSelection != null)
                 {
-                    _member.SponsorID = _sponsorSelection.ID;
-                    _member.Sponsor = _sponsorSelection;
+                    _membership.SponsorID = _sponsorSelection.MemberID;
+                    _membership.Sponsor = _sponsorSelection;
                 }
                 else
                 {
-                    _member.SponsorID = value.SponsorID;
-                    _member.Sponsor = value.Sponsor;
+                    _membership.SponsorID = value.SponsorID;
+                    _membership.Sponsor = value.Sponsor;
                 }
 
                 if (_levelSelection != null && _levelSelection.ID != null)
                 {
-                    _member.CurrentLevelID = (int)_levelSelection.ID;
-                    _member.CurrentLevel = _levelSelection;
+                    _membership.LevelID = (int)_levelSelection.ID;
+                    _membership.Level = _levelSelection;
                 }
                 else
                 {
-                    _member.CurrentLevelID = value.CurrentLevelID;
-                    _member.CurrentLevel = value.CurrentLevel;
+                    _membership.LevelID = value.LevelID;
+                    _membership.Level = value.Level;
                 }
             }
         }
@@ -60,7 +65,7 @@ namespace hi_fi_prototype.Views
 
         private async void AcceptChanges_Clicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_member.Name))
+            if (string.IsNullOrWhiteSpace(_membership.Member?.Name))
             {
                 var toast = Toast.Make("A name for the member is required");
                 await toast.Show();
@@ -85,22 +90,35 @@ namespace hi_fi_prototype.Views
 
         private async void ChooseSponsor_Clicked(object sender, EventArgs e)
         {
-            MemberViewModel? copy = null;
+            MembershipViewModel? copy = null;
 
-            if (_member.Sponsor != null)
+            if (_membership.Sponsor != null)
             {
-                copy = new MemberViewModel()
+                var sponsorMember = _membership.Sponsor.Member;
+                if (sponsorMember != null)
                 {
-                    ID = _member.Sponsor.ID,
-                    Name = _member.Sponsor.Name,
-                    SponsorID = null,
-                    Sponsor = null,
-                    CurrentLevelID = _member.Sponsor.CurrentLevelID,
-                    CurrentLevel = _member.Sponsor.CurrentLevel,
-                    AttendanceCount = _member.Sponsor.AttendanceCount,
-                    IsArchived = _member.Sponsor.IsArchived,
-                    ArchiveReason = _member.Sponsor.ArchiveReason,
-                };
+                    copy = new MembershipViewModel()
+                    {
+                        ClubID = _membership.ClubID,
+                        SponsorID = null,
+                        Sponsor = null,
+                        LevelID = _membership.Sponsor.LevelID,
+                        Level = _membership.Sponsor.Level,
+                        AttendanceCount = _membership.Sponsor.AttendanceCount,
+                        IsAdmin = _membership.Sponsor.IsAdmin,
+                        IsFoundingFather = _membership.Sponsor.IsFoundingFather,
+                        IsAuditor = _membership.Sponsor.IsAuditor,
+                        IsArchived = _membership.Sponsor.IsArchived,
+                        ArchiveReason = _membership.Sponsor.ArchiveReason,
+                        Member = new MemberViewModel()
+                        {
+                            ID = sponsorMember.ID,
+                            Name = sponsorMember.Name,
+                            IsArchived = sponsorMember.IsArchived,
+                            ArchiveReason = sponsorMember.ArchiveReason,
+                        },
+                    };
+                }
             }
 
             SelectSingleMemberPage selectSingleMemberPage = new()
@@ -112,49 +130,62 @@ namespace hi_fi_prototype.Views
             await Navigation.PushAsync(selectSingleMemberPage);
         }
 
-        private void SponsorSelection_Accepted(MemberViewModel model)
+        private void SponsorSelection_Accepted(MembershipViewModel model)
         {
-            _sponsorSelection = new MemberViewModel()
+            _sponsorSelection = new MembershipViewModel()
             {
-                ID = model.ID,
-                Name = model.Name,
+                ClubID = model.ClubID,
                 SponsorID = model.SponsorID,
                 Sponsor = model.Sponsor,
-                CurrentLevelID = model.CurrentLevelID,
-                CurrentLevel = model.CurrentLevel,
+                LevelID = model.LevelID,
+                Level = model.Level,
                 AttendanceCount = model.AttendanceCount,
+                IsAdmin = model.IsAdmin,
+                IsFoundingFather = model.IsFoundingFather,
+                IsAuditor = model.IsAuditor,
                 IsArchived = model.IsArchived,
                 ArchiveReason = model.ArchiveReason,
             };
+
+            if (model.Member != null)
+            {
+                _sponsorSelection.Member = new MemberViewModel()
+                {
+                    ID = model.Member.ID,
+                    Name = model.Member.Name,
+                    IsArchived = model.Member.IsArchived,
+                    ArchiveReason = model.Member.ArchiveReason,
+                };
+            }
         }
 
         private async void ChooseLevel_Clicked(object sender, EventArgs e)
         {
             LevelViewModel? copy = null;
 
-            if (_member.CurrentLevel != null)
+            if (_membership.Level != null)
             {
                 copy = new LevelViewModel()
                 {
-                    ID = _member.CurrentLevelID,
-                    RequiredAttendances = _member.CurrentLevel.RequiredAttendances,
-                    Name = _member.CurrentLevel.Name,
-                    Description = _member.CurrentLevel.Description,
-                    IsArchived = _member.CurrentLevel.IsArchived,
-                    ArchiveReason = _member.CurrentLevel.ArchiveReason,
+                    ID = _membership.LevelID,
+                    RequiredAttendances = _membership.Level.RequiredAttendances,
+                    Name = _membership.Level.Name,
+                    Description = _membership.Level.Description,
+                    IsArchived = _membership.Level.IsArchived,
+                    ArchiveReason = _membership.Level.ArchiveReason,
                 };
             }
 
             SelectSingleLevelPage selectSingleLevelPage = new()
             {
                 SelectedLevel = copy,
-                AcceptFunction = CurrentLevelSelection_Accepted,
+                AcceptFunction = LevelSelection_Accepted,
             };
 
             await Navigation.PushAsync(selectSingleLevelPage);
         }
 
-        private void CurrentLevelSelection_Accepted(LevelViewModel model)
+        private void LevelSelection_Accepted(LevelViewModel model)
         {
             _levelSelection = new LevelViewModel()
             {
@@ -195,23 +226,34 @@ namespace hi_fi_prototype.Views
 
                 var startTime = DateTime.Now;
 
-                var model = new acm_models.Member()
+                var model = new acm_models.Membership()
                 {
-                    ID = Member.ID,
-                    Name = Member.Name,
-                    SponsorID = Member.SponsorID,
-                    CurrentLevelID = Member.CurrentLevelID,
-                    AttendanceCount = Member.AttendanceCount,
-                    IsArchived = Member.IsArchived,
-                    ArchiveReason = Member.ArchiveReason,
+                    ClubID = Membership.ClubID,
+                    SponsorID = Membership.SponsorID,
+                    LevelID = Membership.LevelID,
+                    AttendanceCount = Membership.AttendanceCount,
+                    IsAdmin = Membership.IsAdmin,
+                    IsFoundingFather = Membership.IsFoundingFather,
+                    IsAuditor = Membership.IsAuditor,
+                    IsArchived = Membership.IsArchived,
+                    ArchiveReason = Membership.ArchiveReason,
                 };
 
-                if (Member.Sponsor != null)
-                    model.Sponsor = new acm_models.Member() { ID = Member.SponsorID, Name = Member.Sponsor.Name };
-                if (Member.CurrentLevel != null)
-                    model.CurrentLevel = new acm_models.Level() { ID = Member.CurrentLevelID, Name = Member.CurrentLevel.Name };
+                if (Membership.Member != null)
+                    model.Member = new acm_models.Member() { ID = Membership.Member.ID, Name = Membership.Member.Name };
+                if (Membership.Level != null)
+                    model.Level = new acm_models.Level() { ID = Membership.Level.ID, Name = Membership.Level.Name };
+                if (Membership.Sponsor != null && Membership.Sponsor.Member != null)
+                {
+                    model.Sponsor = new acm_models.Membership()
+                    {
+                        ClubID = Membership.ClubID,
+                        Member = new acm_models.Member() { ID = Membership.Sponsor.Member.ID, Name = Membership.Sponsor.Member.Name }
+                    };
+                }
 
-                saved = await AcmService.UpdateMemberAsync(model);
+                if (Membership.Member != null && Membership.Member.ID != null)
+                    saved = await AcmService.UpdateClubMembershipAsync(Membership.ClubID, (int)Membership.Member.ID, model);
 
                 var elapsed = DateTime.Now - startTime;
                 if (elapsed.Milliseconds < MIN_REFRESH_TIME_MS)

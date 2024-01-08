@@ -7,7 +7,7 @@
         public Dinner? Dinner { get; set; }
         public int FoundingFatherID { get; set; }
         public Membership? FoundingFather { get; set; }
-        public int MemberID { get; set; }
+        public int MembershipID { get; set; }
         public Membership? Membership { get; set; }
         public string Description { get; set; } = string.Empty;
         public bool IsIndianHotCurry { get; set; }

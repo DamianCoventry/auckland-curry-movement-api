@@ -5,7 +5,7 @@
         public int? ID { get; set; }
         public int DinnerID { get; set; }
         public Dinner? Dinner { get; set; }
-        public int MemberID { get; set; }
+        public int MembershipID { get; set; }
         public Membership? Membership { get; set; }
         public int LevelID { get; set; }
         public Level? Level { get; set; }

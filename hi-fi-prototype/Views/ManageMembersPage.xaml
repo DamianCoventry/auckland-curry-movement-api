@@ -30,11 +30,11 @@
 
             <ListView x:Name="MemberItems" ItemsSource="{Binding Members}" ItemTapped="MemberItems_ItemTapped" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:MemberViewModel">
+                    <DataTemplate x:DataType="viewmodels:MembershipViewModel">
                         <ViewCell>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Image Grid.Column="0" Source="member.png" WidthRequest="32" Margin="8"/>
-                                <Label Grid.Column="1" Text="{Binding Name}" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Member.Name}" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalTextAlignment="Center"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

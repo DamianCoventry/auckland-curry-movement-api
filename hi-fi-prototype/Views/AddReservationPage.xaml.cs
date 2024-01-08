@@ -79,17 +79,18 @@ namespace hi_fi_prototype.Views
 
         private async void ChooseMember_Clicked(object sender, EventArgs e)
         {
-            MemberViewModel? copy = null;
+            MembershipViewModel? copy = null;
 
             if (_reservation.Organiser != null)
             {
-                copy = new()
+                var m = _reservation.Organiser.Member;
+                if (m != null)
                 {
-                    ID = _reservation.Organiser.ID,
-                    Name = _reservation.Organiser.Name,
-                    IsArchived = _reservation.Organiser.IsArchived,
-                    ArchiveReason = _reservation.Organiser.ArchiveReason,
-                };
+                    copy = new()
+                    {
+                        Member = new MemberViewModel() { ID = m.ID, Name = m.Name, IsArchived = m.IsArchived, ArchiveReason = m.ArchiveReason, },
+                    };
+                }
             }
 
             SelectSingleMemberPage page = new()
@@ -101,10 +102,11 @@ namespace hi_fi_prototype.Views
             await Navigation.PushAsync(page, true);
         }
 
-        private void OrganiserSelection_Accepted(MemberViewModel selectedMember)
+        private void OrganiserSelection_Accepted(MembershipViewModel selectedMember)
         {
             Reservation.Organiser = selectedMember;
-            Reservation.OrganiserID = selectedMember.ID != null ? (int)selectedMember.ID : 0;
+            if (selectedMember.Member != null && selectedMember.Member.ID != null)
+                Reservation.OrganiserID = (int)selectedMember.Member.ID;
         }
 
         private async void ChooseRestaurant_Clicked(object sender, EventArgs e)

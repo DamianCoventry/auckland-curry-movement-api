@@ -17,11 +17,11 @@ namespace acm_mobile_app.ViewModels
                 Members = []
             };
 
-            if (model.Members != null)
+            if (model.Memberships != null)
             {
-                foreach (var m in model.Members)
+                foreach (var ms in model.Memberships)
                 {
-                    var x = Member.FromModel(m);
+                    var x = Membership.FromModel(ms);
                     if (x != null)
                         club.Members.Add(x);
                 }
@@ -89,7 +89,7 @@ namespace acm_mobile_app.ViewModels
 
         public int NumMembers { get { return Members == null ? 0 : Members.Count; } }
 
-        public ICollection<Member>? Members { get; set; }
+        public ICollection<Membership>? Members { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;

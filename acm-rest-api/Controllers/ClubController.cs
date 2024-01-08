@@ -1,7 +1,6 @@
 ﻿using acm_models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph;
 
 namespace acm_rest_api.Controllers
 {
@@ -204,7 +203,7 @@ namespace acm_rest_api.Controllers
 
         // GET: api/Club/43/FoundingFathers
         [HttpGet("{id}/FoundingFathers")]
-        public async Task<ActionResult<PageOfData<Member>>> GetClubFoundingFathers(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
+        public async Task<ActionResult<PageOfData<Membership>>> GetClubFoundingFathers(int? id, [FromQuery(Name = "first")] int first, [FromQuery(Name = "count")] int pageSize)
         {
             if (_context.Club == null || _context.Member == null || _context.Membership == null || id == null || pageSize <= 0)
             {
@@ -222,18 +221,13 @@ namespace acm_rest_api.Controllers
             if (rowCount % pageSize > 0)
                 ++totalPages;
 
-            return new PageOfData<Member>()
+            return new PageOfData<Membership>()
             {
                 CurrentPage = first,
                 TotalPages = totalPages,
                 PageItems = await _context
-                                    .Set<Member>()
-                                    .FromSqlRaw(
-                                        "SELECT [m].[ID], [m].[Name], [mc].[SponsorID], [mc].[LevelID], [mc].[AttendanceCount], [m].[IsArchived], [m].[ArchiveReason] " +
-                                        "FROM [dbo].[Member] m " +
-                                        "INNER JOIN Membership mc ON [mc].[MemberID] = [m].[ID] AND [mc].[IsFoundingFather] <> 0 " +
-                                       $"AND [mc].[ClubID] = {id}")
-                                    .OrderBy(x => x.ID).Skip(first).Take(pageSize)
+                                    .Membership.Where(x => x.ClubID == id && x.IsFoundingFather)
+                                    .OrderBy(x => x.MemberID).Skip(first).Take(pageSize)
                                     .ToListAsync()
             };
         }
@@ -270,7 +264,7 @@ namespace acm_rest_api.Controllers
         }
 
         // GET: api/Club/43/Membership/18
-        [HttpGet("{clubId}/Membership/{membershipId}")]
+        [HttpGet("{clubId}/Membership/{memberId}")]
         public async Task<ActionResult<Membership>> GetClubMembership(int? clubId, int? memberId)
         {
             if (_context.Club == null || _context.Membership == null)
@@ -292,6 +286,50 @@ namespace acm_rest_api.Controllers
                 return NotFound();
             }
             return membership;
+        }
+
+        // PUT: api/Club/4/Membership/87
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{clubId}/Membership/{memberId}")]
+        public async Task<IActionResult> PutClubMembership(int? clubId, int? memberId, Membership membership)
+        {
+            if (clubId != membership.ClubID || memberId != membership.MemberID)
+            {
+                return BadRequest();
+            }
+
+            membership.Clubs = null;
+            membership.Dinners = null;
+            membership.Attendees = null;
+            membership.ExemptionsGiven = null;
+            membership.ExemptionsReceived = null;
+            membership.KotCs = null;
+            membership.Reservations = null;
+            membership.RotYs = null;
+            membership.ViolationsGiven = null;
+            membership.ViolationsReceived = null;
+            membership.Notifications = null;
+            membership.Inductees = null;
+
+            _context.Entry(membership).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ClubExists(clubId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         // PUT: api/Club/5

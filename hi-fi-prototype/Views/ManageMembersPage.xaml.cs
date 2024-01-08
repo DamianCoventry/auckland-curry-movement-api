@@ -7,7 +7,7 @@ namespace hi_fi_prototype.Views
     public partial class ManageMembersPage : ContentPage
     {
         private const int MIN_REFRESH_TIME_MS = 500;
-        private ObservableCollection<MemberViewModel> _members = [];
+        private ObservableCollection<MembershipViewModel> _members = [];
         private int _totalPages = 0;
         private int _currentPage = 0;
 
@@ -19,25 +19,33 @@ namespace hi_fi_prototype.Views
 
         public int PageSize { get; set; } = 10;
 
-        public ObservableCollection<MemberViewModel> Members
+        public ObservableCollection<MembershipViewModel> Members
         {
             get => _members;
             set
             {
                 _members = [];
-                foreach (var member in value)
+                foreach (var ms in value)
                 {
-                    var copy = new MemberViewModel()
+                    var m = ms.Member;
+                    if (m == null) continue;
+                    var copy = new MembershipViewModel()
                     {
-                        ID = member.ID,
-                        Name = member.Name,
-                        SponsorID = member.SponsorID,
-                        Sponsor = member.Sponsor,
-                        CurrentLevelID = member.CurrentLevelID,
-                        CurrentLevel = member.CurrentLevel,
-                        AttendanceCount = member.AttendanceCount,
-                        IsArchived = member.IsArchived,
-                        ArchiveReason = member.ArchiveReason,
+                        SponsorID = ms.SponsorID,
+                        Sponsor = ms.Sponsor,
+                        LevelID = ms.LevelID,
+                        Level = ms.Level,
+                        AttendanceCount = ms.AttendanceCount,
+                        IsAdmin = ms.IsAdmin,
+                        IsFoundingFather = ms.IsFoundingFather,
+                        IsAuditor = ms.IsAuditor,
+                        Member = new MemberViewModel()
+                        {
+                            ID = m.ID,
+                            Name = m.Name,
+                            IsArchived = m.IsArchived,
+                            ArchiveReason = m.ArchiveReason,
+                        },
                     };
                     _members.Add(copy);
                 }
@@ -59,9 +67,9 @@ namespace hi_fi_prototype.Views
 
         private async void MemberItems_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item is MemberViewModel memberViewModel)
+            if (e.Item is MembershipViewModel memberViewModel)
             {
-                Dictionary<string, object> parameters = new() { { "Member", memberViewModel } };
+                Dictionary<string, object> parameters = new() { { "Membership", memberViewModel } };
                 await Shell.Current.GoToAsync("edit_member", true, parameters);
             }
         }
@@ -85,12 +93,12 @@ namespace hi_fi_prototype.Views
                 LoadMoreButton.IsEnabled = false;
 
                 // TODO: Get the club id from somewhere
-                var pageOfData = await AcmService.ListClubMembersAsync(1, _currentPage * PageSize, PageSize);
-                if (pageOfData != null && pageOfData.PageItems != null)
+                var memberships = await AcmService.ListClubMembershipsAsync(1, _currentPage * PageSize, PageSize);
+                if (memberships != null && memberships.PageItems != null)
                 {
-                    _totalPages = pageOfData.TotalPages;
+                    _totalPages = memberships.TotalPages;
                     LoadMoreButton.IsVisible = _currentPage < _totalPages - 1;
-                    MergePageIntoListView(pageOfData.PageItems);
+                    MergePageIntoListView(memberships.PageItems);
                 }
 
                 var elapsed = DateTime.Now - startTime;
@@ -109,29 +117,32 @@ namespace hi_fi_prototype.Views
             }
         }
 
-        private void MergePageIntoListView(List<acm_models.Member> pageOfMembers)
+        private void MergePageIntoListView(List<acm_models.Membership> memberships)
         {
             MemberItems.BatchCommit();
-            foreach (var member in pageOfMembers)
+            foreach (var ms in memberships)
             {
-                var existing = _members.FirstOrDefault(y => y.ID == member.ID);
+                var existing = _members.FirstOrDefault(x => x.MemberID == ms.MemberID);
                 if (existing == null)
                 {
-                    var vm = MemberViewModel.FromModel(member);
+                    var vm = MembershipViewModel.FromModel(ms);
                     if (vm != null)
                         _members.Add(vm);
                 }
                 else
                 {
-                    existing.ID = member.ID;
-                    existing.Name = member.Name;
-                    existing.SponsorID = member.SponsorID;
-                    existing.Sponsor = MemberViewModel.FromModel(member.Sponsor); // TODO: check for recursion
-                    existing.CurrentLevelID = member.CurrentLevelID;
-                    existing.CurrentLevel = LevelViewModel.FromModel(member.CurrentLevel);
-                    existing.AttendanceCount = member.AttendanceCount;
-                    existing.IsArchived = member.IsArchived;
-                    existing.ArchiveReason = member.ArchiveReason;
+                    existing.SponsorID = ms.SponsorID;
+                    existing.Sponsor = MembershipViewModel.FromModel(ms.Sponsor); // TODO: check for recursion
+                    existing.LevelID = ms.LevelID;
+                    existing.Level = LevelViewModel.FromModel(ms.Level);
+                    existing.AttendanceCount = ms.AttendanceCount;
+                    existing.IsAdmin = ms.IsAdmin;
+                    existing.IsFoundingFather = ms.IsFoundingFather;
+                    existing.IsAuditor = ms.IsAuditor;
+                    existing.IsArchived = ms.IsArchived;
+                    existing.ArchiveReason = ms.ArchiveReason;
+                    if (ms.Member != null)
+                        existing.Member = new MemberViewModel() { ID = ms.Member.ID, Name = ms.Member.Name };
                 }
             }
             MemberItems.BatchCommit();
